@@ -1,0 +1,31 @@
+# xmake 本机配置、构建及分发产物
+/.xmake/
+/build/
+/dist/
+/compile_commands.json
+
+# 扫描结果、裁图证据及本地实验材料
+/results/
+/temp/
+/prototype/results/
+
+# Python 虚拟环境和缓存（原型代码、实验脚本及标签仍纳入版本管理）
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# 字体需自行准备；不随源码提交，保留字体说明及授权文件
+/resources/fonts/*.ttf
+/resources/fonts/*.otf
+/resources/fonts/*.ttc
+
+# 本机 IDE 状态及 Windows 缓存
+/.vs/
+*.suo
+*.user
+Thumbs.db
+Desktop.ini
+
+# 保留 xmake-requires.lock、布局 JSON、名称 TXT 和实验标注 JSON

@@ -1,0 +1,4821 @@
+{
+  "seed": 20261024,
+  "label_source": "助手逐图视觉核对的辅助标注，非用户确认。初次候选标注有2处修正：圆圆丸子、暖阳缱绻；后者在对照输出提示差异后查看完整卡片确认，保留修订证据。",
+  "samples": [
+    {
+      "id": "hair:r138_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r138_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "缩丝垂",
+      "ocr_score": 0.8039563298225403,
+      "suggestions": [
+        "绾丝垂",
+        "青丝垂泪",
+        "金丝雀"
+      ],
+      "split": "calibration",
+      "text": "绾丝垂",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 1",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r112_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r112_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "寂静之日",
+      "ocr_score": 0.9864833354949951,
+      "suggestions": [
+        "寂静之日",
+        "寂静之日·橘火",
+        "静思之行"
+      ],
+      "split": "calibration",
+      "text": "寂静之日",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 2",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r074_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r074_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "柔风细诉",
+      "ocr_score": 0.8541544079780579,
+      "suggestions": [
+        "柔风细诉",
+        "风诉悠长",
+        "风诉悠长·枯荣"
+      ],
+      "split": "calibration",
+      "text": "柔风细诉",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 3",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r211_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r211_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "逆行如风",
+      "ocr_score": 0.9565190076828003,
+      "suggestions": [
+        "逆行如风",
+        "再游行",
+        "叹将行"
+      ],
+      "split": "calibration",
+      "text": "逆行如风",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 4",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r017_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r017_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "银灰羽絮",
+      "ocr_score": 0.9990148544311523,
+      "suggestions": [
+        "银灰羽絮",
+        "幻夜烁银",
+        "拂落星羽"
+      ],
+      "split": "calibration",
+      "text": "银灰羽絮",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 5",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r235_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r235_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "浮于指间",
+      "ocr_score": 0.9993730783462524,
+      "suggestions": [
+        "浮于指间",
+        "浮于指间·童谣",
+        "人间茕茕"
+      ],
+      "split": "calibration",
+      "text": "浮于指间",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 6",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r047_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r047_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "绿叶清辉",
+      "ocr_score": 0.9942201972007751,
+      "suggestions": [
+        "绿叶清辉",
+        "银月清辉",
+        "银月清辉·春雪"
+      ],
+      "split": "calibration",
+      "text": "绿叶清辉",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 7",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r225_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r225_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "云弯霞影",
+      "ocr_score": 0.8878160119056702,
+      "suggestions": [
+        "云鸾霞影",
+        "轻丝飞舞·云霞",
+        "云烟录"
+      ],
+      "split": "calibration",
+      "text": "云鸾霞影",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 8",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r114_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r114_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "蓝花岸",
+      "ocr_score": 0.9930222630500793,
+      "suggestions": [
+        "蓝花岸",
+        "绕曲岸",
+        "含苞花蕾"
+      ],
+      "split": "calibration",
+      "text": "蓝花岸",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 9",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r091_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r091_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "図図丸子",
+      "ocr_score": 0.6906009912490845,
+      "suggestions": [
+        "双喜丸子",
+        "圆圆丸子",
+        "十秒丸子头"
+      ],
+      "split": "calibration",
+      "text": "圆圆丸子",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 10",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r111_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r111_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "晚起乱糟糟",
+      "ocr_score": 0.8509143590927124,
+      "suggestions": [
+        "晚起乱糟糟",
+        "串起风声",
+        "夕阳晚祷"
+      ],
+      "split": "calibration",
+      "text": "晚起乱糟糟",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 11"
+    },
+    {
+      "id": "hair:r063_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r063_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "缝绻深眠·辰雾",
+      "ocr_score": 0.8404298424720764,
+      "suggestions": [
+        "缱绻深眠·辰雾",
+        "缱绻深眠",
+        "长月思·含雾"
+      ],
+      "split": "calibration",
+      "text": "缱绻深眠·辰雾",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 12"
+    },
+    {
+      "id": "hair:r150_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r150_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "灰穹暗涌",
+      "ocr_score": 0.9976205825805664,
+      "suggestions": [
+        "灰穹暗涌",
+        "火海暗涌",
+        "失真暗面"
+      ],
+      "split": "calibration",
+      "text": "灰穹暗涌",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 13"
+    },
+    {
+      "id": "hair:r257_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r257_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "缱e云丝",
+      "ocr_score": 0.7845991253852844,
+      "suggestions": [
+        "缱绻云丝",
+        "缱绻云丝·春山",
+        "云烟录"
+      ],
+      "split": "calibration",
+      "text": "缱绻云丝",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 14"
+    },
+    {
+      "id": "hair:r045_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r045_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "雾月流影-赤泪",
+      "ocr_score": 0.9365710616111755,
+      "suggestions": [
+        "雾月流影·赤泪",
+        "雾月流影",
+        "月辉流连"
+      ],
+      "split": "calibration",
+      "text": "雾月流影·赤泪",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 15"
+    },
+    {
+      "id": "hair:r212_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r212_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "白梦翩然",
+      "ocr_score": 0.9980555772781372,
+      "suggestions": [
+        "白梦翩然",
+        "白梦翩然·炽火",
+        "影翩然"
+      ],
+      "split": "calibration",
+      "text": "白梦翩然",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 16"
+    },
+    {
+      "id": "hair:r115_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r115_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "苍白时光",
+      "ocr_score": 0.9975848197937012,
+      "suggestions": [
+        "苍白时光",
+        "时光余温",
+        "时光漫溯"
+      ],
+      "split": "calibration",
+      "text": "苍白时光",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 17"
+    },
+    {
+      "id": "hair:r044_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r044_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "颢行岚",
+      "ocr_score": 0.8809939026832581,
+      "suggestions": [
+        "颢行岚",
+        "再游行",
+        "叹将行"
+      ],
+      "split": "calibration",
+      "text": "颢行岚",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 18"
+    },
+    {
+      "id": "hair:r243_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r243_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "辉夜溯光",
+      "ocr_score": 0.8862932324409485,
+      "suggestions": [
+        "辉夜溯光",
+        "夜隐星光",
+        "寂夜微光"
+      ],
+      "split": "calibration",
+      "text": "辉夜溯光",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 19"
+    },
+    {
+      "id": "hair:r207_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r207_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "雾之尽头·心潮",
+      "ocr_score": 0.9550380706787109,
+      "suggestions": [
+        "雾之尽头·心潮",
+        "雾之尽头",
+        "逐光之心"
+      ],
+      "split": "calibration",
+      "text": "雾之尽头·心潮",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 20"
+    },
+    {
+      "id": "hair:r133_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r133_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "聚光的起点",
+      "ocr_score": 0.9969140887260437,
+      "suggestions": [
+        "聚光的起点",
+        "聚光的起点·响彻",
+        "光羽的振翼"
+      ],
+      "split": "calibration",
+      "text": "聚光的起点",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 21"
+    },
+    {
+      "id": "hair:r032_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r032_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "沉没诅咒",
+      "ocr_score": 0.8322948217391968,
+      "suggestions": [
+        "沉没诅咒",
+        "沉眠曲",
+        "日沉守望"
+      ],
+      "split": "calibration",
+      "text": "沉没诅咒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 22"
+    },
+    {
+      "id": "hair:r271_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r271_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "无声的守誓·苍守",
+      "ocr_score": 0.9421709775924683,
+      "suggestions": [
+        "无声的守誓·苍守",
+        "无声的守誓",
+        "无声之约"
+      ],
+      "split": "calibration",
+      "text": "无声的守誓·苍守",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 23"
+    },
+    {
+      "id": "hair:r061_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r061_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "缝e深眠",
+      "ocr_score": 0.7144999504089355,
+      "suggestions": [
+        "缱绻深眠",
+        "林雾深处·酣眠",
+        "缱绻深眠·辰雾"
+      ],
+      "split": "calibration",
+      "text": "缱绻深眠",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 24"
+    },
+    {
+      "id": "hair:r069_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r069_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "白夜烁烁",
+      "ocr_score": 0.92950439453125,
+      "suggestions": [
+        "白夜烁烁",
+        "白夜烁烁·绿意",
+        "幻夜烁银"
+      ],
+      "split": "evaluation",
+      "text": "白夜烁烁",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 25",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r069_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r069_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "白夜烁烁·绿意",
+      "ocr_score": 0.9391154646873474,
+      "suggestions": [
+        "白夜烁烁·绿意",
+        "白夜烁烁",
+        "幻夜烁银"
+      ],
+      "split": "evaluation",
+      "text": "白夜烁烁·绿意",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 26"
+    },
+    {
+      "id": "hair:r032_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r032_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "蝶岛流霭",
+      "ocr_score": 0.8851351141929626,
+      "suggestions": [
+        "蝶岛流霭",
+        "蝶岛流霭·枯谢咏",
+        "墨写流年"
+      ],
+      "split": "evaluation",
+      "text": "蝶岛流霭",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 27",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r230_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r230_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "迷花幻梦·初芒",
+      "ocr_score": 0.9468061327934265,
+      "suggestions": [
+        "迷花幻梦·初芒",
+        "迷花幻梦",
+        "幻梦工坊·迷途"
+      ],
+      "split": "evaluation",
+      "text": "迷花幻梦·初芒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 28"
+    },
+    {
+      "id": "hair:r172_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r172_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "自然生息",
+      "ocr_score": 0.998660147190094,
+      "suggestions": [
+        "自然生息",
+        "自然生息·晨露",
+        "盎然生机"
+      ],
+      "split": "evaluation",
+      "text": "自然生息",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 29",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r252_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r252_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "掬焰成欢",
+      "ocr_score": 0.963668942451477,
+      "suggestions": [
+        "掬焰成欢",
+        "掬水帖",
+        "无光欢宴"
+      ],
+      "split": "evaluation",
+      "text": "掬焰成欢",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 30",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r143_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r143_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "芳绪栖所·困梦",
+      "ocr_score": 0.8786103129386902,
+      "suggestions": [
+        "芳绪栖所·困梦",
+        "芳绪栖所",
+        "栖枝如梦"
+      ],
+      "split": "evaluation",
+      "text": "芳绪栖所·困梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 31"
+    },
+    {
+      "id": "hair:r009_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r009_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "千千乐章",
+      "ocr_score": 0.9931034445762634,
+      "suggestions": [
+        "千千乐章",
+        "千千乐章·晴光",
+        "朝晖乐章"
+      ],
+      "split": "evaluation",
+      "text": "千千乐章",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 32",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r264_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r264_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "碧潮垂烟·潮错",
+      "ocr_score": 0.9897575378417969,
+      "suggestions": [
+        "碧潮垂烟·潮错",
+        "碧潮垂烟",
+        "垂坠梦廊·思念"
+      ],
+      "split": "evaluation",
+      "text": "碧潮垂烟·潮错",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 33"
+    },
+    {
+      "id": "hair:r124_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r124_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "人间茕茕",
+      "ocr_score": 0.8089284300804138,
+      "suggestions": [
+        "人间茕茕",
+        "人间茕茕·陆离",
+        "湖落人间"
+      ],
+      "split": "evaluation",
+      "text": "人间茕茕",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 34",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r249_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r249_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "先于明日·稚羽",
+      "ocr_score": 0.9593085646629333,
+      "suggestions": [
+        "先于明日·稚羽",
+        "先于明日",
+        "明日誓约·归真"
+      ],
+      "split": "evaluation",
+      "text": "先于明日·稚羽",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 35"
+    },
+    {
+      "id": "hair:r004_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r004_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "晴朗视野·湖畔",
+      "ocr_score": 0.9702288508415222,
+      "suggestions": [
+        "晴朗视野·湖畔 ",
+        "晴朗视野",
+        "初生晴梦·心声"
+      ],
+      "split": "evaluation",
+      "text": "晴朗视野·湖畔 ",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 36"
+    },
+    {
+      "id": "hair:r192_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r192_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "静思之行·奔夜",
+      "ocr_score": 0.9892863035202026,
+      "suggestions": [
+        "静思之行·奔夜",
+        "静思之行",
+        "寂静之日·橘火"
+      ],
+      "split": "evaluation",
+      "text": "静思之行·奔夜",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 37"
+    },
+    {
+      "id": "hair:r085_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r085_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "潇洒卷尾",
+      "ocr_score": 0.852932333946228,
+      "suggestions": [
+        "潇洒卷尾",
+        "潇洒卷尾·觅趣",
+        "卷橙麦芒"
+      ],
+      "split": "evaluation",
+      "text": "潇洒卷尾",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 38",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r251_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r251_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "灼灼落流霞",
+      "ocr_score": 0.9985088109970093,
+      "suggestions": [
+        "灼灼落流霞",
+        "余烬灼灼",
+        "梦烬灼灼"
+      ],
+      "split": "evaluation",
+      "text": "灼灼落流霞",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 39",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ],
+        [
+          53,
+          0,
+          67,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r040_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r040_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "青绿心情",
+      "ocr_score": 0.9992556571960449,
+      "suggestions": [
+        "青绿心情",
+        "潮湿心情",
+        "归心引"
+      ],
+      "split": "evaluation",
+      "text": "青绿心情",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_1.png, slot 40",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r003_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r003_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "波纹卷卷·落照",
+      "ocr_score": 0.9452881813049316,
+      "suggestions": [
+        "波纹卷卷·落照 ",
+        "波纹卷卷",
+        "柔心卷卷"
+      ],
+      "split": "evaluation",
+      "text": "波纹卷卷·落照 ",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 41"
+    },
+    {
+      "id": "hair:r103_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r103_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "守护花萼·无忧",
+      "ocr_score": 0.8556652665138245,
+      "suggestions": [
+        "守护花萼·无忧",
+        "守护花萼",
+        "守护者誓约"
+      ],
+      "split": "evaluation",
+      "text": "守护花萼·无忧",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 42"
+    },
+    {
+      "id": "hair:r244_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r244_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "不落黎光·砥锋",
+      "ocr_score": 0.9911311268806458,
+      "suggestions": [
+        "不落黎光·砥锋",
+        "不落黎光",
+        "光织星缘·栖野"
+      ],
+      "split": "evaluation",
+      "text": "不落黎光·砥锋",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 43"
+    },
+    {
+      "id": "hair:r078_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r078_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "徐徐风吟",
+      "ocr_score": 0.9935582876205444,
+      "suggestions": [
+        "徐徐风吟",
+        "徐徐风吟·柔茵",
+        "风中吟唱"
+      ],
+      "split": "evaluation",
+      "text": "徐徐风吟",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 44",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r076_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r076_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "燃情摇曳",
+      "ocr_score": 0.9692971110343933,
+      "suggestions": [
+        "燃情摇曳",
+        "摇曳光影",
+        "摇曳光影·薄暮"
+      ],
+      "split": "evaluation",
+      "text": "燃情摇曳",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 45",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r165_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r165_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "利落风采",
+      "ocr_score": 0.9951564073562622,
+      "suggestions": [
+        "利落风采",
+        "叶落果熟时·穗风",
+        "不落黎光"
+      ],
+      "split": "evaluation",
+      "text": "利落风采",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 46",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r081_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r081_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "迷梦流金-晚城",
+      "ocr_score": 0.9634509682655334,
+      "suggestions": [
+        "迷梦流金·晚城",
+        "迷梦流金",
+        "流金锋芒"
+      ],
+      "split": "evaluation",
+      "text": "迷梦流金·晚城",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 47"
+    },
+    {
+      "id": "hair:r140_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r140_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "雨后日记",
+      "ocr_score": 0.9969272613525391,
+      "suggestions": [
+        "雨后日记",
+        "晴雨线",
+        "雨摇篮"
+      ],
+      "split": "evaluation",
+      "text": "雨后日记",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 48",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r105_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r105_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "蜜色迷离",
+      "ocr_score": 0.9975457787513733,
+      "suggestions": [
+        "蜜色迷离",
+        "水色离调",
+        "迷离星尘"
+      ],
+      "split": "evaluation",
+      "text": "蜜色迷离",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 49",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r038_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r038_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "银白编发",
+      "ocr_score": 0.9987623691558838,
+      "suggestions": [
+        "银白编发",
+        "银白编发·沁心",
+        "银白夜语"
+      ],
+      "split": "evaluation",
+      "text": "银白编发",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 50",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r125_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r125_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "素描前",
+      "ocr_score": 0.9916703104972839,
+      "suggestions": [
+        "素描前",
+        "素描前·暮声",
+        "不悔向前"
+      ],
+      "split": "evaluation",
+      "text": "素描前",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 51",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r162_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r162_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "朝晖乐章",
+      "ocr_score": 0.999591588973999,
+      "suggestions": [
+        "朝晖乐章",
+        "朝晖乐章·续歌",
+        "千千乐章"
+      ],
+      "split": "evaluation",
+      "text": "朝晖乐章",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 52",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r055_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r055_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "银河漾波",
+      "ocr_score": 0.9989528656005859,
+      "suggestions": [
+        "银河漾波",
+        "银河漾波·梦夜",
+        "命河浮光"
+      ],
+      "split": "evaluation",
+      "text": "银河漾波",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 53",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r205_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r205_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "晨雾朦胧",
+      "ocr_score": 0.9952518939971924,
+      "suggestions": [
+        "晨雾朦胧",
+        "朦胧林隙",
+        "朦胧梦隙"
+      ],
+      "split": "evaluation",
+      "text": "晨雾朦胧",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 54",
+      "character_boxes": [
+        [
+          0,
+          0,
+          14,
+          20
+        ],
+        [
+          13,
+          0,
+          27,
+          20
+        ],
+        [
+          26,
+          0,
+          40,
+          20
+        ],
+        [
+          39,
+          0,
+          53,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r089_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r089_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "翘翘棕毛",
+      "ocr_score": 0.848039984703064,
+      "suggestions": [
+        "翘翘棕毛",
+        "翘翘棕毛·新熟",
+        "棕甜梦境"
+      ],
+      "split": "evaluation",
+      "text": "翘翘棕毛",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 55",
+      "character_boxes": [
+        [
+          1,
+          0,
+          15,
+          20
+        ],
+        [
+          14,
+          0,
+          28,
+          20
+        ],
+        [
+          27,
+          0,
+          41,
+          20
+        ],
+        [
+          40,
+          0,
+          54,
+          20
+        ]
+      ],
+      "character_box_source": "显式字格：13px步长、14px宽度保留边缘；第1列起点0，第2/3列起点1。根据标定裁图笔画列投影确定，已查看character_boxes.png确认。"
+    },
+    {
+      "id": "hair:r094_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r094_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "俯瞰虚实",
+      "ocr_score": 0.9983006119728088,
+      "suggestions": [
+        "俯瞰虚实",
+        "虚无之海",
+        "饱满果实"
+      ],
+      "split": "evaluation",
+      "text": "俯瞰虚实",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 56"
+    },
+    {
+      "id": "hair:r215_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r215_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "晨风拾歌",
+      "ocr_score": 0.9980143308639526,
+      "suggestions": [
+        "晨风拾歌",
+        "晨风拾歌·憧梦",
+        "串起风声"
+      ],
+      "split": "evaluation",
+      "text": "晨风拾歌",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 57"
+    },
+    {
+      "id": "hair:r182_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r182_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "流金锋芒",
+      "ocr_score": 0.9976441860198975,
+      "suggestions": [
+        "流金锋芒",
+        "炽日流金",
+        "迷梦流金"
+      ],
+      "split": "evaluation",
+      "text": "流金锋芒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 58"
+    },
+    {
+      "id": "hair:r060_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r060_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "清风掠发",
+      "ocr_score": 0.9958629608154297,
+      "suggestions": [
+        "清风掠发",
+        "清逸暖风",
+        "铃铃清风"
+      ],
+      "split": "evaluation",
+      "text": "清风掠发",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 59"
+    },
+    {
+      "id": "hair:r151_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r151_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "绿踪奇遇·邀梦",
+      "ocr_score": 0.9695715308189392,
+      "suggestions": [
+        "绿踪奇遇·邀梦",
+        "绿踪奇遇",
+        "小鼓奇遇·修习"
+      ],
+      "split": "evaluation",
+      "text": "绿踪奇遇·邀梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 60"
+    },
+    {
+      "id": "hair:r229_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r229_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "源溯往日",
+      "ocr_score": 0.9214283227920532,
+      "suggestions": [
+        "源溯往日",
+        "先于明日",
+        "冬日寒枝"
+      ],
+      "split": "evaluation",
+      "text": "源溯往日",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 61"
+    },
+    {
+      "id": "hair:r016_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r016_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "十秒丸子头",
+      "ocr_score": 0.9955195188522339,
+      "suggestions": [
+        "十秒丸子头",
+        "双喜丸子",
+        "圆圆丸子"
+      ],
+      "split": "evaluation",
+      "text": "十秒丸子头",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 62"
+    },
+    {
+      "id": "hair:r191_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r191_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "幽邃奇境",
+      "ocr_score": 0.9983959794044495,
+      "suggestions": [
+        "幽邃奇境",
+        "妙笔染樱华·奇境",
+        "丰饶奇迹"
+      ],
+      "split": "evaluation",
+      "text": "幽邃奇境",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 63"
+    },
+    {
+      "id": "hair:r208_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r208_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "坏童谣",
+      "ocr_score": 0.9958224296569824,
+      "suggestions": [
+        "坏童谣",
+        "浮于指间·童谣",
+        "人鱼童话"
+      ],
+      "split": "evaluation",
+      "text": "坏童谣",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 64"
+    },
+    {
+      "id": "hair:r011_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r011_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "长梦不醒",
+      "ocr_score": 0.9998518228530884,
+      "suggestions": [
+        "长梦不醒",
+        "不朽铭",
+        "梦之虹"
+      ],
+      "split": "evaluation",
+      "text": "长梦不醒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 65"
+    },
+    {
+      "id": "hair:r179_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r179_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "澄澈诗篇·轮回",
+      "ocr_score": 0.9484861493110657,
+      "suggestions": [
+        "澄澈诗篇·轮回",
+        "澄澈诗篇",
+        "灵犀诗篇"
+      ],
+      "split": "evaluation",
+      "text": "澄澈诗篇·轮回",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 66"
+    },
+    {
+      "id": "hair:r222_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r222_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "余烬灼灼",
+      "ocr_score": 0.965025782585144,
+      "suggestions": [
+        "余烬灼灼",
+        "梦烬灼灼",
+        "余烬灼灼·荣荫"
+      ],
+      "split": "evaluation",
+      "text": "余烬灼灼",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 67"
+    },
+    {
+      "id": "hair:r110_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r110_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "橙黄双尾",
+      "ocr_score": 0.998084306716919,
+      "suggestions": [
+        "橙黄双尾",
+        "橙黄双尾·酸糖果",
+        "乖张黄黑"
+      ],
+      "split": "evaluation",
+      "text": "橙黄双尾",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 68"
+    },
+    {
+      "id": "hair:r096_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r096_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "晨昏曲光",
+      "ocr_score": 0.9994577169418335,
+      "suggestions": [
+        "晨昏曲光",
+        "晨昏千度",
+        "沉眠曲"
+      ],
+      "split": "evaluation",
+      "text": "晨昏曲光",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 69"
+    },
+    {
+      "id": "hair:r088_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r088_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "谆谆教海",
+      "ocr_score": 0.8349891304969788,
+      "suggestions": [
+        "谆谆教诲",
+        "恋夏海风",
+        "火海暗涌"
+      ],
+      "split": "evaluation",
+      "text": "谆谆教诲",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 70"
+    },
+    {
+      "id": "hair:r075_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r075_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "梦离愁·梦中忆",
+      "ocr_score": 0.9686457514762878,
+      "suggestions": [
+        "梦离愁·梦中忆",
+        "梦离愁",
+        "憧憬的幻梦·梦旅"
+      ],
+      "split": "evaluation",
+      "text": "梦离愁·梦中忆",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 71"
+    },
+    {
+      "id": "hair:r267_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r267_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "溺梦溯光",
+      "ocr_score": 0.8587557077407837,
+      "suggestions": [
+        "溺梦溯光",
+        "辉夜溯光",
+        "梦之虹"
+      ],
+      "split": "evaluation",
+      "text": "溺梦溯光",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 72"
+    },
+    {
+      "id": "hair:r208_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r208_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "时光漫溯",
+      "ocr_score": 0.8584944605827332,
+      "suggestions": [
+        "时光漫溯",
+        "时光余温",
+        "时光讯号"
+      ],
+      "split": "evaluation",
+      "text": "时光漫溯",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 73"
+    },
+    {
+      "id": "hair:r140_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r140_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "雨都別书",
+      "ocr_score": 0.9085742831230164,
+      "suggestions": [
+        "雨都别书",
+        "晴雨线",
+        "雨摇篮"
+      ],
+      "split": "evaluation",
+      "text": "雨都别书",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 74"
+    },
+    {
+      "id": "hair:r254_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r254_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "弦音合鸣之时",
+      "ocr_score": 0.9894750714302063,
+      "suggestions": [
+        "弦音合鸣之时",
+        "弦音合鸣之时·清晓",
+        "诀别旧弦之时"
+      ],
+      "split": "evaluation",
+      "text": "弦音合鸣之时",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 75"
+    },
+    {
+      "id": "hair:r266_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r266_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "盛景向晚时",
+      "ocr_score": 0.9970437288284302,
+      "suggestions": [
+        "盛景向晚时",
+        "盛景如诗",
+        "盛景如诗·桃枝"
+      ],
+      "split": "evaluation",
+      "text": "盛景向晚时",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 76"
+    },
+    {
+      "id": "hair:r155_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r155_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "呼嚎嗷嗷",
+      "ocr_score": 0.8750388622283936,
+      "suggestions": [
+        "呼嚎嗷嗷",
+        "呼嚎嗷嗷·隐夜",
+        "**服装店发型"
+      ],
+      "split": "evaluation",
+      "text": "呼嚎嗷嗷",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 77"
+    },
+    {
+      "id": "hair:r142_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r142_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "循常之惑",
+      "ocr_score": 0.9998816847801208,
+      "suggestions": [
+        "循常之惑",
+        "星之岚",
+        "梦之虹"
+      ],
+      "split": "evaluation",
+      "text": "循常之惑",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 78"
+    },
+    {
+      "id": "hair:r215_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r215_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "微光与憧憬·向暖",
+      "ocr_score": 0.964597761631012,
+      "suggestions": [
+        "微光与憧憬·向暖",
+        "微光与憧憬",
+        "憧憬的幻梦·梦旅"
+      ],
+      "split": "evaluation",
+      "text": "微光与憧憬·向暖",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 79"
+    },
+    {
+      "id": "hair:r027_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r027_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "鎏金幽香·软糖",
+      "ocr_score": 0.969023585319519,
+      "suggestions": [
+        "鎏金幽香·软糖",
+        "鎏金幽香",
+        "幽谷誓光·微明"
+      ],
+      "split": "evaluation",
+      "text": "鎏金幽香·软糖",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_2.png, slot 80"
+    },
+    {
+      "id": "hair:r059_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r059_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "银泉漫流·暗影",
+      "ocr_score": 0.9313015341758728,
+      "suggestions": [
+        "银泉漫流·暗影",
+        "银泉漫流",
+        "未尽暗影"
+      ],
+      "split": "evaluation",
+      "text": "银泉漫流·暗影",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 81"
+    },
+    {
+      "id": "hair:r160_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r160_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "纤红挑染",
+      "ocr_score": 0.9981563091278076,
+      "suggestions": [
+        "纤红挑染",
+        "红尘热",
+        "粉红微卷"
+      ],
+      "split": "evaluation",
+      "text": "纤红挑染",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 82"
+    },
+    {
+      "id": "hair:r212_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r212_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "纪录朝晨",
+      "ocr_score": 0.9984681606292725,
+      "suggestions": [
+        "纪录朝晨",
+        "云烟录",
+        "诞辰录"
+      ],
+      "split": "evaluation",
+      "text": "纪录朝晨",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 83"
+    },
+    {
+      "id": "hair:r043_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r043_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "柔心卷卷",
+      "ocr_score": 0.8852465152740479,
+      "suggestions": [
+        "柔心卷卷",
+        "波纹卷卷",
+        "波纹卷卷·落照 "
+      ],
+      "split": "evaluation",
+      "text": "柔心卷卷",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 84"
+    },
+    {
+      "id": "hair:r128_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r128_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "喚醒花容",
+      "ocr_score": 0.9190728068351746,
+      "suggestions": [
+        "唤醒花容",
+        "唤醒花容·离程",
+        "清醒梦"
+      ],
+      "split": "evaluation",
+      "text": "唤醒花容",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 85"
+    },
+    {
+      "id": "hair:r036_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r036_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "烬上新风",
+      "ocr_score": 0.9329810738563538,
+      "suggestions": [
+        "烬上新风",
+        "余烬如新星",
+        "夜余烬"
+      ],
+      "split": "evaluation",
+      "text": "烬上新风",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 86"
+    },
+    {
+      "id": "hair:r086_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r086_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "绵绵双辫·森旅",
+      "ocr_score": 0.9883342981338501,
+      "suggestions": [
+        "绵绵双辫·森旅",
+        "绵绵双辫",
+        "专注思索·森青"
+      ],
+      "split": "evaluation",
+      "text": "绵绵双辫·森旅",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 87"
+    },
+    {
+      "id": "hair:r021_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r021_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "银辉流转",
+      "ocr_score": 0.9988512992858887,
+      "suggestions": [
+        "银辉流转",
+        "月辉流连",
+        "银月清辉"
+      ],
+      "split": "evaluation",
+      "text": "银辉流转",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 88"
+    },
+    {
+      "id": "hair:r180_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r180_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "半掩晦明-断痕",
+      "ocr_score": 0.9034134149551392,
+      "suggestions": [
+        "半掩晦明·断痕",
+        "半掩晦明",
+        "馋明月"
+      ],
+      "split": "evaluation",
+      "text": "半掩晦明·断痕",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 89"
+    },
+    {
+      "id": "hair:r049_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r049_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "暖意融烛·臻意",
+      "ocr_score": 0.9618569612503052,
+      "suggestions": [
+        "暖意融烛·臻意",
+        "暖意融烛",
+        "恣意酸橙·星衍"
+      ],
+      "split": "evaluation",
+      "text": "暖意融烛·臻意",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 90"
+    },
+    {
+      "id": "hair:r023_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r023_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "拂落星羽",
+      "ocr_score": 0.9990034699440002,
+      "suggestions": [
+        "拂落星羽",
+        "星之岚",
+        "舞之星"
+      ],
+      "split": "evaluation",
+      "text": "拂落星羽",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 91"
+    },
+    {
+      "id": "hair:r233_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r233_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "霜星流光·夜尘",
+      "ocr_score": 0.9714507460594177,
+      "suggestions": [
+        "霜星流光·夜尘",
+        "霜星流光",
+        "流光不眠夜"
+      ],
+      "split": "evaluation",
+      "text": "霜星流光·夜尘",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 92"
+    },
+    {
+      "id": "hair:r217_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r217_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "胧胧旧梦",
+      "ocr_score": 0.9933590292930603,
+      "suggestions": [
+        "胧胧旧梦",
+        "朦胧梦隙",
+        "梦之虹"
+      ],
+      "split": "evaluation",
+      "text": "胧胧旧梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 93"
+    },
+    {
+      "id": "hair:r224_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r224_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "树影宁谧",
+      "ocr_score": 0.8466019630432129,
+      "suggestions": [
+        "树影宁谧",
+        "影翩然",
+        "云鸾霞影"
+      ],
+      "split": "evaluation",
+      "text": "树影宁谧",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 94"
+    },
+    {
+      "id": "hair:r022_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r022_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "火海暗涌",
+      "ocr_score": 0.9991846084594727,
+      "suggestions": [
+        "火海暗涌",
+        "灰穹暗涌",
+        "失真暗面"
+      ],
+      "split": "evaluation",
+      "text": "火海暗涌",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 95"
+    },
+    {
+      "id": "hair:r223_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r223_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "幽暗之火",
+      "ocr_score": 0.9996471405029297,
+      "suggestions": [
+        "幽暗之火",
+        "暗星之陨",
+        "寂静之日·橘火"
+      ],
+      "split": "evaluation",
+      "text": "幽暗之火",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 96"
+    },
+    {
+      "id": "hair:r078_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r078_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "心梦飞星",
+      "ocr_score": 0.9976341724395752,
+      "suggestions": [
+        "心梦飞星",
+        "眠云揉梦·谧星",
+        "金蔷薇之梦·星遇"
+      ],
+      "split": "evaluation",
+      "text": "心梦飞星",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 97"
+    },
+    {
+      "id": "hair:r121_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r121_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "岁月轮转",
+      "ocr_score": 0.9991248250007629,
+      "suggestions": [
+        "岁月轮转",
+        "岁月蹉跎",
+        "无面纱月轮"
+      ],
+      "split": "evaluation",
+      "text": "岁月轮转",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 98"
+    },
+    {
+      "id": "hair:r090_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r090_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "回首过往",
+      "ocr_score": 0.9993596076965332,
+      "suggestions": [
+        "回首过往",
+        "刹那回首",
+        "回忆马尾"
+      ],
+      "split": "evaluation",
+      "text": "回首过往",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 99"
+    },
+    {
+      "id": "hair:r270_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r270_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "一个礼物",
+      "ocr_score": 0.9894154071807861,
+      "suggestions": [
+        "一个礼物",
+        "初献礼",
+        "贵族礼"
+      ],
+      "split": "evaluation",
+      "text": "一个礼物",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 100"
+    },
+    {
+      "id": "hair:r108_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r108_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "林雾深处·酣眠",
+      "ocr_score": 0.9378169178962708,
+      "suggestions": [
+        "林雾深处·酣眠",
+        "林雾深处",
+        "缱绻深眠"
+      ],
+      "split": "evaluation",
+      "text": "林雾深处·酣眠",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 101"
+    },
+    {
+      "id": "hair:r181_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r181_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "螺旋密语",
+      "ocr_score": 0.994736909866333,
+      "suggestions": [
+        "螺旋密语",
+        "日光螺旋",
+        "黄昏密语"
+      ],
+      "split": "evaluation",
+      "text": "螺旋密语",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 102"
+    },
+    {
+      "id": "hair:r200_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r200_c02_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "渺月静默",
+      "ocr_score": 0.9839646816253662,
+      "suggestions": [
+        "渺月静默",
+        "渺月静默·馨愫",
+        "渺渺月光"
+      ],
+      "split": "evaluation",
+      "text": "渺月静默",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 103"
+    },
+    {
+      "id": "hair:r008_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r008_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "亲和印象·濯春",
+      "ocr_score": 0.9787493348121643,
+      "suggestions": [
+        "亲和印象·濯春",
+        "亲和印象",
+        "墨鳞吟·春涧"
+      ],
+      "split": "evaluation",
+      "text": "亲和印象·濯春",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 104"
+    },
+    {
+      "id": "hair:r053_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r053_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "愿归之处",
+      "ocr_score": 0.9987179636955261,
+      "suggestions": [
+        "愿归之处",
+        "水色离歌·归处",
+        "归心引"
+      ],
+      "split": "evaluation",
+      "text": "愿归之处",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 105"
+    },
+    {
+      "id": "hair:r022_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r022_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "月色成弦",
+      "ocr_score": 0.9990864396095276,
+      "suggestions": [
+        "月色成弦",
+        "晴晚月色",
+        "月色无踪"
+      ],
+      "split": "evaluation",
+      "text": "月色成弦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 106"
+    },
+    {
+      "id": "hair:r176_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r176_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "不甘束缚",
+      "ocr_score": 0.997713565826416,
+      "suggestions": [
+        "不甘束缚",
+        "不朽铭",
+        "一丝不苟"
+      ],
+      "split": "evaluation",
+      "text": "不甘束缚",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 107"
+    },
+    {
+      "id": "hair:r090_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r090_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "潮湿心情",
+      "ocr_score": 0.9991198778152466,
+      "suggestions": [
+        "潮湿心情",
+        "青绿心情",
+        "归心引"
+      ],
+      "split": "evaluation",
+      "text": "潮湿心情",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 108"
+    },
+    {
+      "id": "hair:r034_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r034_c03_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "妙笔染樱华·奇境",
+      "ocr_score": 0.9637453556060791,
+      "suggestions": [
+        "妙笔染樱华·奇境",
+        "妙笔染樱华",
+        "幽邃奇境"
+      ],
+      "split": "evaluation",
+      "text": "妙笔染樱华·奇境",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 109"
+    },
+    {
+      "id": "hair:r047_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r047_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "馨曲婉转·远方",
+      "ocr_score": 0.9599419236183167,
+      "suggestions": [
+        "鬈曲婉转·远方",
+        "鬈曲婉转",
+        "遥遥远方"
+      ],
+      "split": "evaluation",
+      "text": "鬈曲婉转·远方",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 110"
+    },
+    {
+      "id": "hair:r056_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r056_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "浅漾月辉",
+      "ocr_score": 0.9924116134643555,
+      "suggestions": [
+        "浅漾月辉",
+        "浅漾月辉·旋步",
+        "月辉流连"
+      ],
+      "split": "evaluation",
+      "text": "浅漾月辉",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 111"
+    },
+    {
+      "id": "hair:r171_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r171_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "眠云揉梦",
+      "ocr_score": 0.9961734414100647,
+      "suggestions": [
+        "眠云揉梦",
+        "眠云揉梦·谧星",
+        "眠于美梦"
+      ],
+      "split": "evaluation",
+      "text": "眠云揉梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 112"
+    },
+    {
+      "id": "hair:r016_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r016_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "再睡五分钟",
+      "ocr_score": 0.999981701374054,
+      "suggestions": [
+        "再睡五分钟",
+        "再游行",
+        "初遇时分"
+      ],
+      "split": "evaluation",
+      "text": "再睡五分钟",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 113"
+    },
+    {
+      "id": "hair:r061_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r061_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "蝙跹花舞·盈盈",
+      "ocr_score": 0.9339129328727722,
+      "suggestions": [
+        "蹁跹花舞·盈盈",
+        "蹁跹花舞",
+        "舞之星·启明"
+      ],
+      "split": "evaluation",
+      "text": "蹁跹花舞·盈盈",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 114"
+    },
+    {
+      "id": "hair:r238_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r238_c01_name.png",
+      "part": "hair",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "雨人之约",
+      "ocr_score": 0.9914216995239258,
+      "suggestions": [
+        "雨人之约",
+        "无声之约",
+        "花羽之约"
+      ],
+      "split": "evaluation",
+      "text": "雨人之约",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 115"
+    },
+    {
+      "id": "hair:r173_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r173_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "风眠心絮",
+      "ocr_score": 0.9990580081939697,
+      "suggestions": [
+        "风眠心絮",
+        "悠远之忆·风絮",
+        "归心引"
+      ],
+      "split": "evaluation",
+      "text": "风眠心絮",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 116"
+    },
+    {
+      "id": "hair:r196_c03",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r196_c03_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "青烟化雾·幽罗",
+      "ocr_score": 0.9700307846069336,
+      "suggestions": [
+        "青烟化雾·幽罗",
+        "青烟化雾",
+        "明晦罅隙·幽息"
+      ],
+      "split": "evaluation",
+      "text": "青烟化雾·幽罗",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 117"
+    },
+    {
+      "id": "hair:r003_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r003_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "入场邀请",
+      "ocr_score": 0.9949744939804077,
+      "suggestions": [
+        "入场邀请",
+        "妙墨入神",
+        "澄心之邀"
+      ],
+      "split": "evaluation",
+      "text": "入场邀请",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 118"
+    },
+    {
+      "id": "hair:r013_c01",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r013_c01_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "明日誓约",
+      "ocr_score": 0.9906014204025269,
+      "suggestions": [
+        "明日誓约",
+        "明日誓约·归真",
+        "先于明日"
+      ],
+      "split": "evaluation",
+      "text": "明日誓约",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 119"
+    },
+    {
+      "id": "hair:r072_c02",
+      "source": "live_20261024_033018_762642",
+      "crop": "results/live_20261024_033018_762642/crops/r072_c02_name.png",
+      "part": "hair",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "暖阳缝e",
+      "ocr_score": 0.7734833359718323,
+      "suggestions": [
+        "暖阳盛放",
+        "暖阳缱绻",
+        "发间暖雪"
+      ],
+      "split": "evaluation",
+      "text": "暖阳缱绻",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_3.png, slot 120"
+    },
+    {
+      "id": "set:r056_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r056_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "美味印记",
+      "ocr_score": 0.9994519352912903,
+      "suggestions": [
+        "美味印记",
+        "初恋滋味",
+        "完美构想"
+      ],
+      "split": "calibration",
+      "text": "美味印记",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 121"
+    },
+    {
+      "id": "set:r066_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r066_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "隐匿叶声",
+      "ocr_score": 0.9994421601295471,
+      "suggestions": [
+        "隐匿叶声",
+        "一叶晴日",
+        "声声纸鸢"
+      ],
+      "split": "calibration",
+      "text": "隐匿叶声",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 122"
+    },
+    {
+      "id": "set:r072_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r072_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "沙野之息",
+      "ocr_score": 0.9996846318244934,
+      "suggestions": [
+        "沙野之息",
+        "沙野之息·奔夜",
+        "沙野之息·遥径"
+      ],
+      "split": "calibration",
+      "text": "沙野之息",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 123"
+    },
+    {
+      "id": "set:r067_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r067_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "青枝缀诗",
+      "ocr_score": 0.990159273147583,
+      "suggestions": [
+        "青枝缀诗",
+        "青枝缀诗·炽跃",
+        "青枝缀诗·轮回"
+      ],
+      "split": "calibration",
+      "text": "青枝缀诗",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 124"
+    },
+    {
+      "id": "set:r023_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r023_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "焰光灼灼",
+      "ocr_score": 0.9927256107330322,
+      "suggestions": [
+        "焰光灼灼",
+        "焰光灼灼·绿意",
+        "焰光灼灼·奇妙夜"
+      ],
+      "split": "calibration",
+      "text": "焰光灼灼",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 125"
+    },
+    {
+      "id": "set:r019_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r019_c01_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "粉缎带圆舞曲",
+      "ocr_score": 0.8885291218757629,
+      "suggestions": [
+        "粉缎带圆舞曲",
+        "粉缎带圆舞曲·变奏",
+        "粉缎带圆舞曲·旋步"
+      ],
+      "split": "calibration",
+      "text": "粉缎带圆舞曲",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 126"
+    },
+    {
+      "id": "set:r047_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r047_c03_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "星屑小梦曲",
+      "ocr_score": 0.9984725117683411,
+      "suggestions": [
+        "星屑小梦曲",
+        "星屑小梦曲·初日",
+        "星屑小梦曲·响彻"
+      ],
+      "split": "calibration",
+      "text": "星屑小梦曲",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 127"
+    },
+    {
+      "id": "set:r045_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r045_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "芙菜缘",
+      "ocr_score": 0.8114212155342102,
+      "suggestions": [
+        "芙蕖缘",
+        "三生因缘",
+        "宴梦奇缘"
+      ],
+      "split": "calibration",
+      "text": "芙蕖缘",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 128"
+    },
+    {
+      "id": "set:r012_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r012_c03_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "初恋滋味",
+      "ocr_score": 0.998583197593689,
+      "suggestions": [
+        "初恋滋味",
+        "第五味觉",
+        "美味印记"
+      ],
+      "split": "calibration",
+      "text": "初恋滋味",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 129"
+    },
+    {
+      "id": "set:r010_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r010_c01_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "定格瞬间",
+      "ocr_score": 0.9997033476829529,
+      "suggestions": [
+        "定格瞬间",
+        "定格瞬间·花海",
+        "定格瞬间·薄暮"
+      ],
+      "split": "calibration",
+      "text": "定格瞬间",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 130"
+    },
+    {
+      "id": "set:r096_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r096_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "吹响朝阳时",
+      "ocr_score": 0.9988496899604797,
+      "suggestions": [
+        "吹响朝阳时",
+        "吹响朝阳时·华绽",
+        "吹响朝阳时·清晓"
+      ],
+      "split": "evaluation",
+      "text": "吹响朝阳时",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 131"
+    },
+    {
+      "id": "set:r006_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r006_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "群星绽放时",
+      "ocr_score": 0.9996155500411987,
+      "suggestions": [
+        "群星绽放时",
+        "群星绽放时·坠梦",
+        "群星绽放时·星影"
+      ],
+      "split": "evaluation",
+      "text": "群星绽放时",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 132"
+    },
+    {
+      "id": "set:r017_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r017_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "简练风度",
+      "ocr_score": 0.9966484308242798,
+      "suggestions": [
+        "简练风度",
+        "今宵风月",
+        "伊风祓舞"
+      ],
+      "split": "evaluation",
+      "text": "简练风度",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 133"
+    },
+    {
+      "id": "set:r036_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r036_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "心湖涟漪",
+      "ocr_score": 0.9930316209793091,
+      "suggestions": [
+        "心湖涟漪",
+        "心湖涟漪·初虹",
+        "心湖涟漪·夜阑"
+      ],
+      "split": "evaluation",
+      "text": "心湖涟漪",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 134"
+    },
+    {
+      "id": "set:r009_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r009_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "蝶屿风袭",
+      "ocr_score": 0.9874989986419678,
+      "suggestions": [
+        "蝶屿风袭",
+        "蝶屿风袭·枯谢咏",
+        "蝶屿风袭·梦中谣"
+      ],
+      "split": "evaluation",
+      "text": "蝶屿风袭",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 135"
+    },
+    {
+      "id": "set:r020_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r020_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "雪夜奇遇",
+      "ocr_score": 0.9962698221206665,
+      "suggestions": [
+        "雪夜奇遇",
+        "松果奇遇",
+        "咚咚鼓奇遇"
+      ],
+      "split": "evaluation",
+      "text": "雪夜奇遇",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 136"
+    },
+    {
+      "id": "set:r055_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r055_c03_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "林深栖羽",
+      "ocr_score": 0.9029584527015686,
+      "suggestions": [
+        "林深栖羽",
+        "林深栖羽·遗烬",
+        "林深栖羽·邀梦"
+      ],
+      "split": "evaluation",
+      "text": "林深栖羽",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 137"
+    },
+    {
+      "id": "set:r018_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r018_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "翩翩愿飞去",
+      "ocr_score": 0.9747964143753052,
+      "suggestions": [
+        "翩翩愿飞去",
+        "翩翩愿飞去·昔影",
+        "翩翩愿飞去·晴空"
+      ],
+      "split": "evaluation",
+      "text": "翩翩愿飞去",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 138"
+    },
+    {
+      "id": "set:r081_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r081_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "流光灵契",
+      "ocr_score": 0.9989875555038452,
+      "suggestions": [
+        "流光灵契",
+        "流光灵契·幻华",
+        "流光灵契·炽火"
+      ],
+      "split": "evaluation",
+      "text": "流光灵契",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 139"
+    },
+    {
+      "id": "set:r004_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r004_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "绯红绮梦",
+      "ocr_score": 0.9005506634712219,
+      "suggestions": [
+        "绯红绮梦",
+        "绯夜狂想录·昔梦",
+        "梦航书"
+      ],
+      "split": "evaluation",
+      "text": "绯红绮梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 140"
+    },
+    {
+      "id": "set:r092_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r092_c03_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "咏赞黄昏",
+      "ocr_score": 0.920197606086731,
+      "suggestions": [
+        "咏赞黄昏",
+        "咏赞黄昏·归尘",
+        "咏赞黄昏·砥锋"
+      ],
+      "split": "evaluation",
+      "text": "咏赞黄昏",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 141"
+    },
+    {
+      "id": "set:r066_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r066_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "丛林図舞曲",
+      "ocr_score": 0.9308101534843445,
+      "suggestions": [
+        "丛林圆舞曲",
+        "熠熠舞曲",
+        "音舞心曲"
+      ],
+      "split": "evaluation",
+      "text": "丛林圆舞曲",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 142"
+    },
+    {
+      "id": "set:r058_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r058_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "伊风被舞",
+      "ocr_score": 0.8416528701782227,
+      "suggestions": [
+        "伊风祓舞",
+        "伊风祓舞·沉暮",
+        "伊风祓舞·苍夜"
+      ],
+      "split": "evaluation",
+      "text": "伊风祓舞",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 143"
+    },
+    {
+      "id": "set:r087_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r087_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "烬蝶终歌",
+      "ocr_score": 0.9831725358963013,
+      "suggestions": [
+        "烬蝶终歌",
+        "烬蝶终歌·凛夜",
+        "烬蝶终歌·灼梦"
+      ],
+      "split": "evaluation",
+      "text": "烬蝶终歌",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 144"
+    },
+    {
+      "id": "set:r082_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r082_c01_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "梦隙灵语",
+      "ocr_score": 0.999381959438324,
+      "suggestions": [
+        "梦隙灵语",
+        "梦隙灵语·憧梦",
+        "梦隙灵语·秘契"
+      ],
+      "split": "evaluation",
+      "text": "梦隙灵语",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 145"
+    },
+    {
+      "id": "set:r095_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r095_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "万华缭乱",
+      "ocr_score": 0.9079568386077881,
+      "suggestions": [
+        "万华缭乱",
+        "万华缭乱·彩彻",
+        "万华缭乱·晚霁"
+      ],
+      "split": "evaluation",
+      "text": "万华缭乱",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 146"
+    },
+    {
+      "id": "set:r076_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r076_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "第五味觉",
+      "ocr_score": 0.9707858562469482,
+      "suggestions": [
+        "第五味觉",
+        "第五味觉·归真",
+        "第五味觉·浮愿"
+      ],
+      "split": "evaluation",
+      "text": "第五味觉",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 147"
+    },
+    {
+      "id": "set:r065_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r065_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "暮色终曲",
+      "ocr_score": 0.9890614748001099,
+      "suggestions": [
+        "暮色终曲",
+        "烬蝶终歌",
+        "熠熠舞曲"
+      ],
+      "split": "evaluation",
+      "text": "暮色终曲",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 148"
+    },
+    {
+      "id": "set:r059_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r059_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "遐灵",
+      "ocr_score": 0.5806751251220703,
+      "suggestions": [
+        "谒灵",
+        "梦隙灵语",
+        "流光灵契"
+      ],
+      "split": "evaluation",
+      "text": "谒灵",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 149"
+    },
+    {
+      "id": "set:r075_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r075_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "筑梦绘心",
+      "ocr_score": 0.9996789693832397,
+      "suggestions": [
+        "筑梦绘心",
+        "筑梦绘心·晴空",
+        "筑梦绘心·森青"
+      ],
+      "split": "evaluation",
+      "text": "筑梦绘心",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 150"
+    },
+    {
+      "id": "set:r057_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r057_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "摇烛夜话",
+      "ocr_score": 0.9930667877197266,
+      "suggestions": [
+        "摇烛夜话",
+        "摇醒星与月·夜游",
+        "仲夜守望"
+      ],
+      "split": "evaluation",
+      "text": "摇烛夜话",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 151"
+    },
+    {
+      "id": "set:r014_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r014_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "树荫午憩",
+      "ocr_score": 0.9931353330612183,
+      "suggestions": [
+        "树荫午憩",
+        "清爽茶会时·午憩",
+        "午后暖阳"
+      ],
+      "split": "evaluation",
+      "text": "树荫午憩",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 152"
+    },
+    {
+      "id": "set:r075_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r075_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "白日溯梦",
+      "ocr_score": 0.8785893321037292,
+      "suggestions": [
+        "白日溯梦",
+        "白日溯梦·芳甸",
+        "白日溯梦·荒言"
+      ],
+      "split": "evaluation",
+      "text": "白日溯梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 153"
+    },
+    {
+      "id": "set:r092_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r092_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "启源造律",
+      "ocr_score": 0.9996474981307983,
+      "suggestions": [
+        "启源造律",
+        "启源造律·新章",
+        "启源造律·昔影"
+      ],
+      "split": "evaluation",
+      "text": "启源造律",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 154"
+    },
+    {
+      "id": "set:r098_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r098_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "云隙的针脚",
+      "ocr_score": 0.9970561861991882,
+      "suggestions": [
+        "云隙的针脚",
+        "云隙的针脚·春山",
+        "云隙的针脚·织野"
+      ],
+      "split": "evaluation",
+      "text": "云隙的针脚",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 155"
+    },
+    {
+      "id": "set:r056_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r056_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "慕春之刻",
+      "ocr_score": 0.9782655239105225,
+      "suggestions": [
+        "慕春之刻",
+        "时之契",
+        "星之海"
+      ],
+      "split": "evaluation",
+      "text": "慕春之刻",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 156"
+    },
+    {
+      "id": "set:r094_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r094_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "绘伶成诗",
+      "ocr_score": 0.9434995651245117,
+      "suggestions": [
+        "绘伶成诗",
+        "绘伶成诗·怀愿",
+        "绘伶成诗·琢心"
+      ],
+      "split": "evaluation",
+      "text": "绘伶成诗",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 157"
+    },
+    {
+      "id": "set:r025_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r025_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "晴日草绒",
+      "ocr_score": 0.9794387817382812,
+      "suggestions": [
+        "晴日草绒",
+        "一叶晴日",
+        "晴日悠行"
+      ],
+      "split": "evaluation",
+      "text": "晴日草绒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 158"
+    },
+    {
+      "id": "set:r085_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r085_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "今宵风月",
+      "ocr_score": 0.9922677278518677,
+      "suggestions": [
+        "今宵风月",
+        "今宵风月·念卿",
+        "今宵风月·无束"
+      ],
+      "split": "evaluation",
+      "text": "今宵风月",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 159"
+    },
+    {
+      "id": "set:r077_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r077_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "浮絮云间梦",
+      "ocr_score": 0.9958332180976868,
+      "suggestions": [
+        "浮絮云间梦",
+        "浮金奏梦",
+        "云朵白日梦"
+      ],
+      "split": "evaluation",
+      "text": "浮絮云间梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_4.png, slot 160"
+    },
+    {
+      "id": "set:r017_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r017_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "梦寻星愿",
+      "ocr_score": 0.998041033744812,
+      "suggestions": [
+        "梦寻星愿",
+        "星愿之声",
+        "星愿璨梦"
+      ],
+      "split": "evaluation",
+      "text": "梦寻星愿",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 161"
+    },
+    {
+      "id": "set:r071_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r071_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "花明千焰",
+      "ocr_score": 0.8822599649429321,
+      "suggestions": [
+        "花明千焰",
+        "花明千焰·燃梦",
+        "花明千焰·遐思"
+      ],
+      "split": "evaluation",
+      "text": "花明千焰",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 162"
+    },
+    {
+      "id": "set:r024_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r024_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "新岁瞳瞳",
+      "ocr_score": 0.8669791221618652,
+      "suggestions": [
+        "新岁曈曈",
+        "新岁曈曈·春茶",
+        "新岁曈曈·桃枝"
+      ],
+      "split": "evaluation",
+      "text": "新岁曈曈",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 163"
+    },
+    {
+      "id": "set:r098_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r098_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "花影心期",
+      "ocr_score": 0.9992866516113281,
+      "suggestions": [
+        "花影心期",
+        "花影心期·斓梦",
+        "花影心期·澄辉"
+      ],
+      "split": "evaluation",
+      "text": "花影心期",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 164"
+    },
+    {
+      "id": "set:r034_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r034_c02_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "摇醒星与月",
+      "ocr_score": 0.9939149618148804,
+      "suggestions": [
+        "摇醒星与月",
+        "摇醒星与月·云歌",
+        "摇醒星与月·夜游"
+      ],
+      "split": "evaluation",
+      "text": "摇醒星与月",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 165"
+    },
+    {
+      "id": "set:r035_c02",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r035_c02_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "淑雅格调",
+      "ocr_score": 0.9994152784347534,
+      "suggestions": [
+        "淑雅格调",
+        "淑雅格调·娴静",
+        "淑雅格调·林影"
+      ],
+      "split": "evaluation",
+      "text": "淑雅格调",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 166"
+    },
+    {
+      "id": "set:r099_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r099_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "浮金奏梦",
+      "ocr_score": 0.9860593676567078,
+      "suggestions": [
+        "浮金奏梦",
+        "浮金奏梦·循光",
+        "浮金奏梦·绘曦"
+      ],
+      "split": "evaluation",
+      "text": "浮金奏梦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 167"
+    },
+    {
+      "id": "set:r051_c03",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r051_c03_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "星露谷奇缘",
+      "ocr_score": 0.9965580105781555,
+      "suggestions": [
+        "星露谷奇缘",
+        "宴梦奇缘",
+        "宴梦奇缘·新生"
+      ],
+      "split": "evaluation",
+      "text": "星露谷奇缘",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 168"
+    },
+    {
+      "id": "set:r094_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r094_c01_name.png",
+      "part": "set",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "白夜长旋舞",
+      "ocr_score": 0.9989720582962036,
+      "suggestions": [
+        "白夜长旋舞",
+        "白夜长旋舞·初光",
+        "白夜长旋舞·暗涌"
+      ],
+      "split": "evaluation",
+      "text": "白夜长旋舞",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 169"
+    },
+    {
+      "id": "set:r068_c01",
+      "source": "live_20261024_023946_053174",
+      "crop": "results/live_20261024_023946_053174/crops/r068_c01_name.png",
+      "part": "set",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "浮翩莹白",
+      "ocr_score": 0.9923158884048462,
+      "suggestions": [
+        "浮翩莹白",
+        "浮翩莹白·寂生",
+        "浮翩莹白·献礼"
+      ],
+      "split": "evaluation",
+      "text": "浮翩莹白",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 170"
+    },
+    {
+      "id": "accessory.choker:r028_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r028_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "绫白信笺",
+      "ocr_score": 0.9912233948707581,
+      "suggestions": [
+        "绫白信笺",
+        "绫白信笺·灿蕊",
+        "不灭信仰"
+      ],
+      "split": "calibration",
+      "text": "绫白信笺",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 171"
+    },
+    {
+      "id": "accessory.choker:r013_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r013_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "结茧封缄·枯谢咏",
+      "ocr_score": 0.9084210395812988,
+      "suggestions": [
+        "结茧封缄·枯谢咏",
+        "结茧封缄",
+        "以沉痛封缄"
+      ],
+      "split": "calibration",
+      "text": "结茧封缄·枯谢咏",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 172"
+    },
+    {
+      "id": "accessory.choker:r040_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r040_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "丝丝缀结·晚城",
+      "ocr_score": 0.9778663516044617,
+      "suggestions": [
+        "丝丝缀结·晚城",
+        "丝丝缀结",
+        "黑结浮水·波光"
+      ],
+      "split": "calibration",
+      "text": "丝丝缀结·晚城",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 173"
+    },
+    {
+      "id": "accessory.choker:r035_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r035_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "觅梦音符",
+      "ocr_score": 0.9988477826118469,
+      "suggestions": [
+        "觅梦音符",
+        "起泠音",
+        "具象为梦"
+      ],
+      "split": "calibration",
+      "text": "觅梦音符",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 174"
+    },
+    {
+      "id": "accessory.choker:r021_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r021_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "轻盈如愿·柔曦",
+      "ocr_score": 0.9754511713981628,
+      "suggestions": [
+        "轻盈如愿·柔曦",
+        "轻盈如愿",
+        "心愿织梦·绘曦"
+      ],
+      "split": "calibration",
+      "text": "轻盈如愿·柔曦",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 175"
+    },
+    {
+      "id": "accessory.choker:r009_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r009_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "风雪环颈",
+      "ocr_score": 0.9985358715057373,
+      "suggestions": [
+        "风雪环颈",
+        "守护心环",
+        "寂雪箴言"
+      ],
+      "split": "calibration",
+      "text": "风雪环颈",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 176"
+    },
+    {
+      "id": "accessory.choker:r011_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r011_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "心跳来袭",
+      "ocr_score": 0.9990100264549255,
+      "suggestions": [
+        "心跳来袭",
+        "慢心跳",
+        "不凋之心"
+      ],
+      "split": "evaluation",
+      "text": "心跳来袭",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 177"
+    },
+    {
+      "id": "accessory.choker:r029_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r029_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "绫白信笺·灿蕊",
+      "ocr_score": 0.9604706168174744,
+      "suggestions": [
+        "绫白信笺·灿蕊",
+        "绫白信笺",
+        "银白之誓·瑰焰"
+      ],
+      "split": "evaluation",
+      "text": "绫白信笺·灿蕊",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 178"
+    },
+    {
+      "id": "accessory.choker:r001_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r001_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "荧荧的微光",
+      "ocr_score": 0.9988870620727539,
+      "suggestions": [
+        "荧荧的微光",
+        "芬芳微光",
+        "他的日落"
+      ],
+      "split": "evaluation",
+      "text": "荧荧的微光",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 179"
+    },
+    {
+      "id": "accessory.choker:r027_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r027_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "星落之径",
+      "ocr_score": 0.9984433650970459,
+      "suggestions": [
+        "星落之径",
+        "星落之径·重逢",
+        "春之歌"
+      ],
+      "split": "evaluation",
+      "text": "星落之径",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 180"
+    },
+    {
+      "id": "accessory.choker:r025_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r025_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "引吭欢歌",
+      "ocr_score": 0.9538370370864868,
+      "suggestions": [
+        "引吭欢歌",
+        "引吭欢歌·小星曲",
+        "不寐歌"
+      ],
+      "split": "evaluation",
+      "text": "引吭欢歌",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 181"
+    },
+    {
+      "id": "accessory.choker:r032_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r032_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 3,
+      "ocr_text": "草甸碧空",
+      "ocr_score": 0.9996771216392517,
+      "suggestions": [
+        "草甸碧空",
+        "浅草千里",
+        "焰照新空"
+      ],
+      "split": "evaluation",
+      "text": "草甸碧空",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 182"
+    },
+    {
+      "id": "accessory.choker:r038_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r038_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "宁神奏演",
+      "ocr_score": 0.9861785173416138,
+      "suggestions": [
+        "宁神奏演",
+        "宁神奏演·宵逐",
+        "应援协奏"
+      ],
+      "split": "evaluation",
+      "text": "宁神奏演",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 183"
+    },
+    {
+      "id": "accessory.choker:r018_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r018_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "闪耀昔年",
+      "ocr_score": 0.9970661401748657,
+      "suggestions": [
+        "闪耀昔年",
+        "往昔滞影",
+        "昔日花香"
+      ],
+      "split": "evaluation",
+      "text": "闪耀昔年",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 184"
+    },
+    {
+      "id": "accessory.choker:r037_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r037_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "窗边风景·柔茵",
+      "ocr_score": 0.9619011282920837,
+      "suggestions": [
+        "窗边风景·柔茵",
+        "窗边风景",
+        "轻盈如愿·柔曦"
+      ],
+      "split": "evaluation",
+      "text": "窗边风景·柔茵",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 185"
+    },
+    {
+      "id": "accessory.choker:r009_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r009_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "天鹅心曲·诺言",
+      "ocr_score": 0.9833440184593201,
+      "suggestions": [
+        "天鹅心曲·诺言",
+        "天鹅心曲",
+        "不凋之心·森翠"
+      ],
+      "split": "evaluation",
+      "text": "天鹅心曲·诺言",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 186"
+    },
+    {
+      "id": "accessory.choker:r012_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r012_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "禁锢命运",
+      "ocr_score": 0.9137017726898193,
+      "suggestions": [
+        "禁锢命运",
+        "命运之始",
+        "宿命重蹈"
+      ],
+      "split": "evaluation",
+      "text": "禁锢命运",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 187"
+    },
+    {
+      "id": "accessory.choker:r029_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r029_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "语尽将别",
+      "ocr_score": 0.9967759847640991,
+      "suggestions": [
+        "语尽将别",
+        "缄语",
+        "失语呢喃"
+      ],
+      "split": "evaluation",
+      "text": "语尽将别",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 188"
+    },
+    {
+      "id": "accessory.choker:r001_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r001_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "冉冉的新星·绿汀",
+      "ocr_score": 0.928310751914978,
+      "suggestions": [
+        "冉冉的新星·绿汀",
+        "冉冉的新星",
+        "笑着的星"
+      ],
+      "split": "evaluation",
+      "text": "冉冉的新星·绿汀",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 189"
+    },
+    {
+      "id": "accessory.choker:r002_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r002_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "昔日花香·风絮",
+      "ocr_score": 0.9852169752120972,
+      "suggestions": [
+        "昔日花香·风絮",
+        "昔日花香",
+        "海日繁花"
+      ],
+      "split": "evaluation",
+      "text": "昔日花香·风絮",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 190"
+    },
+    {
+      "id": "accessory.choker:r033_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r033_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "起泠音",
+      "ocr_score": 0.8719179630279541,
+      "suggestions": [
+        "起泠音",
+        "回溯音轨",
+        "弥音似火"
+      ],
+      "split": "evaluation",
+      "text": "起泠音",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 191"
+    },
+    {
+      "id": "accessory.choker:r014_c03",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r014_c03_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 3,
+      "ocr_text": "飘渺幻林·青雾",
+      "ocr_score": 0.9810470342636108,
+      "suggestions": [
+        "飘渺幻林·青雾",
+        "飘渺幻林",
+        "光痕渐明·岚雾"
+      ],
+      "split": "evaluation",
+      "text": "飘渺幻林·青雾",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 192"
+    },
+    {
+      "id": "accessory.choker:r031_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r031_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "锦时绒绒",
+      "ocr_score": 0.9414259791374207,
+      "suggestions": [
+        "锦时绒绒",
+        "锦时绒绒·未央",
+        "绒绒月色"
+      ],
+      "split": "evaluation",
+      "text": "锦时绒绒",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 193"
+    },
+    {
+      "id": "accessory.choker:r008_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r008_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "灼烧成烬",
+      "ocr_score": 0.9225992560386658,
+      "suggestions": [
+        "灼烧成烬",
+        "烬夜新生",
+        "织银成星"
+      ],
+      "split": "evaluation",
+      "text": "灼烧成烬",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 194"
+    },
+    {
+      "id": "accessory.choker:r034_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r034_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "回溯音轨",
+      "ocr_score": 0.8973610401153564,
+      "suggestions": [
+        "回溯音轨",
+        "回溯音轨·安眠曲",
+        "起泠音"
+      ],
+      "split": "evaluation",
+      "text": "回溯音轨",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 195"
+    },
+    {
+      "id": "accessory.choker:r022_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r022_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 1,
+      "ocr_text": "织银成星",
+      "ocr_score": 0.9984105825424194,
+      "suggestions": [
+        "织银成星",
+        "织银成星·暗影",
+        "夜星围巾"
+      ],
+      "split": "evaluation",
+      "text": "织银成星",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 196"
+    },
+    {
+      "id": "accessory.choker:r024_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r024_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "焰光回响",
+      "ocr_score": 0.9980629682540894,
+      "suggestions": [
+        "焰光回响",
+        "焰光回响·辰雾",
+        "暮紫回响"
+      ],
+      "split": "evaluation",
+      "text": "焰光回响",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 197"
+    },
+    {
+      "id": "accessory.choker:r003_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r003_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "owned",
+      "column": 2,
+      "ocr_text": "绿茵涌动",
+      "ocr_score": 0.9919654726982117,
+      "suggestions": [
+        "绿茵涌动",
+        "剪剪绿野",
+        "归于深绿"
+      ],
+      "split": "evaluation",
+      "text": "绿茵涌动",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 198"
+    },
+    {
+      "id": "accessory.choker:r036_c02",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r036_c02_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 2,
+      "ocr_text": "幽夜余弦·绯月",
+      "ocr_score": 0.8788043260574341,
+      "suggestions": [
+        "幽夜余弦·绯月",
+        "幽夜余弦",
+        "如夜垂临·梦沼"
+      ],
+      "split": "evaluation",
+      "text": "幽夜余弦·绯月",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 199"
+    },
+    {
+      "id": "accessory.choker:r017_c01",
+      "source": "scan_neckwear_wider_names",
+      "crop": "results/scan_neckwear_wider_names/crops/r017_c01_name.png",
+      "part": "accessory.choker",
+      "ownership": "unowned",
+      "column": 1,
+      "ocr_text": "即刻启程",
+      "ocr_score": 0.9998287558555603,
+      "suggestions": [
+        "即刻启程",
+        "飘摇启程",
+        "璀璨的启程"
+      ],
+      "split": "evaluation",
+      "text": "即刻启程",
+      "reviewed": true,
+      "reviewed_by": "assistant_visual_review",
+      "review_evidence": "results/font_retrieval_calibrated/labels_5.png, slot 200"
+    }
+  ],
+  "label_changes": [
+    {
+      "sample": "hair:r091_c01",
+      "initial_suggestion": "双喜丸子",
+      "corrected": "圆圆丸子",
+      "stage": "运行前查看联系表",
+      "reason": "图中前两字均为外框内员的圆字，而非双喜"
+    },
+    {
+      "sample": "hair:r072_c02",
+      "initial_label": "暖阳盛放",
+      "corrected": "暖阳缱绻",
+      "stage": "对照输出提示差异后重新查看完整卡片",
+      "reason": "末两字具有绞丝旁，为缱绻而非盛放；图片与候选字形对照见证据",
+      "evidence": "results/font_retrieval_calibrated/label_correction_120.png"
+    }
+  ]
+}
