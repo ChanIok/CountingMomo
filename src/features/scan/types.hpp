@@ -155,8 +155,36 @@ struct Session {
   int candidate_characters{};
   std::string recognition_method{"name_library_gray_templates"};
   bool validate_characters{};
+  bool report_enabled{};
   bool single_page{};
   std::string source_image;
+};
+struct BatchCategory {
+  std::string id;
+  std::string group;
+  std::string name;
+  std::string status{"pending"};
+  std::string message;
+  std::string report;
+  std::string menu_image;
+  std::string title_image;
+  int accepted_count{};
+  int processed_count{};
+};
+struct BatchSession {
+  std::string status{"starting"};
+  std::string message;
+  std::string created_at;
+  std::string current_category;
+  std::string stage;
+  bool navigation_only{};
+  bool report_enabled{};
+  int planned_categories{};
+  int completed_categories{};
+  int skipped_categories{};
+  int processed_count{};
+  double elapsed_seconds{};
+  std::vector<BatchCategory> categories;
 };
 auto rect(const Box& box) -> cv::Rect;
 auto load_layout(const std::filesystem::path& path) -> std::expected<Layout, std::string>;

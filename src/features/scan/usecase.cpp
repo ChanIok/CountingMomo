@@ -7,6 +7,7 @@
 #include "vendor/windows/winrt/windows_foundation.hpp"
 
 #include "features/capture/capture.hpp"
+#include "features/navigation/navigation.hpp"
 #include "features/recognition/recognition.hpp"
 #include "features/report/report.hpp"
 #include "features/scan/vision.hpp"
@@ -19,6 +20,15 @@
 namespace features::scan {
 namespace {
 using Clock = std::chrono::steady_clock;
+struct ScanResources {
+  window::Target target;
+  capture::Capture capture;
+  Layout layout;
+  std::optional<recognition::NameRecognizer> recognizer;
+  std::shared_ptr<const capture::Frame> category_frame;
+  cv::Mat last_image;
+  ~ScanResources() { capture::stop(capture); }
+};
 struct PageJob {
   std::string frame_id;
   cv::Mat image;
@@ -37,6 +47,7 @@ struct RunTimings {
   std::string note{
       "各线程并行；识别分项包含于识别总计，模板按需生成也计入识别总计；"
       "采集识别阶段含启动准备；后台处理包含识别、页面存图和JSONL，不含报告阶段裁图；"
+      "仅开启report时保存正常页面和裁图；report_seconds含JSON/CSV及可选HTML导出；"
       "采样等待包含视觉检查，队列等待和排空等待与后台工作重叠，不能相加。"};
   double wall_seconds{};
   double font_load_seconds{};
@@ -59,6 +70,7 @@ struct Worker {
   recognition::NameRecognizer recognizer;
   Layout layout;
   std::filesystem::path output;
+  bool save_frames{};
   std::mutex mutex;
   std::condition_variable condition;
   std::deque<PageJob> queue;
@@ -86,10 +98,12 @@ auto set_worker_error(Worker& worker, std::string text) -> void {
 }
 auto process_job(Worker& worker, PageJob job, std::ofstream& journal) -> void {
   utils::timing::Scope timer(worker.timings.processing_seconds);
-  auto evidence = utils::timing::measure(worker.timings.frame_save_seconds, [&] {
-    return utils::image::save_jpg(worker.output / "frames" / (job.frame_id + ".jpg"), job.image);
-  });
-  if (!evidence) set_worker_error(worker, evidence.error());
+  if (worker.save_frames) {
+    auto evidence = utils::timing::measure(worker.timings.frame_save_seconds, [&] {
+      return utils::image::save_jpg(worker.output / "frames" / (job.frame_id + ".jpg"), job.image);
+    });
+    if (!evidence) set_worker_error(worker, evidence.error());
+  }
   for (auto& sample : job.samples) {
     auto& item = sample.item;
     try {
@@ -125,11 +139,13 @@ auto process_job(Worker& worker, PageJob job, std::ofstream& journal) -> void {
   cli::log(std::format("已处理 {} 件。", worker.items.size()));
 }
 auto start_worker(recognition::NameRecognizer recognizer, const Layout& layout,
-                  const std::filesystem::path& output) -> std::unique_ptr<Worker> {
+                  const std::filesystem::path& output, bool save_frames)
+    -> std::unique_ptr<Worker> {
   auto worker = std::make_unique<Worker>();
   worker->recognizer = std::move(recognizer);
   worker->layout = layout;
   worker->output = output;
+  worker->save_frames = save_frames;
   worker->thread = std::jthread([w = worker.get()] {
     HRESULT apartment = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     if (FAILED(apartment)) {
@@ -202,8 +218,8 @@ auto seconds(Clock::time_point time) -> double {
 }
 auto wait_page(const capture::Capture& capture, const Layout& layout, const Options& options,
                const window::Target& target, Worker* worker, const Page* previous,
-               const Anchor* anchor, Transaction& transaction, cv::Mat& last_image)
-    -> std::expected<Observation, std::string> {
+               const Anchor* anchor, Transaction& transaction, cv::Mat& last_image,
+               bool require_top) -> std::expected<Observation, std::string> {
   auto deadline = Clock::now() + std::chrono::duration<double>(options.frame_timeout);
   auto last_sequence = transaction.before_sequence;
   auto last_source = transaction.before_source_time;
@@ -234,6 +250,10 @@ auto wait_page(const capture::Capture& capture, const Layout& layout, const Opti
       base.reset();
       stable_frames = 0;
     };
+    if (!previous && require_top && !items_at_top(frame->bgr, layout)) {
+      waiting("新分类物品列表尚未确认回顶");
+      continue;
+    }
     if (previous) {
       auto match = locate_anchor(frame->bgr, *anchor, layout, bottom.at_bottom);
       entry.anchor = match;
@@ -317,9 +337,11 @@ auto page_job(const Page& page, int first_new, int global_start, const std::stri
       item.id = std::format("r{:03}_c{:02}", item.row, item.column);
       item.category = options.category;
       item.frame_id = frame_id;
-      item.card_crop = "crops/" + item.id + "_card.png";
-      item.name_crop = "crops/" + item.id + "_name.png";
-      item.star_crop = "crops/" + item.id + "_star.png";
+      if (options.generate_report) {
+        item.card_crop = "crops/" + item.id + "_card.png";
+        item.name_crop = "crops/" + item.id + "_name.png";
+        item.star_crop = "crops/" + item.id + "_star.png";
+      }
       job.samples.push_back(std::move(copy));
     }
   }
@@ -334,19 +356,20 @@ auto accept(Worker& worker, const Page& page, int first_new, int global_start,
     if (auto ok = submit(worker, std::move(job), target); !ok) return std::unexpected(ok.error());
   return count;
 }
-}  // namespace
-auto run(const Options& options) -> std::expected<int, std::string> {
+auto run_category(const Options& options, ScanResources* shared = nullptr,
+                  Session* finished = nullptr) -> std::expected<int, std::string> {
   if (options.command == "list-windows") {
     for (const auto& w : window::list_windows())
       cli::log(std::format("0x{:x}\t{}\t{}\t{}", reinterpret_cast<std::uintptr_t>(w.hwnd), w.pid,
                            w.exe, w.title));
     return 0;
   }
-  auto layout_result = load_layout(options.layout);
+  auto layout_result =
+      shared ? std::expected<Layout, std::string>{shared->layout} : load_layout(options.layout);
   if (!layout_result) return std::unexpected(layout_result.error());
   auto& layout = *layout_result;
-  HWND hwnd{};
-  if (options.command != "analyze") {
+  HWND hwnd = shared ? shared->target.hwnd : nullptr;
+  if (!shared && options.command != "analyze") {
     auto found = window::find(options.hwnd, options.exe_name);
     if (!found) return std::unexpected(found.error());
     hwnd = *found;
@@ -358,20 +381,26 @@ auto run(const Options& options) -> std::expected<int, std::string> {
   if (!std::filesystem::create_directories(output, ec))
     return std::unexpected("结果目录已存在或无法创建：" + utils::string::path_utf8(output) + " " +
                            ec.message());
-  for (auto folder : {"frames", "crops"}) {
-    std::filesystem::create_directory(output / folder, ec);
-    if (ec) return std::unexpected("无法创建证据目录：" + ec.message());
+  if (options.generate_report) {
+    for (auto folder : {"frames", "crops"}) {
+      std::filesystem::create_directory(output / folder, ec);
+      if (ec) return std::unexpected("无法创建证据目录：" + ec.message());
+    }
   }
   Session session;
   session.category = options.category;
   session.created_at = utils::file::timestamp();
   session.expected_count = options.expected_count;
   session.validate_characters = options.validate_characters;
+  session.report_enabled = options.generate_report;
   session.font = utils::string::path_utf8(std::filesystem::absolute(options.font));
   auto started = Clock::now();
   RunTimings timings;
-  capture::Capture capture;
+  capture::Capture own_capture;
+  auto& capture = shared ? shared->capture : own_capture;
   std::unique_ptr<Worker> worker;
+  double generation_start = 0;
+  int banks_start = 0;
   cv::Mat last_image;
   auto checkpoint = [&]() {
     return utils::file::write(output / "session.json", rfl::json::write(session));
@@ -404,12 +433,23 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       }
       return std::unexpected("等待首个WGC帧超时。");
     }
-    auto recognizer = utils::timing::measure(timings.font_load_seconds, [&] {
-      return recognition::load(options.font, options.names, layout, options.validate_characters);
-    });
+    auto recognizer =
+        utils::timing::measure(timings.font_load_seconds,
+                               [&]() -> std::expected<recognition::NameRecognizer, std::string> {
+                                 if (shared && shared->recognizer) {
+                                   auto cached = std::move(*shared->recognizer);
+                                   shared->recognizer.reset();
+                                   cached.timings = {};
+                                   generation_start = cached.font->generation_seconds;
+                                   banks_start = cached.font->generated_banks;
+                                   return cached;
+                                 }
+                                 return recognition::load(options.font, options.names, layout,
+                                                          options.validate_characters);
+                               });
     if (!recognizer) return std::unexpected(recognizer.error());
-    timings.template_generation_seconds = recognizer->font->generation_seconds;
-    timings.generated_template_banks = recognizer->font->generated_banks;
+    timings.template_generation_seconds = recognizer->font->generation_seconds - generation_start;
+    timings.generated_template_banks = recognizer->font->generated_banks - banks_start;
     session.candidate_characters = static_cast<int>(recognizer->font->characters.size());
     session.names_file = utils::string::path_utf8(std::filesystem::absolute(options.names));
     session.candidate_names = static_cast<int>(recognizer->library.names.size());
@@ -446,7 +486,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
         layout.columns = layout.columns_without_scrollbar;
         cli::log("首屏未检测到滚动条，使用单屏列坐标读取当前分类。");
       }
-      worker = start_worker(std::move(*recognizer), layout, output);
+      worker = start_worker(std::move(*recognizer), layout, output, options.generate_report);
       auto job = page_job(*page, 0, 0, "f0001", options);
       session.accepted_count = static_cast<int>(job.samples.size());
       {
@@ -459,36 +499,37 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       return {};
     }
     auto prepared = utils::timing::measure(timings.window_setup_seconds, [&] {
+      if (shared) return std::expected<window::Target, std::string>{shared->target};
       return window::prepare(hwnd, layout.reference_size[0], layout.reference_size[1],
                              options.frame_timeout);
     });
     if (!prepared) return std::unexpected(prepared.error());
     auto target = *prepared;
-    if (auto ok = utils::timing::measure(timings.focus_wait_seconds,
-                                         [&] { return window::activate(target); });
+    if (auto ok = utils::timing::measure(
+            timings.focus_wait_seconds,
+            [&] { return shared ? window::check(target) : window::activate(target); });
         !ok)
       return ok;
+    // 先读取首屏；仅在确实需要物品滚动时查找滚动点，单屏不移动鼠标。
     auto point = [&]() -> std::expected<POINT, std::string> {
       if (options.scroll_point)
         return POINT{(*options.scroll_point)[0], (*options.scroll_point)[1]};
       return window::scroll_point(target, layout.scroll_rect);
     };
-    auto initial_point = point();
-    if (!initial_point) return std::unexpected(initial_point.error());
-    if (auto ok = window::position_pointer(target, *initial_point); !ok) return ok;
-    cli::log(std::format("滚动点（客户区）：({}, {})。", initial_point->x, initial_point->y));
-    auto source = utils::timing::measure(timings.capture_start_seconds, [&] {
-      return capture::start(hwnd, target.width, target.height);
-    });
-    if (!source) return std::unexpected(source.error());
-    capture = std::move(*source);
+    if (!shared) {
+      auto source = utils::timing::measure(timings.capture_start_seconds, [&] {
+        return capture::start(hwnd, target.width, target.height);
+      });
+      if (!source) return std::unexpected(source.error());
+      capture = std::move(*source);
+    }
     std::ofstream journal(output / "transactions.jsonl", std::ios::binary);
     if (!journal) return std::unexpected("无法创建事务诊断文件。");
     auto observe = [&](const Page* previous, const Anchor* anchor,
                        Transaction& transaction) -> std::expected<Observation, std::string> {
       auto result = utils::timing::measure(timings.page_wait_seconds, [&] {
         return wait_page(capture, layout, options, target, worker.get(), previous, anchor,
-                         transaction, last_image);
+                         transaction, last_image, shared != nullptr);
       });
       journal << rfl::json::write(transaction) << '\n';
       journal.flush();
@@ -496,6 +537,10 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       return result;
     };
     Transaction initial;
+    if (shared && shared->category_frame) {
+      initial.before_sequence = shared->category_frame->sequence;
+      initial.before_source_time = shared->category_frame->source_time;
+    }
     auto observation = observe(nullptr, nullptr, initial);
     if (!observation) return std::unexpected(observation.error());
     Page previous = std::move(observation->page);
@@ -504,7 +549,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       layout.columns = layout.columns_without_scrollbar;
       cli::log("首屏未检测到滚动条，使用单屏列坐标；本次不发送滚动输入。");
     }
-    worker = start_worker(std::move(*recognizer), layout, output);
+    worker = start_worker(std::move(*recognizer), layout, output, options.generate_report);
     auto count = accept(*worker, previous, 0, 0, "f0001", options, target);
     if (!count) return std::unexpected(count.error());
     session.accepted_count = *count;
@@ -521,11 +566,13 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       if (options.expected_count && session.accepted_count > options.expected_count)
         return std::unexpected("采集数量超过指定总数。");
       if (previous.bottom.at_bottom || previous.single_page) {
-        if (auto ok = utils::timing::measure(
-                timings.diagnostic_save_seconds,
-                [&] { return utils::image::save_png(output / "end_frame.png", previous.image); });
-            !ok)
-          return ok;
+        if (options.generate_report) {
+          if (auto ok = utils::timing::measure(
+                  timings.diagnostic_save_seconds,
+                  [&] { return utils::image::save_png(output / "end_frame.png", previous.image); });
+              !ok)
+            return ok;
+        }
         if (options.expected_count && session.accepted_count != options.expected_count)
           return std::unexpected(std::format("分类采集结束，但采集 {}/{} 件，数量不符。",
                                              session.accepted_count, options.expected_count));
@@ -548,6 +595,8 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       if (!anchor) return std::unexpected(anchor.error());
       auto location = point();
       if (!location) return std::unexpected(location.error());
+      if (index == 1)
+        cli::log(std::format("滚动点（客户区）：({}, {})。", location->x, location->y));
       auto baseline = capture::snapshot(capture);
       if (!baseline) return std::unexpected(baseline.error());
       if (!*baseline) return std::unexpected("捕获基准帧丢失。");
@@ -611,7 +660,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
     session.status = window::stop_requested() ? "stopped" : "failed";
     session.message = outcome.error();
   }
-  capture::stop(capture);
+  if (!shared || !outcome || session.status == "scroll_limit") capture::stop(capture);
   if (worker) {
     cli::log("采集已停止，等待已入队名称识别完成并导出。");
     {
@@ -622,8 +671,9 @@ auto run(const Options& options) -> std::expected<int, std::string> {
     utils::timing::measure(timings.drain_wait_seconds, [&] { worker->thread.join(); });
     timings.worker = worker->timings;
     timings.recognition = worker->recognizer.timings;
-    timings.template_generation_seconds = worker->recognizer.font->generation_seconds;
-    timings.generated_template_banks = worker->recognizer.font->generated_banks;
+    timings.template_generation_seconds =
+        worker->recognizer.font->generation_seconds - generation_start;
+    timings.generated_template_banks = worker->recognizer.font->generated_banks - banks_start;
     if (timings.recognition.names)
       timings.recognition_ms_per_name =
           1000 * timings.recognition.total_seconds / timings.recognition.names;
@@ -633,8 +683,11 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       session.status = "failed";
       session.message = error.empty() ? "已采集数量与处理数量不符。" : error;
     }
+    if (shared) shared->recognizer.emplace(std::move(worker->recognizer));
   }
+  if (shared && session.status == "failed") capture::stop(capture);
   timings.processing_wall_seconds = std::chrono::duration<double>(Clock::now() - started).count();
+  if (shared) shared->last_image = last_image;
   session.processing_seconds = timings.processing_wall_seconds;
   if (session.status == "failed" && !last_image.empty()) {
     if (auto ok = utils::timing::measure(
@@ -645,9 +698,10 @@ auto run(const Options& options) -> std::expected<int, std::string> {
   }
   session.elapsed_seconds = std::chrono::duration<double>(Clock::now() - started).count();
   if (options.command != "capture") {
-    cli::log(std::format("采集/识别阶段结束，用时 {:.3f}s；正在裁图并生成报告。",
-                         timings.processing_wall_seconds));
-    if (worker) {
+    cli::log(
+        std::format("采集/识别阶段结束，用时 {:.3f}s；{}。", timings.processing_wall_seconds,
+                    options.generate_report ? "正在裁图并生成完整报告" : "正在导出JSON/CSV结果"));
+    if (worker && options.generate_report) {
       auto crops = utils::timing::measure(
           timings.crop_export_seconds, [&] { return report::save_crops(output, worker->items); });
       if (!crops) {
@@ -657,6 +711,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
     }
     session.elapsed_seconds = std::chrono::duration<double>(Clock::now() - started).count();
     const std::vector<Item> empty;
+    if (finished) *finished = session;
     if (auto ok = utils::timing::measure(
             timings.report_seconds,
             [&] { return report::write(output, session, layout, worker ? worker->items : empty); });
@@ -665,6 +720,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
   }
   timings.wall_seconds = std::chrono::duration<double>(Clock::now() - started).count();
   session.elapsed_seconds = timings.wall_seconds;
+  if (finished) *finished = session;
   if (auto ok = checkpoint(); !ok) return std::unexpected(ok.error());
   if (auto ok = utils::file::write(output / "timings.json", rfl::json::write(timings)); !ok)
     return std::unexpected(ok.error());
@@ -677,7 +733,7 @@ auto run(const Options& options) -> std::expected<int, std::string> {
       "  灰度字形匹配 {:.3f}s；名称/布局评分 {:.3f}s；候选及证据 {:.3f}s\n"
       "  页面存图 {:.3f}s；报告阶段裁图/存图 {:.3f}s；拥有判定 {:.3f}s；JSONL {:.3f}s\n"
       "  采样等待/视觉 {:.3f}s；队列满等待 {:.3f}s；收尾排空等待 {:.3f}s\n"
-      "  后台处理 {:.3f}s；后台空闲 {:.3f}s；诊断图 {:.3f}s；报告导出 {:.3f}s\n"
+      "  后台处理 {:.3f}s；后台空闲 {:.3f}s；诊断图 {:.3f}s；结果导出/可选HTML {:.3f}s\n"
       "  名称 {} 条；查询位置 {} 个；模板比较 {} 次",
       timings.wall_seconds, timings.processing_wall_seconds, timings.recognition.total_seconds,
       timings.recognition_ms_per_name, timings.font_load_seconds,
@@ -697,5 +753,242 @@ auto run(const Options& options) -> std::expected<int, std::string> {
   return session.status == "failed"
              ? 1
              : (session.status == "stopped" || session.status == "scroll_limit" ? 2 : 0);
+}
+
+struct BatchTimings {
+  std::string units{"seconds"};
+  std::string note{
+      "分类顺序执行；categories_wall_seconds含每类采集、识别排空、结果导出及可选报告。"
+      "每类timings.json独立统计识别及新增模板生成，不重复计入已缓存模板；"
+      "导航和回顶耗时单列。"};
+  double wall_seconds{};
+  double window_setup_seconds{};
+  double focus_wait_seconds{};
+  double capture_start_seconds{};
+  double navigation_seconds{};
+  double list_reset_seconds{};
+  double categories_wall_seconds{};
+  double overview_export_seconds{};
+};
+
+auto run_all(const Options& options) -> std::expected<int, std::string> {
+  auto layout = load_layout(options.layout);
+  if (!layout) return std::unexpected(layout.error());
+  auto catalog = navigation::load(options.categories);
+  if (!catalog) return std::unexpected(catalog.error());
+  if (layout->reference_size != catalog->settings.reference_size)
+    return std::unexpected("物品布局与分类导航分辨率不一致。");
+  auto output = options.output.empty()
+                    ? std::filesystem::current_path() / "results" / utils::file::timestamp()
+                    : options.output;
+  std::error_code ec;
+  if (!std::filesystem::create_directories(output, ec))
+    return std::unexpected("结果目录已存在或无法创建：" + utils::string::path_utf8(output) + " " +
+                           ec.message());
+  std::filesystem::create_directory(output / "navigation", ec);
+  if (ec) return std::unexpected("无法创建导航证据目录：" + ec.message());
+  if (!options.navigation_only) {
+    std::filesystem::create_directory(output / "categories", ec);
+    if (ec) return std::unexpected("无法创建分类结果目录：" + ec.message());
+  }
+  auto started = Clock::now();
+  BatchTimings timings;
+  BatchSession batch;
+  batch.created_at = utils::file::timestamp();
+  batch.navigation_only = options.navigation_only;
+  batch.report_enabled = options.generate_report;
+  for (const auto& group : catalog->groups)
+    for (const auto& icon : group.categories) {
+      BatchCategory record{icon.definition.id, group.definition.name, icon.definition.name};
+      if (!icon.definition.skip_reason.empty()) {
+        record.status = "skipped";
+        record.message = icon.definition.skip_reason;
+        ++batch.skipped_categories;
+      } else {
+        ++batch.planned_categories;
+      }
+      batch.categories.push_back(std::move(record));
+    }
+  ScanResources shared;
+  shared.layout = *layout;
+  navigation::Navigator nav;
+  nav.catalog = &*catalog;
+  nav.capture = &shared.capture;
+  nav.output = output / "navigation";
+  nav.timeout = options.frame_timeout;
+  auto checkpoint = [&]() {
+    batch.elapsed_seconds = std::chrono::duration<double>(Clock::now() - started).count();
+    return utils::timing::measure(timings.overview_export_seconds,
+                                  [&] { return report::write_batch(output, batch); });
+  };
+  auto execute = [&]() -> std::expected<void, std::string> {
+    if (auto ok = checkpoint(); !ok) return ok;
+    auto found = window::find(options.hwnd, options.exe_name);
+    if (!found) return std::unexpected(found.error());
+    batch.stage = "调整窗口";
+    auto target = utils::timing::measure(timings.window_setup_seconds, [&] {
+      return window::prepare(*found, layout->reference_size[0], layout->reference_size[1],
+                             options.frame_timeout);
+    });
+    if (!target) return std::unexpected(target.error());
+    shared.target = *target;
+    nav.target = *target;
+    cli::log(std::format(
+        "全分类{}：共{}类；全妆、肤色不点击、不扫描。请确认清除筛选、分组收起、侧栏在顶部。",
+        options.navigation_only ? "导航" : "扫描", batch.planned_categories));
+    batch.stage = "等待游戏前台";
+    if (auto ok = utils::timing::measure(timings.focus_wait_seconds,
+                                         [&] { return window::activate(*target); });
+        !ok)
+      return ok;
+    auto source = utils::timing::measure(timings.capture_start_seconds, [&] {
+      return capture::start(*found, target->width, target->height);
+    });
+    if (!source) return std::unexpected(source.error());
+    shared.capture = std::move(*source);
+    batch.stage = "确认导航初始状态";
+    if (auto ok = utils::timing::measure(timings.navigation_seconds,
+                                         [&] { return navigation::begin(nav); });
+        !ok)
+      return ok;
+    batch.status = "running";
+    std::size_t index = 0;
+    int number = 0;
+    for (const auto& group : catalog->groups) {
+      bool opened = false;
+      for (const auto& icon : group.categories) {
+        auto& record = batch.categories[index++];
+        if (!icon.definition.skip_reason.empty()) continue;
+        ++number;
+        batch.current_category = record.id;
+        batch.stage = "切换分类";
+        record.status = "navigating";
+        if (auto ok = checkpoint(); !ok) return ok;
+        auto navigated = utils::timing::measure(
+            timings.navigation_seconds, [&]() -> std::expected<void, std::string> {
+              if (!opened) {
+                if (auto ok = navigation::open_group(nav, group); !ok) return ok;
+                opened = true;
+              }
+              return navigation::visit(nav, group, icon,
+                                       std::format("{:02}_{}", number, record.id));
+            });
+        if (!navigated) return std::unexpected(navigated.error());
+        auto prefix = std::format("navigation/{:02}_{}", number, record.id);
+        record.menu_image = prefix + "_menu.png";
+        record.title_image = prefix + "_title.png";
+        cli::log(std::format("[{}/{}] {} / {} 已选中。", number, batch.planned_categories,
+                             record.group, record.name));
+        if (options.navigation_only) {
+          record.status = "visited";
+          record.message = "已确认选中；标题截图供核对。";
+        } else {
+          batch.stage = "确认物品列表回顶";
+          if (auto ok = checkpoint(); !ok) return ok;
+          std::optional<POINT> point;
+          if (options.scroll_point)
+            point = POINT{(*options.scroll_point)[0], (*options.scroll_point)[1]};
+          if (auto ok = utils::timing::measure(
+                  timings.list_reset_seconds,
+                  [&] { return navigation::reset_items_top(nav, *layout, point); });
+              !ok)
+            return ok;
+          shared.category_frame = nav.last_frame;
+          record.status = "scanning";
+          batch.stage = "采集、识别并导出当前分类";
+          if (auto ok = checkpoint(); !ok) return ok;
+          auto relative = std::format("categories/{:02}_{}", number, record.id);
+          Options category_options = options;
+          category_options.command = "scan";
+          category_options.category = record.name;
+          category_options.output = output / utils::string::wide(relative);
+          Session category_session;
+          auto result = utils::timing::measure(timings.categories_wall_seconds, [&] {
+            return run_category(category_options, &shared, &category_session);
+          });
+          record.accepted_count = category_session.accepted_count;
+          record.processed_count = category_session.processed_count;
+          batch.processed_count += record.processed_count;
+          if (options.generate_report &&
+              std::filesystem::exists(category_options.output / "review.html"))
+            record.report = relative + "/review.html";
+          record.message = result ? category_session.message : result.error();
+          if (!result) {
+            record.status = "failed";
+            return std::unexpected(result.error());
+          }
+          if (*result != 0) {
+            record.status = category_session.status;
+            return std::unexpected(record.message);
+          }
+          record.status = "completed";
+        }
+        ++batch.completed_categories;
+        if (auto ok = checkpoint(); !ok) return ok;
+      }
+    }
+    batch.status = "completed";
+    batch.current_category.clear();
+    batch.stage = "完成";
+    batch.message = options.navigation_only ? "计划分类导航完成，请核对标题截图；全妆、肤色已跳过。"
+                                            : "全部计划分类已扫描并导出；全妆、肤色已跳过。";
+    return {};
+  };
+  std::expected<void, std::string> outcome;
+  try {
+    outcome = execute();
+  } catch (const winrt::hresult_error& e) {
+    outcome = std::unexpected(winrt::to_string(e.message()));
+  } catch (const std::exception& e) {
+    outcome = std::unexpected(e.what());
+  }
+  if (!outcome) {
+    bool failed = std::ranges::any_of(
+        batch.categories, [](const BatchCategory& record) { return record.status == "failed"; });
+    bool limited = std::ranges::any_of(batch.categories, [](const BatchCategory& record) {
+      return record.status == "scroll_limit";
+    });
+    batch.status = failed                     ? "failed"
+                   : window::stop_requested() ? "stopped"
+                   : limited                  ? "scroll_limit"
+                                              : "failed";
+    batch.message = outcome.error();
+    if (batch.stage == "切换分类" || batch.stage == "确认导航初始状态") batch.stage = nav.stage;
+    for (auto& record : batch.categories)
+      if (record.id == batch.current_category &&
+          (record.status == "navigating" || record.status == "scanning")) {
+        record.status = batch.status;
+        record.message = batch.message;
+      }
+    // 优先保存当前捕获帧；分类扫描已停止WGC时，下面使用该类最后的有效原图。
+    if (shared.capture.state) {
+      auto latest = capture::snapshot(shared.capture);
+      if (latest && *latest) nav.last_frame = *latest;
+    }
+  }
+  capture::stop(shared.capture);
+  cv::Mat diagnostic = nav.last_frame ? nav.last_frame->bgr : cv::Mat{};
+  if (batch.stage == "采集、识别并导出当前分类" && !shared.last_image.empty())
+    diagnostic = shared.last_image;
+  if (!outcome && !diagnostic.empty()) {
+    auto saved = utils::image::save_png(output / "unmatched_frame.png", diagnostic);
+    if (!saved) batch.message += "；失败截图保存失败：" + saved.error();
+  }
+  if (auto ok = checkpoint(); !ok) return std::unexpected(ok.error());
+  timings.wall_seconds = std::chrono::duration<double>(Clock::now() - started).count();
+  if (auto ok = utils::file::write(output / "timings.json", rfl::json::write(timings)); !ok)
+    return std::unexpected(ok.error());
+  cli::log(std::format("{}：{}\n完成 {}/{} 类，跳过 {} 类，处理 {} 件。\n结果目录：{}",
+                       batch.status, batch.message, batch.completed_categories,
+                       batch.planned_categories, batch.skipped_categories, batch.processed_count,
+                       utils::string::path_utf8(output)));
+  return batch.status == "failed"
+             ? 1
+             : (batch.status == "stopped" || batch.status == "scroll_limit" ? 2 : 0);
+}
+}  // namespace
+
+auto run(const Options& options) -> std::expected<int, std::string> {
+  return options.command == "scan-all" ? run_all(options) : run_category(options);
 }
 }  // namespace features::scan

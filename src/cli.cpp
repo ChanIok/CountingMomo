@@ -12,13 +12,19 @@ auto log(std::string_view message) -> void {
 auto print_help() -> void {
   log("CountingMomo · 数数吧大喵\n"
       "  CountingMomo.exe scan --category 发型 [--expected-count 820]\n"
+      "  CountingMomo.exe scan-all [--navigation-only]\n"
       "  CountingMomo.exe analyze --image 截图.jpg --category 发型\n"
       "  CountingMomo.exe capture [--hwnd 0x句柄]\n"
       "  CountingMomo.exe list-windows\n\n"
       "扫描前手动打开分类、清除筛选并滚到顶部。F8 / Ctrl+C 停止并保存。\n"
+      "全分类扫描前收起饰品、妆容分组并将侧栏滚到顶部；全妆、肤色跳过，共28类。\n"
+      "默认仅导出JSON/CSV及运行记录，不生成HTML报告或正常页面图片。\n"
+      "  --report             生成HTML报告及页面/裁图证据，用于scan/scan-all/analyze\n"
+      "  --navigation-only    scan-all仅切换分类、保存标题，不扫描物品\n"
+      "  --categories PATH    scan-all的分类导航JSON及同目录图标\n"
       "  --font PATH           游戏TrueType字体\n"
       "  --names PATH          名称库TXT，一行一个名称\n"
-      "  --validate-characters 开启单字低分核对及逐字证据，仅用于scan/analyze；默认关闭\n"
+      "  --validate-characters 开启单字低分核对及逐字证据，用于扫描/analyze；默认关闭\n"
       "  --layout PATH         布局JSON\n"
       "  --output PATH         新建结果目录，拒绝覆盖\n"
       "  --image PATH          analyze的原始客户区截图，不缩放、不操作游戏\n"
@@ -30,7 +36,7 @@ auto print_help() -> void {
       "  --scroll-point X Y    布局客户区滚动点，默认自动选择\n"
       "  --frame-timeout SEC   单次事务超时，默认8秒\n"
       "  --stable-seconds SEC  名称与星星稳定时长，默认0.25秒\n"
-      "  --max-scrolls N       滚动次数上限，默认1000");
+      "  --max-scrolls N       每分类物品滚动次数上限，默认1000");
 }
 auto parse(int argc, wchar_t** argv) -> std::expected<Options, std::string> {
   Options o;
@@ -38,14 +44,15 @@ auto parse(int argc, wchar_t** argv) -> std::expected<Options, std::string> {
   o.layout = root / L"resources/layout.json";
   o.font = root / L"resources/fonts/FZYASHJW_Zhong.ttf";
   o.names = root / L"resources/clothes_names.txt";
+  o.categories = root / L"resources/categories/categories.json";
   if (argc == 1) {
     o.command = "help";
     return o;
   }
   o.command = utils::string::utf8(argv[1]);
   if (o.command == "--help" || o.command == "-h") o.command = "help";
-  if (o.command != "scan" && o.command != "analyze" && o.command != "capture" &&
-      o.command != "list-windows" && o.command != "help")
+  if (o.command != "scan" && o.command != "scan-all" && o.command != "analyze" &&
+      o.command != "capture" && o.command != "list-windows" && o.command != "help")
     return std::unexpected("未知命令；请运行 --help。");
   auto integer = [](std::wstring_view text, bool allow_zero = false) -> std::optional<int> {
     std::wstring copy(text);
@@ -64,6 +71,14 @@ auto parse(int argc, wchar_t** argv) -> std::expected<Options, std::string> {
       o.validate_characters = true;
       continue;
     }
+    if (key == L"--navigation-only") {
+      o.navigation_only = true;
+      continue;
+    }
+    if (key == L"--report") {
+      o.generate_report = true;
+      continue;
+    }
     if (i + 1 >= argc) return std::unexpected("参数缺少值：" + utils::string::utf8(key));
     std::wstring_view value(argv[++i]);
     if (key == L"--category")
@@ -72,6 +87,8 @@ auto parse(int argc, wchar_t** argv) -> std::expected<Options, std::string> {
       o.font = value;
     else if (key == L"--names")
       o.names = value;
+    else if (key == L"--categories")
+      o.categories = value;
     else if (key == L"--layout")
       o.layout = value;
     else if (key == L"--output")
@@ -124,8 +141,19 @@ auto parse(int argc, wchar_t** argv) -> std::expected<Options, std::string> {
   if (o.command != "analyze" && !o.image.empty())
     return std::unexpected("--image 仅用于 analyze。");
   if (o.command != "analyze" && o.row_phase) return std::unexpected("--row-phase 仅用于 analyze。");
-  if (o.validate_characters && o.command != "scan" && o.command != "analyze")
-    return std::unexpected("--validate-characters 仅用于 scan / analyze。");
+  if (o.navigation_only && o.command != "scan-all")
+    return std::unexpected("--navigation-only 仅用于 scan-all。");
+  if (o.generate_report && o.command != "scan" && o.command != "scan-all" && o.command != "analyze")
+    return std::unexpected("--report 仅用于 scan / scan-all / analyze。");
+  if (o.command == "scan-all" && (!o.category.empty() || o.expected_count))
+    return std::unexpected("scan-all 使用分类清单，不接受 --category 或 --expected-count。");
+  if (o.command == "scan-all" && o.frame_timeout <= 0.35)
+    return std::unexpected("分类导航超时须大于0.35秒的稳定等待。");
+  if (o.validate_characters && o.command != "scan" && o.command != "scan-all" &&
+      o.command != "analyze")
+    return std::unexpected("--validate-characters 仅用于 scan / scan-all / analyze。");
+  if (o.navigation_only && o.validate_characters)
+    return std::unexpected("仅导航不识别物品，无需 --validate-characters。");
   if (o.command == "analyze" && o.expected_count)
     return std::unexpected("单张截图不核对分类总数；--expected-count 仅用于 scan。");
   if (!o.hwnd) {

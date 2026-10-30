@@ -10,6 +10,7 @@
 namespace features::recognition {
 namespace {
 constexpr double kMinInk = 7.5, kMinSimilarity = 0.9, kMinMargin = 0.01;
+constexpr int kSmallFontProbeSpan = 128;
 struct TextGeometry {
   std::vector<int> font_sizes;
   bool unsupported_height{};
@@ -40,8 +41,8 @@ auto measure_text(const cv::Mat& ink, const FontRaster& raster) -> TextGeometry 
 
   geometry.right = right;
 
-  // 只有接近占满可读区域的名称才可能缩字；短名称不测高度。
-  if (right - left + 1 < ink.cols - raster.max_size) return geometry;
+  // 缩小字号的长名称可能未占满裁图；短名称仍直接使用最大字号。
+  if (right - left + 1 < kSmallFontProbeSpan) return geometry;
 
   const auto& rows = geometry.rows;
   double row_peak = *std::ranges::max_element(rows);

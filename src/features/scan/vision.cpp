@@ -77,6 +77,19 @@ auto difference_ok(const cv::Mat& first, const cv::Mat& second, double mean_limi
   return quantile(std::move(values), 0.99) <= 8;
 }
 }  // namespace
+auto items_at_top(const cv::Mat& image, const Layout& layout) -> bool {
+  if (!scrollbar_visible(image, layout)) return true;
+  auto settings = layout.bottom_detection;
+  int height = settings.line_rect[3] - settings.line_rect[1];
+  for (auto* box : {&settings.line_rect, &settings.left_rect, &settings.right_rect}) {
+    (*box)[1] = layout.safe_y[0];
+    (*box)[3] = layout.safe_y[0] + height;
+  }
+  auto top_layout = layout;
+  top_layout.bottom_detection = settings;
+  return detect_bottom(image, top_layout).at_bottom;
+}
+
 auto detect_bottom(const cv::Mat& image, const Layout& layout) -> BottomResult {
   const auto& settings = layout.bottom_detection;
   std::array<std::vector<double>, 3> regions;

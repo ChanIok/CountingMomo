@@ -24,6 +24,42 @@ struct Document {
   std::vector<scan::Item> items;
 };
 }  // namespace
+auto write_batch(const std::filesystem::path& output, const scan::BatchSession& session)
+    -> std::expected<void, std::string> {
+  if (auto ok = utils::file::write(output / "session.json", rfl::json::write(session)); !ok)
+    return ok;
+  if (!session.report_enabled) return {};
+  auto escape = utils::string::html;
+  std::string page =
+      "<!doctype html><html lang=zh-CN><meta charset=utf-8><meta name=viewport "
+      "content='width=device-width,initial-scale=1'><title>CountingMomo 分类总览</title>"
+      "<style>body{font:16px system-ui;margin:32px;color:#222;background:#f5f5f7}"
+      "table{border-collapse:collapse;background:white;width:100%}th,td{padding:10px;"
+      "border-bottom:1px solid #ddd;text-align:left}a{color:#245b94}small{color:#555}</style>";
+  page += std::format(
+      "<h1>全分类{}总览</h1><p>{}：{}</p>"
+      "<p>完成 {}/{} 类，跳过 {} 类，处理 {} 件；用时 {:.1f} 秒。</p>",
+      session.navigation_only ? "导航" : "扫描", escape(session.status), escape(session.message),
+      session.completed_categories, session.planned_categories, session.skipped_categories,
+      session.processed_count, session.elapsed_seconds);
+  page +=
+      "<table><thead><tr><th>分组 / 分类</th><th>状态</th><th>采集 / 处理</th>"
+      "<th>证据与报告</th><th>说明</th></tr></thead><tbody>";
+  for (const auto& category : session.categories) {
+    std::string links;
+    for (auto [path, title] :
+         {std::pair{category.report, "物品报告"}, std::pair{category.title_image, "分类标题"},
+          std::pair{category.menu_image, "侧栏"}})
+      if (!path.empty()) links += "<a href='" + escape(path) + "'>" + title + "</a> ";
+    page += std::format(
+        "<tr><td>{} / {}</td><td>{}</td><td>{} / {}</td><td>{}</td><td>{}</td></tr>",
+        escape(category.group), escape(category.name), escape(category.status),
+        category.accepted_count, category.processed_count, links, escape(category.message));
+  }
+  page += "</tbody></table>";
+  return utils::file::write(output / "review.html", page);
+}
+
 auto save_crops(const std::filesystem::path& output, const std::vector<scan::Item>& items)
     -> std::expected<void, std::string> {
   std::string frame_id;
@@ -64,6 +100,7 @@ auto write(const std::filesystem::path& output, const scan::Session& session,
                          csv(item.name.text), csv(item.ownership), item.name.similarity,
                          item.name.margin, item.name.font_size, item.needs_review);
   if (auto ok = utils::file::write(output / "items.csv", table); !ok) return ok;
+  if (!session.report_enabled) return {};
   auto escape = utils::string::html;
   int review = 0, owned = 0, unowned = 0;
   for (const auto& item : items) {

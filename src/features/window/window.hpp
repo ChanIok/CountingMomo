@@ -37,4 +37,9 @@ auto scroll_point(const Target& target, const scan::Box& bounds)
     -> std::expected<POINT, std::string>;
 auto position_pointer(const Target& target, POINT point) -> std::expected<void, std::string>;
 auto scroll(const Target& target, POINT point, int notches) -> std::expected<void, std::string>;
+
+// 菜单及回顶使用有符号格数：正数向下、负数向上；不改变原scan的正数接口。
+auto wheel(const Target& target, int notches) -> std::expected<void, std::string>;
+
+auto click(const Target& target) -> std::expected<void, std::string>;
 }  // namespace features::window

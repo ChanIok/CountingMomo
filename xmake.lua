@@ -35,7 +35,8 @@ target("CountingMomo")
     after_build(function (target)
         os.cp("resources/layout.json", path.join(target:targetdir(), "resources/layout.json"))
         os.cp("resources/clothes_names.txt", path.join(target:targetdir(), "resources/clothes_names.txt"))
-        -- 字体、名称库与布局作为显式资源随构建输出。
+        os.cp("resources/categories", path.join(target:targetdir(), "resources/"))
+        -- 字体、名称库、布局与分类导航素材作为显式资源随构建输出。
         if os.isfile("resources/fonts/FZYASHJW_Zhong.ttf") then
             os.cp("resources/fonts/FZYASHJW_Zhong.ttf", path.join(target:targetdir(), "resources/fonts/FZYASHJW_Zhong.ttf"))
         end
@@ -54,11 +55,13 @@ task("package")
         if not os.isfile(exe) then raise("请先构建 Release。") end
         if not os.isfile(font) then raise("缺少 " .. font .. "；请准备可分发的字体资源。") end
         if not os.isfile("resources/clothes_names.txt") then raise("缺少 resources/clothes_names.txt。") end
+        if not os.isfile("resources/categories/categories.json") then raise("缺少分类导航资源。") end
         local dest = path.join("dist", "CountingMomo-" .. os.date("%Y%m%d-%H%M%S"))
         os.mkdir(dest)
         os.cp(exe, dest)
         os.cp("resources/layout.json", path.join(dest, "resources/layout.json"))
         os.cp("resources/clothes_names.txt", path.join(dest, "resources/clothes_names.txt"))
+        os.cp("resources/categories", path.join(dest, "resources/"))
         os.cp(font, path.join(dest, "resources/fonts/FZYASHJW_Zhong.ttf"))
         os.cp("README.md", dest)
         print("已打包：" .. dest)

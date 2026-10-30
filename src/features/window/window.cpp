@@ -267,6 +267,12 @@ auto position_pointer(const Target& target, POINT point) -> std::expected<void, 
 auto scroll(const Target& target, POINT point, int notches) -> std::expected<void, std::string> {
   if (notches < 1 || notches > 273) return std::unexpected("滚轮幅度必须为1～273。");
   if (auto ok = position_pointer(target, point); !ok) return ok;
+  return wheel(target, notches);
+}
+
+auto wheel(const Target& target, int notches) -> std::expected<void, std::string> {
+  if (notches == 0 || notches < -273 || notches > 273)
+    return std::unexpected("滚轮格数须为-273～-1或1～273。");
   if (auto ok = check(target); !ok) return ok;
   INPUT input{};
   input.type = INPUT_MOUSE;
@@ -274,5 +280,17 @@ auto scroll(const Target& target, POINT point, int notches) -> std::expected<voi
   input.mi.mouseData = static_cast<DWORD>(-WHEEL_DELTA * notches);
   if (SendInput(1, &input, sizeof(input)) != 1) return std::unexpected(error("SendInput"));
   return {};
+}
+
+auto click(const Target& target) -> std::expected<void, std::string> {
+  if (auto ok = check(target); !ok) return ok;
+  INPUT inputs[2]{};
+  for (auto& input : inputs) input.type = INPUT_MOUSE;
+  inputs[0].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+  inputs[1].mi.dwFlags = MOUSEEVENTF_LEFTUP;
+  auto count = SendInput(2, inputs, sizeof(INPUT));
+  if (count == 2) return {};
+  if (count == 1) SendInput(1, &inputs[1], sizeof(INPUT));
+  return std::unexpected(error("点击输入"));
 }
 }  // namespace features::window

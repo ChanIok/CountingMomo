@@ -12,10 +12,13 @@ struct Options {
   std::filesystem::path layout;
   std::filesystem::path font;
   std::filesystem::path names;
+  std::filesystem::path categories;
   std::filesystem::path output;
   std::filesystem::path image;
   std::optional<int> row_phase;
   bool validate_characters{};
+  bool navigation_only{};
+  bool generate_report{};
   int expected_count{};
   int wheel_notches{};
   int overlap_rows{6};
