@@ -6,3 +6,5 @@ InsertBraces: true
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 SeparateDefinitionBlocks: Always
+LineEnding: LF
+
