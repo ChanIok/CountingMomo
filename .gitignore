@@ -7,9 +7,11 @@
 # 扫描结果、裁图证据及本地实验材料
 /results/
 /temp/
-/prototype/results/
 
-# Python 虚拟环境和缓存（原型代码、实验脚本及标签仍纳入版本管理）
+# 原型代码与实验脚本仅本地保留，不再纳入版本管理
+/prototype/
+
+# Python 虚拟环境和缓存
 .venv/
 __pycache__/
 *.py[cod]
@@ -28,4 +30,4 @@ __pycache__/
 Thumbs.db
 Desktop.ini
 
-# 保留 xmake-requires.lock、布局 JSON、名称 TXT 和实验标注 JSON
+# 保留 xmake-requires.lock、布局 JSON、扫描素材和实验标注 JSON

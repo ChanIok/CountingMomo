@@ -1,4 +1,0 @@
-# Install with --no-deps after requirements.txt: opencv-contrib-python already
-# supplies cv2, including every API windows-capture uses. Installing its declared
-# opencv-python dependency as well would put two wheels in the same cv2 directory.
-windows-capture==2.0.1

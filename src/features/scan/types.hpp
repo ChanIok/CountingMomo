@@ -4,13 +4,22 @@
 
 #include "vendor/opencv.hpp"
 
+#include "core/message/types.hpp"
+#include "features/scan/stage.hpp"
+
 namespace features::scan {
+
+// [left, top, right, bottom]，右下边界不包含；单位为原生像素。
 using Box = std::array<int, 4>;
+
+// 普通卡边框的两条采样带，坐标相对卡片左上角。
 struct CardFrame {
   Box bottom_rect;
   Box right_rect;
   double min_contrast;
 };
+
+// 滚动条采样带及读取下边界，坐标相对客户区左上角。
 struct BottomSettings {
   Box line_rect;
   Box left_rect;
@@ -19,17 +28,20 @@ struct BottomSettings {
   double min_clear_fraction;
   int safe_bottom;
 };
+
 struct OwnershipSettings {
   std::vector<std::string> foreground_mask;
   double owned_luma;
   double unowned_luma;
   double max_luma_error;
 };
-struct NameSettings {
-  std::array<int, 2> font_size_range;
-  int baseline;
-  int origin_count;
+
+struct HiddenCardSettings {
+  std::string image;
+  Box search_rect;  // 相对卡片左上角的问号搜索区域。
+  double min_score;
 };
+
 struct Layout {
   std::array<int, 2> reference_size;
   std::vector<int> columns;
@@ -40,92 +52,68 @@ struct Layout {
   CardFrame card_frame;
   std::array<int, 2> safe_y;
   int scrolled_safe_top;
-  Box scroll_rect;
+  Box scroll_rect;  // 相对客户区左上角，只有需要滚动时才解析实际输入点。
   BottomSettings bottom_detection;
-  Box name_rect;
-  Box name_tracking_rect;
-  Box star_rect;
+  Box name_tracking_rect;  // 相对卡片左上角的文字追踪区域。
+  Box star_rect;           // 相对卡片左上角的最右侧星星区域。
   OwnershipSettings ownership_star;
-  NameSettings name_recognition;
+  HiddenCardSettings hidden_card;
 };
-struct Candidate {
-  std::string text;
-  double similarity{};
-};
-struct Character {
-  int index{};
-  int left{};
-  std::string text;
-  double similarity{};
-};
-struct NameResult {
-  std::string text;
-  double similarity{};
-  double margin{};
-  int font_size{};
-  int origin{};
-  int baseline{};
-  std::vector<Candidate> candidates;
-  std::vector<Character> characters;  // 仅开启单字校验时输出最佳候选的逐字证据。
-  std::vector<std::string> issues;
-};
-struct Item {
-  std::string id;
-  int row{};
-  int column{};
-  std::string category;
-  std::string frame_id;
-  Box box{};
-  Box name_box{};
-  Box star_box{};
-  NameResult name;
-  std::string ownership{"unknown"};
-  double star_luma{};
-  bool needs_review{true};
-  std::vector<std::string> review_reasons;
-  std::string card_crop;
-  std::string name_crop;
-  std::string star_crop;
-};
+
 struct Sample {
-  Item item;
-  cv::Mat name;
-  cv::Mat star;
+  int column{};  // 从 1 开始的列号，问号卡同样占用位置。
+  int owned{};   // 业务值只有 0 / 1；未就绪的采样不作为页面结果接受。
+  bool hidden{};
+  double star_luma{};
+  cv::Mat name;  // 文字灰度裁图，只用于接续和稳定判断，不识别名称。
+  // 普通卡只保存固定星星前景，问号卡保存占位图案；不等待服装缩略图。
+  cv::Mat signal;
 };
+
 struct Row {
   int y{};
   std::vector<Sample> cards;
 };
+
 struct BottomResult {
   bool at_bottom{};
   double clear_fraction{};
   double contrast_median{};
 };
+
 struct Page {
   cv::Mat image;
   cv::Mat gray;
   std::vector<Row> rows;
-  int phase{};
+  int phase{};  // 行首 y 对行距取余，范围为 [0, row_step)。
   BottomResult bottom;
   bool single_page{};
-  std::vector<cv::Mat> names;
-  std::vector<cv::Mat> stars;
 };
+
+struct AnchorTemplate {
+  int row{};     // 相对锚点起始行，从 0 开始。
+  int column{};  // 布局列下标，从 0 开始。
+  cv::Mat pixels;
+};
+
 struct Anchor {
   int y{};
-  std::vector<std::vector<cv::Mat>> templates;
+  int span_rows{};
+  std::vector<AnchorTemplate> templates;
 };
+
 struct AnchorSampleMatch {
-  int row{};
-  int column{};
-  int vertical_offset{};
+  int row{};              // 相对锚点起始行，从 1 开始，供诊断显示。
+  int column{};           // 从 1 开始的列号。
+  int vertical_offset{};  // 单张文字的局部校正量（px），不改变整体位移。
   double raw_score{};
   double score{};
 };
+
 struct AnchorMatch {
   bool valid{};
   int y{};
-  int displacement{};
+  int displacement{};  // 原锚点 y 减去当前 y（px）；向下滚动列表时为正。
   double score{};
   double weakest_score{};
   double runner_up{};
@@ -133,59 +121,41 @@ struct AnchorMatch {
   double raw_weakest_score{};
   std::vector<AnchorSampleMatch> samples;
 };
+
+// 以下为诊断状态，不进入业务结果 JSON。
 struct Session {
   std::string status{"incomplete"};
-  std::string message;
+  core::Error message;
   std::string category;
   std::string created_at;
-  int expected_count{};
   int accepted_count{};
-  int processed_count{};
   int scroll_count{};
   int page_notches{};
   double pixels_per_notch{};
   double elapsed_seconds{};
-  double processing_seconds{};
-  std::string font;
-  std::string names_file;
-  std::vector<std::string> ignored_names;
-  std::string fallback_font;
-  std::vector<std::string> fallback_characters;
-  int candidate_names{};
-  int candidate_characters{};
-  std::string recognition_method{"name_library_gray_templates"};
-  bool validate_characters{};
-  bool report_enabled{};
   bool single_page{};
-  std::string source_image;
 };
+
 struct BatchCategory {
   std::string id;
   std::string group;
-  std::string name;
   std::string status{"pending"};
-  std::string message;
-  std::string report;
-  std::string menu_image;
-  std::string title_image;
+  core::Error message;
   int accepted_count{};
-  int processed_count{};
 };
+
 struct BatchSession {
   std::string status{"starting"};
-  std::string message;
+  core::Error message;
   std::string created_at;
   std::string current_category;
-  std::string stage;
-  bool navigation_only{};
-  bool report_enabled{};
+  Stage stage{Stage::preparing};
+  core::Message navigation_stage;
   int planned_categories{};
   int completed_categories{};
-  int skipped_categories{};
-  int processed_count{};
+  int accepted_count{};
   double elapsed_seconds{};
   std::vector<BatchCategory> categories;
 };
-auto rect(const Box& box) -> cv::Rect;
-auto load_layout(const std::filesystem::path& path) -> std::expected<Layout, std::string>;
+
 }  // namespace features::scan

@@ -3,9 +3,6 @@
         version = "1.0"
     },
     ["windows|x64"] = {
-        ["vcpkg::freetype#f56260b5"] = {
-            version = "latest"
-        },
         ["vcpkg::opencv4#79a0dd90"] = {
             version = "latest"
         },
