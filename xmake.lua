@@ -29,8 +29,24 @@ target("CountingMomo")
     end
     on_load(function (target)
         local manifest = io.readfile(path.join(os.projectdir(), "resources/app.manifest"))
-        local version = manifest:match('<assemblyIdentity version="([^"]+)"')
+        local version = manifest:match('<assemblyIdentity%s+version="([^"]+)"')
+        local major, minor, patch, revision = (version or ""):match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
+        if not major then
+            raise("CountingMomo assemblyIdentity version must contain four numeric parts.")
+        end
+        local parts = {major, minor, patch, revision}
+        for index, part in ipairs(parts) do
+            local number = tonumber(part)
+            if number > 65535 then
+                raise("CountingMomo version parts must be between 0 and 65535.")
+            end
+            parts[index] = number
+        end
         target:add("defines", 'COUNTING_MOMO_VERSION="' .. version .. '"')
+        target:add("defines", "COUNTING_MOMO_VERSION_NUMERIC=" .. table.concat(parts, ","))
+        if is_mode("debug") then
+            target:add("defines", "COUNTING_MOMO_DEBUG_BUILD")
+        end
         local opencv = target:pkg("vcpkg::opencv4")
         if opencv then
             for _, dir in ipairs(opencv:get("sysincludedirs") or {}) do

@@ -1,3 +1,36 @@
 #include <windows.h>
 1 RT_MANIFEST "app.manifest"
 101 ICON "ui/app.ico"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+1 VERSIONINFO
+FILEVERSION COUNTING_MOMO_VERSION_NUMERIC
+PRODUCTVERSION COUNTING_MOMO_VERSION_NUMERIC
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+#ifdef COUNTING_MOMO_DEBUG_BUILD
+FILEFLAGS VS_FF_DEBUG
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE 0x0L
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "FileDescription", "Infinity Nikki collection scanner\0"
+      VALUE "FileVersion", COUNTING_MOMO_VERSION "\0"
+      VALUE "InternalName", "CountingMomo\0"
+      VALUE "OriginalFilename", "CountingMomo.exe\0"
+      VALUE "ProductName", "CountingMomo\0"
+      VALUE "ProductVersion", COUNTING_MOMO_VERSION "\0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 1200
+  END
+END

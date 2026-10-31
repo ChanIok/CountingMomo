@@ -13,9 +13,48 @@ function main() {
   const manifest = fs.readFileSync(path.join(root, "resources/app.manifest"), "utf8");
   const version = manifest.match(/<assemblyIdentity\s+version="(\d+\.\d+\.\d+\.\d+)"/)?.[1];
   if (!version) throw new Error("Could not read a four-part version number from resources/app.manifest.");
+  const versionParts = version.split(".").map(Number);
+  if (versionParts.some((part) => part > 65535)) throw new Error("Version parts must be between 0 and 65535.");
 
   const exe = path.join(root, "build/windows/x64/release/CountingMomo.exe");
   if (!fs.existsSync(exe)) throw new Error("Release executable not found. Run 'pnpm run build --release' first.");
+
+  const versionResult = spawnSync(
+    "powershell.exe",
+    [
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      `$ErrorActionPreference = 'Stop'
+$info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($env:COUNTING_MOMO_PACKAGE_EXE)
+@{
+  hasVersion = [bool]($info.FileVersion -and $info.ProductVersion)
+  file = @($info.FileMajorPart, $info.FileMinorPart, $info.FileBuildPart, $info.FilePrivatePart)
+  product = @($info.ProductMajorPart, $info.ProductMinorPart, $info.ProductBuildPart, $info.ProductPrivatePart)
+} | ConvertTo-Json -Compress`,
+    ],
+    {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "inherit"],
+      env: { ...process.env, COUNTING_MOMO_PACKAGE_EXE: exe },
+    },
+  );
+  if (versionResult.error) throw new Error(`Failed to run PowerShell: ${versionResult.error.message}`);
+  if (versionResult.status !== 0) throw new Error("Could not read the executable version information.");
+  const executableVersion = JSON.parse(versionResult.stdout);
+  if (!executableVersion.hasVersion) {
+    throw new Error("Executable version information is missing. Run 'pnpm run build --release' first.");
+  }
+  const fileVersion = executableVersion.file.join(".");
+  const productVersion = executableVersion.product.join(".");
+  const expectedVersion = versionParts.join(".");
+  if (fileVersion !== expectedVersion || productVersion !== expectedVersion) {
+    throw new Error(
+      `Executable version mismatch: expected ${version}, file version ${fileVersion}, product version ${productVersion}. Run 'pnpm run build --release' first.`,
+    );
+  }
+
   if (!fs.existsSync(path.join(root, "resources/scan/hidden_question.png"))) {
     throw new Error("Question-mark placeholder image not found: resources/scan/hidden_question.png.");
   }
