@@ -2,6 +2,12 @@ name: Build Release
 
 on:
   workflow_dispatch:
+    inputs:
+      publish_release:
+        description: Publish GitHub Release
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -10,6 +16,11 @@ jobs:
   build:
     runs-on: windows-2025
     timeout-minutes: 60
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release_tag: ${{ steps.version.outputs.release_tag }}
+      package_name: ${{ steps.version.outputs.package_name }}
+      portable_artifact_id: ${{ steps.upload_zip.outputs.artifact-id }}
     defaults:
       run:
         shell: pwsh
@@ -19,6 +30,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Resolve version and validate release tag
+        id: version
+        env:
+          PUBLISH_RELEASE: ${{ inputs.publish_release }}
+        run: |
+          [xml]$manifest = Get-Content -LiteralPath "resources/app.manifest" -Raw
+          $windowsVersion = [string]$manifest.assembly.assemblyIdentity.version
+          if ($windowsVersion -notmatch '^[0-9]+\.[0-9]+\.[0-9]+\.0$') {
+            throw "CountingMomo assemblyIdentity version must use X.Y.Z.0."
+          }
+          $parts = @()
+          foreach ($part in $windowsVersion.Split('.')) {
+            if ([double]$part -gt 65535) {
+              throw "CountingMomo version parts must be between 0 and 65535."
+            }
+            $parts += [int]$part
+          }
+          $version = $parts[0..2] -join '.'
+          $tag = "v$version"
+          if ($env:PUBLISH_RELEASE -eq 'true') {
+            if ($env:GITHUB_REF_TYPE -ne 'tag' -or $env:GITHUB_REF_NAME -cne $tag) {
+              throw "Publishing requires the existing $tag tag matching resources/app.manifest. Selected ref: $env:GITHUB_REF"
+            }
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "release_tag=$tag" >> $env:GITHUB_OUTPUT
+          "package_name=CountingMomo-$version-windows-x64.zip" >> $env:GITHUB_OUTPUT
 
       - name: Setup Node.js and pnpm
         uses: pnpm/setup@v1
@@ -49,9 +88,10 @@ jobs:
         run: pnpm run package
 
       - name: Upload portable ZIP
+        id: upload_zip
         uses: actions/upload-artifact@v7
         with:
-          path: dist/CountingMomo-*-windows-x64.zip
+          path: dist/${{ steps.version.outputs.package_name }}
           archive: false
           if-no-files-found: error
 
@@ -61,3 +101,28 @@ jobs:
           name: CountingMomo-Symbols
           path: build/windows/x64/release/CountingMomo.pdb
           if-no-files-found: error
+
+  release:
+    if: ${{ inputs.publish_release }}
+    needs: build
+    runs-on: windows-2025
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download portable ZIP
+        uses: actions/download-artifact@v8
+        with:
+          artifact-ids: ${{ needs.build.outputs.portable_artifact_id }}
+          path: dist
+          skip-decompress: true
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+          RELEASE_TAG: ${{ needs.build.outputs.release_tag }}
+          RELEASE_ASSET: dist/${{ needs.build.outputs.package_name }}
+        run: |
+          gh release create $env:RELEASE_TAG $env:RELEASE_ASSET --repo $env:GITHUB_REPOSITORY --verify-tag --title $env:RELEASE_VERSION --generate-notes

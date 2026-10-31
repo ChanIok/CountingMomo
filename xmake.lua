@@ -29,8 +29,8 @@ target("CountingMomo")
     end
     on_load(function (target)
         local manifest = io.readfile(path.join(os.projectdir(), "resources/app.manifest"))
-        local version = manifest:match('<assemblyIdentity%s+version="([^"]+)"')
-        local major, minor, patch, revision = (version or ""):match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
+        local windows_version = manifest:match('<assemblyIdentity%s+version="([^"]+)"')
+        local major, minor, patch, revision = (windows_version or ""):match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$")
         if not major then
             raise("CountingMomo assemblyIdentity version must contain four numeric parts.")
         end
@@ -42,6 +42,10 @@ target("CountingMomo")
             end
             parts[index] = number
         end
+        if revision ~= "0" then
+            raise("CountingMomo assemblyIdentity version must end in .0.")
+        end
+        local version = table.concat({parts[1], parts[2], parts[3]}, ".")
         target:add("defines", 'COUNTING_MOMO_VERSION="' .. version .. '"')
         target:add("defines", "COUNTING_MOMO_VERSION_NUMERIC=" .. table.concat(parts, ","))
         if is_mode("debug") then

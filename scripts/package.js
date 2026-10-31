@@ -11,10 +11,12 @@ function main() {
   if (process.platform !== "win32") throw new Error("Packaging requires Windows PowerShell.");
 
   const manifest = fs.readFileSync(path.join(root, "resources/app.manifest"), "utf8");
-  const version = manifest.match(/<assemblyIdentity\s+version="(\d+\.\d+\.\d+\.\d+)"/)?.[1];
-  if (!version) throw new Error("Could not read a four-part version number from resources/app.manifest.");
-  const versionParts = version.split(".").map(Number);
+  const windowsVersion = manifest.match(/<assemblyIdentity\s+version="(\d+\.\d+\.\d+\.\d+)"/)?.[1];
+  if (!windowsVersion) throw new Error("Could not read a four-part version number from resources/app.manifest.");
+  const versionParts = windowsVersion.split(".").map(Number);
   if (versionParts.some((part) => part > 65535)) throw new Error("Version parts must be between 0 and 65535.");
+  if (windowsVersion.split(".")[3] !== "0") throw new Error("CountingMomo assemblyIdentity version must end in .0.");
+  const version = versionParts.slice(0, 3).join(".");
 
   const exe = path.join(root, "build/windows/x64/release/CountingMomo.exe");
   if (!fs.existsSync(exe)) throw new Error("Release executable not found. Run 'pnpm run build --release' first.");
@@ -51,7 +53,7 @@ $info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($env:COUNTING_MOMO_
   const expectedVersion = versionParts.join(".");
   if (fileVersion !== expectedVersion || productVersion !== expectedVersion) {
     throw new Error(
-      `Executable version mismatch: expected ${version}, file version ${fileVersion}, product version ${productVersion}. Run 'pnpm run build --release' first.`,
+      `Executable version mismatch: expected ${expectedVersion}, file version ${fileVersion}, product version ${productVersion}. Run 'pnpm run build --release' first.`,
     );
   }
 
