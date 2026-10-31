@@ -37,3 +37,11 @@ For architecture and development guidelines, see [AGENTS.md](AGENTS.md).
 pnpm run build --release     # Build Release
 pnpm run package             # Package portable zip
 ```
+
+## Tech Stack
+
+C++23 · clang-cl · xmake · vcpkg · OpenCV · reflect-cpp · Win32 · Direct2D · Direct3D 11 · Windows.Graphics.Capture · Node.js
+
+## License
+
+This project is licensed under the [MIT License](LICENSE). The project logo and all game-related assets remain the property of the developers of *Infinity Nikki*.

@@ -37,3 +37,11 @@
 pnpm run build --release     # 构建 Release
 pnpm run package             # 打包便携 zip
 ```
+
+## 技术栈
+
+C++23 · clang-cl · xmake · OpenCV · reflect-cpp · Win32 · Direct2D · Direct3D 11 · Windows.Graphics.Capture
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。项目 Logo 和游戏相关素材版权归《无限暖暖》开发商所有。
