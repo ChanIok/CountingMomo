@@ -7,6 +7,7 @@
 #include "vendor/windows/dxgi.hpp"
 #include "vendor/windows/windows_graphics_capture_interop.hpp"
 #include "vendor/windows/windows_graphics_directx_direct3d11_interop.hpp"
+#include "vendor/windows/winrt/windows_foundation_metadata.hpp"
 #include "vendor/windows/winrt/windows_graphics_directx.hpp"
 
 #include "core/message/message.hpp"
@@ -245,6 +246,11 @@ auto start(core::AppState& state, HWND hwnd, Settings settings)
   try {
     if (!wgc::GraphicsCaptureSession::IsSupported()) {
       return std::unexpected(core::error("error.capture.unsupported"));
+    }
+    // 光标像素会干扰匹配与判稳，缺少排除能力时不能继续扫描。
+    if (!winrt::Windows::Foundation::Metadata::ApiInformation::IsPropertyPresent(
+            winrt::name_of<wgc::GraphicsCaptureSession>(), L"IsCursorCaptureEnabled")) {
+      return std::unexpected(core::error("error.capture.cursor_control_unsupported"));
     }
     winrt::handle frame_ready{CreateEventW(nullptr, FALSE, FALSE, nullptr)};
     winrt::check_bool(static_cast<bool>(frame_ready));

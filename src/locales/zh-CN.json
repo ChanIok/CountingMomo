@@ -59,6 +59,7 @@
   "error.capture.already_started": "游戏画面捕获已在运行。",
   "error.capture.client_origin_failed": "无法确定游戏画面的位置。",
   "error.capture.client_region_unknown": "无法确定需要读取的游戏画面。",
+  "error.capture.cursor_control_unsupported": "当前系统不支持扫描所需的捕获功能，请使用 Windows 10 2004 或更高版本。",
   "error.capture.gpu_failed": "无法处理游戏画面。",
   "error.capture.invalid_settings": "游戏画面捕获配置无效。",
   "error.capture.not_started": "游戏画面捕获尚未启动。",

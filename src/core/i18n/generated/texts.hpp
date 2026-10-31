@@ -8,7 +8,7 @@ struct Text {
   std::string_view zh_cn;
   std::string_view en_us;
 };
-inline constexpr std::array<Text, 234> texts{{
+inline constexpr std::array<Text, 235> texts{{
     {"action.back", "返回", "Back"},
     {"action.copied", "已复制", "Copied"},
     {"action.copy", "复制结果", "Copy result"},
@@ -69,6 +69,7 @@ inline constexpr std::array<Text, 234> texts{{
     {"error.capture.already_started", "游戏画面捕获已在运行。", "Game capture is already running."},
     {"error.capture.client_origin_failed", "无法确定游戏画面的位置。", "Could not locate the game image."},
     {"error.capture.client_region_unknown", "无法确定需要读取的游戏画面。", "Could not identify the game image to read."},
+    {"error.capture.cursor_control_unsupported", "当前系统不支持扫描所需的捕获功能，请使用 Windows 10 2004 或更高版本。", "This system does not support the capture features required for scanning. Use Windows 10 version 2004 or later."},
     {"error.capture.gpu_failed", "无法处理游戏画面。", "Could not process the game image."},
     {"error.capture.invalid_settings", "游戏画面捕获配置无效。", "The game capture configuration is invalid."},
     {"error.capture.not_started", "游戏画面捕获尚未启动。", "Game capture has not started."},

@@ -16,6 +16,7 @@ namespace features::capture {
 // 与 WGC SystemRelativeTime 同一 QPC 时钟，单位为 100ns，用于记录输入完成边界。
 auto source_time() -> std::int64_t;
 // 启动、等帧和关闭均由扫描任务线程调用；初始化失败会显式回滚已分配的资源。
+// 创建捕获资源前确认 WGC 与排除鼠标指针的能力，缺少任一能力时直接失败。
 auto start(core::AppState& state, HWND hwnd, Settings settings) -> std::expected<void, core::Error>;
 // GPU 精确比较配置区域，达到稳定时长后才读回完整客户区图片。
 // after_source_time 排除操作前的帧；require_change 用于拒绝候选后的重试，必须先看到画面变化。

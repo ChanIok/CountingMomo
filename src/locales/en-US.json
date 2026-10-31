@@ -59,6 +59,7 @@
   "error.capture.already_started": "Game capture is already running.",
   "error.capture.client_origin_failed": "Could not locate the game image.",
   "error.capture.client_region_unknown": "Could not identify the game image to read.",
+  "error.capture.cursor_control_unsupported": "This system does not support the capture features required for scanning. Use Windows 10 version 2004 or later.",
   "error.capture.gpu_failed": "Could not process the game image.",
   "error.capture.invalid_settings": "The game capture configuration is invalid.",
   "error.capture.not_started": "Game capture has not started.",
