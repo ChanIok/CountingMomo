@@ -72,7 +72,7 @@ ${entries}
 `;
 const destination = path.join(root, "src/core/i18n/generated/texts.hpp");
 fs.mkdirSync(path.dirname(destination), { recursive: true });
-// Preserve the timestamp when nothing changed so a normal build stays incremental.
+// Preserve the timestamp when regeneration leaves the content unchanged.
 if (!fs.existsSync(destination) || fs.readFileSync(destination, "utf8") !== header) {
   fs.writeFileSync(destination, header, "utf8");
 }

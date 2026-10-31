@@ -8,6 +8,9 @@
   "scripts": {
     "prepare": "husky",
     "build": "node scripts/build.js",
+    "build:cpp": "xmake build -y CountingMomo",
+    "generate:locales": "node scripts/generate-locales.js",
+    "package": "node scripts/package.js",
     "format:cpp": "node scripts/format-cpp.js"
   },
   "devDependencies": {

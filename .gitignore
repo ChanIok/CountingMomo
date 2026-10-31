@@ -1,5 +1,6 @@
 # xmake 本机配置、构建及分发产物
 /.xmake/
+/.xmake-global/
 /build/
 /dist/
 /compile_commands.json

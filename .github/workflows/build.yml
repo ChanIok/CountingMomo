@@ -1,0 +1,63 @@
+name: Build Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      XMAKE_GLOBALDIR: ${{ github.workspace }}/.xmake-global
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and pnpm
+        uses: pnpm/setup@v1
+        with:
+          runtime: node@24
+          install: false
+
+      - name: Setup xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: '3.1.2'
+
+      - name: Cache xmake/vcpkg dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            .xmake-global
+            build/.packages/v
+          key: ${{ runner.os }}-${{ runner.arch }}-msvc-release-xmake-${{ hashFiles('xmake.lua', 'xmake-requires.lock', '.github/workflows/build.yml') }}
+
+      - name: Configure Release with MSVC
+        run: xmake f -p windows -a x64 -m release --toolchain=msvc -y
+
+      - name: Build CountingMomo
+        run: pnpm run build:cpp
+
+      - name: Package portable ZIP
+        run: pnpm run package
+
+      - name: Upload portable ZIP
+        uses: actions/upload-artifact@v7
+        with:
+          path: dist/CountingMomo-*-windows-x64.zip
+          archive: false
+          if-no-files-found: error
+
+      - name: Upload debug symbols
+        uses: actions/upload-artifact@v7
+        with:
+          name: CountingMomo-Symbols
+          path: build/windows/x64/release/CountingMomo.pdb
+          if-no-files-found: error

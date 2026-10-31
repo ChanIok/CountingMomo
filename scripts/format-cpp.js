@@ -44,7 +44,7 @@ function collect(directory) {
 function resolveFiles(args) {
   if (args[0] === "--files") args = args.slice(1);
   const candidates = args.length > 0 ? args.map((file) => path.resolve(file)) : collect(sourceRoot);
-  // 生成产物每次构建都会被 scripts/generate-locales.js 覆盖，格式化它只会产生反复变动
+  // 生成产物的格式由 scripts/generate-locales.js 决定，不参与手工格式化。
   return candidates.filter(
     (file) =>
       suffixes.has(path.extname(file)) &&
@@ -59,7 +59,7 @@ function main() {
 
   const clangFormat = findClangFormat();
   if (!clangFormat) {
-    console.warn("⚠ 未找到 clang-format，跳过 C++ 格式化。请安装 LLVM 或 VS2022 的 C++ 工作负载。");
+    console.warn("⚠ clang-format not found. Skipping C++ formatting. Install LLVM or the C++ workload for Visual Studio 2022.");
     return 0;
   }
 
