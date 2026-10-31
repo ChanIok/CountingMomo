@@ -1,4 +1,5 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
 #include "vendor/windows/d2d1_1.hpp"

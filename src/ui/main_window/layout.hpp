@@ -1,4 +1,5 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
 #include "vendor/windows.hpp"
@@ -34,7 +35,7 @@ struct Layout {
   D2D1_RECT_F save{};
   D2D1_RECT_F diagnostic{};
   D2D1_RECT_F theme{};
-  D2D1_RECT_F restore{};
+  D2D1_RECT_F repository{};
   D2D1_RECT_F language{};
   D2D1_RECT_F summary{};
   D2D1_RECT_F footer{};

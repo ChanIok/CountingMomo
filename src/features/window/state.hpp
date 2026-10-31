@@ -1,4 +1,5 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
 #include "vendor/windows.hpp"
@@ -13,7 +14,7 @@ struct SavedWindow {
 };
 
 struct State {
-  bool restore_enabled{};  // 仅扫描线程访问。
+  HWND game{};  // UI 线程更新，任务启动前复制进扫描请求。
   std::optional<SavedWindow> original;
 };
 }  // namespace features::window

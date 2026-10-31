@@ -18,7 +18,7 @@ target("CountingMomo")
     add_includedirs("src")
     add_files("src/**.cpp", "resources/app.rc")
     add_packages("vcpkg::opencv4", "vcpkg::reflectcpp")
-    add_links("user32", "ole32", "shell32", "d3d11", "dxgi", "dwmapi", "windowsapp",
+    add_links("user32", "ole32", "shell32", "d3d11", "d3dcompiler", "dxgi", "dwmapi", "windowsapp",
               "RuntimeObject", "windowscodecs", "d2d1", "dwrite", "dcomp", "gdi32",
               "advapi32", "comdlg32", "uuid")
     if is_mode("release") then
@@ -28,6 +28,9 @@ target("CountingMomo")
         add_ldflags("/DEFAULTLIB:ucrt.lib", {force = true})
     end
     on_load(function (target)
+        local manifest = io.readfile(path.join(os.projectdir(), "resources/app.manifest"))
+        local version = manifest:match('<assemblyIdentity version="([^"]+)"')
+        target:add("defines", 'COUNTING_MOMO_VERSION="' .. version .. '"')
         local opencv = target:pkg("vcpkg::opencv4")
         if opencv then
             for _, dir in ipairs(opencv:get("sysincludedirs") or {}) do
@@ -39,7 +42,6 @@ target("CountingMomo")
         os.vrunv("node", {path.join(os.projectdir(), "scripts/generate-locales.js")})
     end)
     after_build(function (target)
-        os.cp("resources/layout.json", path.join(target:targetdir(), "resources/layout.json"))
         os.cp("resources/scan", path.join(target:targetdir(), "resources/"))
         os.cp("resources/categories", path.join(target:targetdir(), "resources/"))
     end)
@@ -57,11 +59,9 @@ task("package")
         local exe = target:targetfile()
         if not os.isfile(exe) then raise("请先构建 Release。") end
         if not os.isfile("resources/scan/hidden_question.png") then raise("缺少问号占位素材。") end
-        if not os.isfile("resources/categories/categories.json") then raise("缺少分类导航资源。") end
         local dest = path.join("dist", "CountingMomo-" .. os.date("%Y%m%d-%H%M%S"))
         os.mkdir(dest)
         os.cp(exe, dest)
-        os.cp("resources/layout.json", path.join(dest, "resources/layout.json"))
         os.cp("resources/scan", path.join(dest, "resources/"))
         os.cp("resources/categories", path.join(dest, "resources/"))
         os.cp("README.md", dest)

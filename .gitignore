@@ -5,6 +5,7 @@
 /compile_commands.json
 
 # 扫描结果、裁图证据及本地实验材料
+/data/
 /results/
 /temp/
 
@@ -22,6 +23,9 @@ __pycache__/
 /resources/fonts/*.ttf
 /resources/fonts/*.otf
 /resources/fonts/*.ttc
+
+# 提交前钩子依赖；pnpm 安装后由 prepare 脚本注册 husky
+/node_modules/
 
 # 本机 IDE 状态及 Windows 缓存
 /.vs/

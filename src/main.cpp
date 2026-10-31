@@ -3,17 +3,41 @@
 #include "vendor/windows.hpp"
 #include "vendor/windows/roapi.hpp"
 
-#include "app/usecase.hpp"
 #include "core/i18n/i18n.hpp"
+#include "core/initializer/initializer.hpp"
+#include "core/shutdown/shutdown.hpp"
 #include "core/state/app_state.hpp"
-#include "ui/composition.hpp"
 #include "ui/main_window/state.hpp"
-#include "ui/main_window/window.hpp"
-#include "ui/status_window/window.hpp"
-#include "ui/theme.hpp"
 #include "utils/string.hpp"
 
-int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int show_command) {
+namespace {
+
+auto run_application(core::AppState& state, const wchar_t* arguments, int show_command) -> int {
+  auto initialized = core::initializer::initialize_application(state, arguments, show_command);
+  if (!initialized) {
+    MessageBoxW(state.main_window->hwnd, core::i18n::wide(state, initialized.error()).c_str(),
+                core::i18n::wide(state, "error.app.startup_title").c_str(), MB_OK | MB_ICONERROR);
+    return 1;
+  }
+  if (*initialized == core::startup::Action::exit) {
+    return 0;
+  }
+
+  ShowWindow(state.main_window->hwnd, show_command);
+  UpdateWindow(state.main_window->hwnd);
+  MSG message{};
+  int received{};
+  while ((received = GetMessageW(&message, nullptr, 0, 0)) > 0) {
+    TranslateMessage(&message);
+    DispatchMessageW(&message);
+  }
+  return received < 0 ? 1 : static_cast<int>(message.wParam);
+}
+
+}  // namespace
+
+int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR arguments, int show_command) {
+  // UI 资源的显式关闭和自然析构都必须发生在当前 COM 套间撤销之前。
   auto apartment = RoInitialize(RO_INIT_SINGLETHREADED);
   if (FAILED(apartment)) {
     MessageBoxW(nullptr,
@@ -27,40 +51,16 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int show_command) {
   auto language = core::i18n::system_language();
   try {
     core::AppState state;
-    core::i18n::set_language(state, core::i18n::system_language());
-    auto initialized = app::initialize(state);
-    language = core::i18n::current(state);
-    if (initialized) {
-      initialized = ui::theme::initialize(state);
-    }
-    if (initialized) {
-      initialized = ui::composition::initialize(state);
-    }
-    if (initialized) {
-      initialized = ui::main_window::create(state);
-    }
-    if (initialized) {
-      initialized = ui::theme::watch(state, state.main_window->hwnd, ui::main_window::theme_update);
-    }
-    if (initialized) {
-      initialized = ui::status_window::create(state);
+    try {
+      exit_code = run_application(state, arguments, show_command);
+    } catch (...) {
+      language = core::i18n::current(state);
+      // 初始化中途或消息循环抛出异常时，也先收尾，不能依赖 AppState 析构停止任务。
+      core::shutdown::shutdown_application(state);
+      throw;
     }
     language = core::i18n::current(state);
-    if (!initialized) {
-      MessageBoxW(state.main_window->hwnd, core::i18n::wide(state, initialized.error()).c_str(),
-                  core::i18n::wide(state, "error.app.startup_title").c_str(), MB_OK | MB_ICONERROR);
-      exit_code = 1;
-    } else {
-      ShowWindow(state.main_window->hwnd, show_command);
-      UpdateWindow(state.main_window->hwnd);
-      MSG message{};
-      int received{};
-      while ((received = GetMessageW(&message, nullptr, 0, 0)) > 0) {
-        TranslateMessage(&message);
-        DispatchMessageW(&message);
-      }
-      exit_code = received < 0 ? 1 : static_cast<int>(message.wParam);
-    }
+    core::shutdown::shutdown_application(state);
   } catch (const std::exception& error) {
     MessageBoxW(nullptr,
                 utils::string::wide(
@@ -68,6 +68,12 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int show_command) {
                                                                  error.what())))
                     .c_str(),
                 L"CountingMomo", MB_OK | MB_ICONERROR);
+    exit_code = 1;
+  } catch (...) {
+    MessageBoxW(
+        nullptr,
+        utils::string::wide(core::i18n::text(language, core::error("error.app.exception"))).c_str(),
+        L"CountingMomo", MB_OK | MB_ICONERROR);
     exit_code = 1;
   }
   RoUninitialize();

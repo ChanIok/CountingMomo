@@ -5,8 +5,8 @@
 #include "vendor/windows.hpp"
 
 #include "core/message/message.hpp"
-
 #include "features/scan/types.hpp"
+#include "features/window/types.hpp"
 
 namespace core {
 struct AppState;
@@ -14,21 +14,10 @@ struct AppState;
 
 namespace features::window {
 
-struct Geometry {
-  int width{};
-  int height{};
-  POINT origin{};  // 客户区左上角的屏幕坐标。
-};
+inline constexpr std::wstring_view game_executable = L"X6Game-Win64-Shipping.exe";
+// 单次滚轮输入保持在有符号 16 位增量范围内。
+inline constexpr int max_wheel_notches = std::numeric_limits<short>::max() / WHEEL_DELTA;
 
-struct Target {
-  HWND hwnd{};
-  DWORD pid{};
-  int width{};
-  int height{};
-};
-
-auto request_stop(core::AppState& state) -> void;
-auto stop_requested(core::AppState& state) -> bool;
 auto restore(core::AppState& state) -> std::expected<void, core::Error>;
 
 // 显式句柄优先；否则精确匹配 exe（ASCII 大小写无关），取可见无 owner 的最大窗口。
@@ -49,7 +38,7 @@ auto scroll_point(const Target& target, const scan::Box& bounds)
 auto position_pointer(core::AppState& state, const Target& target, POINT point)
     -> std::expected<void, core::Error>;
 
-// 移动到客户区坐标 point 后向下滚动，notches 为 1～273。
+// 移动到客户区坐标 point 后向下滚动，notches 为 1～max_wheel_notches。
 auto scroll(core::AppState& state, const Target& target, POINT point, int notches)
     -> std::expected<void, core::Error>;
 

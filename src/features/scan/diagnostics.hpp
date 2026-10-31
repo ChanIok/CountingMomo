@@ -1,20 +1,18 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
-#include "core/message/message.hpp"
+#include "core/message/types.hpp"
 
-#include "features/scan/diagnostic_types.hpp"
+namespace core {
+struct AppState;
+}
+
+namespace features::scan {
+struct Outcome;
+}
 
 namespace features::scan::diagnostics {
-auto log(const core::Message& message) -> void;
-auto append(std::ofstream& journal, const Transaction& transaction)
-    -> std::expected<void, core::Error>;
-auto write(const std::filesystem::path& path, const Session& session)
-    -> std::expected<void, core::Error>;
-auto write(const std::filesystem::path& path, const BatchSession& session)
-    -> std::expected<void, core::Error>;
-auto write(const std::filesystem::path& path, const RunTimings& timings)
-    -> std::expected<void, core::Error>;
-auto write(const std::filesystem::path& path, const BatchTimings& timings)
-    -> std::expected<void, core::Error>;
+// 仅异常终态保存报告与已有现场图；捕获已关闭，工作数据和线程 COM 套间仍有效。
+auto save(core::AppState& state, Outcome& outcome) -> std::expected<void, core::Error>;
 }  // namespace features::scan::diagnostics

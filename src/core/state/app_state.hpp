@@ -1,11 +1,28 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
 namespace core::i18n {
 struct State;
 }
 
-namespace app {
+namespace core::startup {
+struct State;
+}
+
+namespace features::settings {
+struct State;
+}
+
+namespace features::result {
+struct State;
+}
+
+namespace features::navigation {
+struct State;
+}
+
+namespace features::capture {
 struct State;
 }
 
@@ -38,7 +55,11 @@ namespace core {
 struct AppState {
   AppState();
   ~AppState();
-  std::unique_ptr<app::State> app;
+  std::unique_ptr<startup::State> startup;
+  std::unique_ptr<features::settings::State> settings;
+  std::unique_ptr<features::result::State> result;
+  std::unique_ptr<features::navigation::State> navigation;
+  std::unique_ptr<features::capture::State> capture;
   std::unique_ptr<i18n::State> i18n;
   std::unique_ptr<features::scan::State> scan;
   std::unique_ptr<features::window::State> window;

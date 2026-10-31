@@ -37,13 +37,8 @@ function requireKey(key, source) {
   if (!Object.hasOwn(zh, key)) fail(`${source}: missing text key ${key}`);
 }
 
-const catalog = readJson("resources/categories/categories.json");
-for (const group of catalog.groups) {
-  requireKey(`group.${group.id}`, "categories.json");
-  for (const category of group.categories) requireKey(`category.${category.id}`, "categories.json");
-}
-
-// Validate direct literal references as well as keys derived from the catalog above.
+// Dynamic category/group keys are checked against the generated table by navigation's static_assert.
+// Validate direct literal references in C++ sources here.
 function inspectSources(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     if (entry.name === "generated") continue;

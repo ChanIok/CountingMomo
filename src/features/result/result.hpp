@@ -3,10 +3,10 @@
 #include "vendor/std.hpp"
 
 #include "core/message/message.hpp"
+#include "features/result/types.hpp"
 
 namespace features::result {
 
-using Categories = std::map<std::string, std::vector<int>>;
 auto serialize(const Categories& categories) -> std::expected<std::string, core::Error>;
 
 // 已有结果先写入同目录临时文件，再替换，避免中断破坏已有结果文件。

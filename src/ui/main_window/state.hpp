@@ -1,10 +1,11 @@
 #pragma once
+
 #include "vendor/std.hpp"
 
 #include "vendor/windows.hpp"
 #include "vendor/windows/shobjidl_core.hpp"
 
-#include "app/state.hpp"
+#include "features/scan/task_types.hpp"
 #include "ui/button.hpp"
 #include "ui/composition.hpp"
 #include "ui/main_window/layout.hpp"
@@ -16,13 +17,13 @@ enum class Page { main, settings, details };
 // 可见内容的快照；同一快照供布局、绘制和按钮模型使用，不从 HWND 回读数据。
 struct View {
   Page page{};
-  app::Phase phase{};
+  features::scan::Phase phase{};
   std::wstring category;
   std::wstring message;
   std::wstring notice;
   std::wstring warning;
   std::wstring theme_label;
-  std::wstring restore_label;
+  std::wstring repository_label;
   std::wstring language_label;
   int summary_count{};
   int category_count{};
@@ -39,6 +40,10 @@ struct View {
 };
 
 struct State {
+  core::Error notice;
+  std::chrono::steady_clock::time_point notice_until{};
+  bool copied{};
+  bool closing{};
   HWND hwnd{};
   UINT taskbar_message{};
   Microsoft::WRL::ComPtr<ITaskbarList3> taskbar;

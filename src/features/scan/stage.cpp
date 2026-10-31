@@ -5,7 +5,9 @@
 #include "core/message/message.hpp"
 
 namespace features::scan {
+// 映射扫描阶段枚举到多语言展示消息
 auto stage_message(Stage stage) -> core::Message {
+  // 根据当前执行阶段返回对应的展示文案键
   switch (stage) {
     case Stage::preparing:
       return core::message("scan.stage.preparing");
@@ -17,8 +19,6 @@ auto stage_message(Stage stage) -> core::Message {
       return core::message("scan.stage.waiting_layout");
     case Stage::switching_category:
       return core::message("scan.stage.switching_category");
-    case Stage::resetting_items:
-      return core::message("scan.stage.resetting_items");
     case Stage::collecting:
       return core::message("scan.stage.collecting");
     case Stage::completed:

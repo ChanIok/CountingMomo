@@ -1,4 +1,5 @@
 #pragma once
+
 #include "core/i18n/types.hpp"
 
 namespace core::i18n {

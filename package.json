@@ -1,0 +1,20 @@
+{
+  "name": "counting-momo",
+  "private": true,
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "build": "node scripts/build.js",
+    "format:cpp": "node scripts/format-cpp.js"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.4"
+  },
+  "lint-staged": {
+    "src/**/*.{cpp,hpp}": "node scripts/format-cpp.js --files"
+  }
+}

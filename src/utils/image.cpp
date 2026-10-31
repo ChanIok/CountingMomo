@@ -7,26 +7,30 @@
 #include "vendor/windows/wrl/client.hpp"
 
 #include "core/message/message.hpp"
-
 #include "utils/string.hpp"
 
 namespace utils::image {
 
+// 使用 WIC 解码图像文件并转换为 24 位 BGR cv::Mat 矩阵
 auto load(const std::filesystem::path& path) -> std::expected<cv::Mat, core::Error> {
   using Microsoft::WRL::ComPtr;
   ComPtr<IWICImagingFactory> factory;
+  // 创建 Windows Imaging Component (WIC) 工厂
   HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
                                 IID_PPV_ARGS(&factory));
   ComPtr<IWICBitmapDecoder> decoder;
+  // 从目标文件路径创建图像解码器
   if (SUCCEEDED(hr)) {
     hr = factory->CreateDecoderFromFilename(path.c_str(), nullptr, GENERIC_READ,
                                             WICDecodeMetadataCacheOnDemand, &decoder);
   }
   ComPtr<IWICBitmapFrameDecode> frame;
+  // 提取图像第一帧
   if (SUCCEEDED(hr)) {
     hr = decoder->GetFrame(0, &frame);
   }
   ComPtr<IWICFormatConverter> converter;
+  // 创建格式转换器并初始化为 24 位 BGR 格式
   if (SUCCEEDED(hr)) {
     hr = factory->CreateFormatConverter(&converter);
   }
@@ -39,6 +43,7 @@ auto load(const std::filesystem::path& path) -> std::expected<cv::Mat, core::Err
   if (SUCCEEDED(hr)) {
     hr = converter->GetSize(&width, &height);
   }
+  // 校验尺寸合法性与溢出风险
   if (SUCCEEDED(hr) &&
       (!width || !height || width > static_cast<UINT>(std::numeric_limits<int>::max()) ||
        height > static_cast<UINT>(std::numeric_limits<int>::max()) ||
@@ -46,6 +51,7 @@ auto load(const std::filesystem::path& path) -> std::expected<cv::Mat, core::Err
     hr = E_INVALIDARG;
   }
   cv::Mat pixels;
+  // 分配 OpenCV 矩阵并将转换后的像素数据拷贝拷出
   if (SUCCEEDED(hr)) {
     pixels.create(static_cast<int>(height), static_cast<int>(width), CV_8UC3);
     UINT stride = static_cast<UINT>(pixels.step[0]);
@@ -59,13 +65,16 @@ auto load(const std::filesystem::path& path) -> std::expected<cv::Mat, core::Err
   return pixels;
 }
 
+// 使用 WIC 将 24 位 BGR 像素矩阵编码保存为本地 PNG 文件
 auto save_png(const std::filesystem::path& path, const cv::Mat& bgr)
     -> std::expected<void, core::Error> {
+  // 必须为非空的 3 通道 8 位 BGR 矩阵
   if (bgr.empty() || bgr.type() != CV_8UC3) {
     return std::unexpected(core::error("error.image.invalid_pixels"));
   }
   using Microsoft::WRL::ComPtr;
   ComPtr<IWICImagingFactory> factory;
+  // 创建 WIC 工厂与目标文件输出流
   HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
                                 IID_PPV_ARGS(&factory));
   ComPtr<IWICStream> stream;
@@ -76,6 +85,7 @@ auto save_png(const std::filesystem::path& path, const cv::Mat& bgr)
     hr = stream->InitializeFromFilename(path.c_str(), GENERIC_WRITE);
   }
   ComPtr<IWICBitmapEncoder> encoder;
+  // 创建并初始化 PNG 容器编码器
   if (SUCCEEDED(hr)) {
     hr = factory->CreateEncoder(GUID_ContainerFormatPng, nullptr, &encoder);
   }
@@ -83,6 +93,7 @@ auto save_png(const std::filesystem::path& path, const cv::Mat& bgr)
     hr = encoder->Initialize(stream.Get(), WICBitmapEncoderNoCache);
   }
   ComPtr<IWICBitmapFrameEncode> frame;
+  // 创建新帧并配置尺寸与像素格式
   if (SUCCEEDED(hr)) {
     hr = encoder->CreateNewFrame(&frame, nullptr);
   }
@@ -99,11 +110,13 @@ auto save_png(const std::filesystem::path& path, const cv::Mat& bgr)
   if (SUCCEEDED(hr) && !IsEqualGUID(format, GUID_WICPixelFormat24bppBGR)) {
     hr = E_UNEXPECTED;
   }
+  // 确保内存连续后写入帧像素数据
   auto pixels = bgr.isContinuous() ? bgr : bgr.clone();
   UINT stride = static_cast<UINT>(pixels.step[0]);
   if (SUCCEEDED(hr)) {
     hr = frame->WritePixels(pixels.rows, stride, stride * pixels.rows, pixels.data);
   }
+  // 提交帧并持久化编码结果
   if (SUCCEEDED(hr)) {
     hr = frame->Commit();
   }

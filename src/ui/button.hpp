@@ -3,7 +3,6 @@
 #include "vendor/std.hpp"
 
 #include "core/message/message.hpp"
-
 #include "ui/composition.hpp"
 #include "ui/theme.hpp"
 
@@ -19,7 +18,7 @@ enum class Action {
   diagnostic,
   save,
   theme,
-  restore,
+  repository,
   language,
   copy,
   view

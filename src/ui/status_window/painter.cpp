@@ -2,9 +2,8 @@
 
 #include "vendor/std.hpp"
 
-#include "core/message/message.hpp"
-
 #include "core/i18n/i18n.hpp"
+#include "core/message/message.hpp"
 #include "core/state/app_state.hpp"
 #include "ui/button.hpp"
 #include "ui/drawing.hpp"
@@ -13,8 +12,10 @@
 
 namespace ui::status_window::painter {
 
+// 渲染悬浮状态窗：绘制背景与提示 → 绘制并驱动呼吸状态圆点 → 同步复制/查看按钮并提交合成
 auto paint(core::AppState& state) -> std::expected<void, core::Error> {
   auto& window = *state.status_window;
+  // 确保悬浮窗 DirectComposition 宿主已就绪
   if (auto ready = composition::create(state, window.composition, window.hwnd); !ready) {
     return ready;
   }
@@ -27,6 +28,7 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
   constexpr float indicator_size = 8;
   // 微软雅黑字形的视觉中心略低于行框中心，圆点随标题行定位并向下校正 1 DIP。
   float indicator_top = (title.top + title.bottom - indicator_size) / 2 + 1;
+  // 仅在明确标记 redraw 时执行卡片主体离屏重绘
   if (window.redraw) {
     auto painted = composition::draw(
         state, window.composition.content, static_cast<UINT>(client.right),
@@ -34,10 +36,12 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
           target->Clear(window.material ? D2D1::ColorF(0, 0.0f) : colors.card);
           auto background = colors.card;
           background.a = window.material ? 0.72f : 1.0f;
+          // 填充半透明圆角卡片底色
           drawing::fill(target, D2D1::RectF(0, 0, width, height), background, 8);
           drawing::text(state, target, window.title, title, 15, colors.text);
           drawing::text(state, target, window.detail, D2D1::RectF(20, 49, width - 20, 77), 13,
                         colors.muted);
+          // 运行态显示前台保持提示
           if (window.active) {
             drawing::text(state, target, core::i18n::wide(state, "scan.foreground_hint"),
                           D2D1::RectF(20, 87, width - 20, 118), 12, colors.muted);
@@ -47,6 +51,7 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
       return painted;
     }
   }
+  // 挂载呼吸圆点 Visual 节点
   if (!window.indicator.node.visual) {
     if (auto ready =
             composition::attach(state, window.indicator.node, window.composition.root.visual.Get());
@@ -54,6 +59,7 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
       return ready;
     }
   }
+  // 绘制状态圆点
   if (window.redraw || window.repaint_buttons || !window.indicator.surface) {
     UINT size = static_cast<UINT>(std::ceil(indicator_size * window.dpi / 96.0f));
     if (auto ready = composition::draw(
@@ -73,11 +79,13 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
       return ready;
     }
   }
+  // 扫描进行中触发圆点正弦呼吸动效
   if (auto ready =
           composition::pulse(state, window.indicator.node, window.active && window.visible);
       !ready) {
     return ready;
   }
+  // 非进行态装配复制与查看主窗口按钮
   std::vector<button::Spec> buttons;
   auto clip = D2D1::RectF(0, 0, width, height);
   float action_right = width - 20;
@@ -99,12 +107,14 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
                        .clip = clip,
                        .style = button::Style::secondary});
   }
+  // 同步按钮集合
   if (auto ready =
           button::sync(state, window.buttons, window.hwnd, window.composition.root.visual.Get(),
                        std::move(buttons), colors, window.dpi, window.repaint_buttons);
       !ready) {
     return ready;
   }
+  // 提交合成渲染
   auto committed = composition::commit(state);
   if (committed) {
     window.redraw = false;
