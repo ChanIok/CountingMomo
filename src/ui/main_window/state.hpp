@@ -25,6 +25,11 @@ struct View {
   std::wstring theme_label;
   std::wstring repository_label;
   std::wstring language_label;
+  std::wstring stop_key_label;
+  std::wstring stop_key_button_label;
+  std::wstring hotkey_warning;
+  bool hotkey_available{true};
+  button::Action focused{};
   int summary_count{};
   int category_count{};
   int total{};
@@ -62,5 +67,8 @@ struct State {
   layout::Layout layout;
   composition::Host composition;
   button::State buttons;
+  button::Action focused{};
+  bool recording_stop_key{};
+  int stop_key_candidate{};  // 0 表示尚未按下有效功能键；松开前不写入设置。
 };
 }  // namespace ui::main_window

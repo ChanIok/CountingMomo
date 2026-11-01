@@ -21,7 +21,8 @@ enum class Action {
   repository,
   language,
   copy,
-  view
+  view,
+  stop_key
 };
 enum class Style { primary, secondary, quiet };
 
@@ -33,6 +34,7 @@ struct Spec {
   Style style{Style::quiet};
   bool enabled{true};
   std::wstring icon;
+  bool focused{};
 };
 
 struct Button {

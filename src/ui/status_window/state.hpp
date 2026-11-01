@@ -22,6 +22,7 @@ struct State {
   bool failed{};
   std::wstring title;
   std::wstring detail;
+  std::wstring hint;
   composition::Host composition;
   composition::Layer indicator;
   button::State buttons;

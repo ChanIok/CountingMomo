@@ -5,6 +5,7 @@
 #include "core/i18n/i18n.hpp"
 #include "core/startup/startup.hpp"
 #include "core/state/app_state.hpp"
+#include "features/scan/control.hpp"
 #include "features/settings/usecase.hpp"
 #include "features/window/state.hpp"
 #include "features/window/window.hpp"
@@ -56,6 +57,8 @@ auto initialize_application(AppState& state, const wchar_t* arguments, int show_
   if (auto initialized = ui::status_window::create(state); !initialized) {
     return std::unexpected(initialized.error());
   }
+  features::scan::check_hotkey(state);
+  ui::main_window::refresh(state);
   return startup::Action::run;
 }
 

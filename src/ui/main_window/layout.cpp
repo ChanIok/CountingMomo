@@ -14,8 +14,16 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
   const auto& view = window.view;
   Layout result;
   // 计算页脚与正文区域底沿
-  float footer_top = std::max(header_bottom + 16, viewport - 24 - footer_height);
-  result.footer = D2D1::RectF(24, footer_top, width - 24, footer_top + footer_height);
+  bool hotkey_warning = view.page == Page::main && !view.hotkey_available;
+  bool footer_actions =
+      view.has_success || (view.diagnostic && (view.phase == features::scan::Phase::failed ||
+                                               view.phase == features::scan::Phase::stopped));
+  // 有底栏动作时把持续告警放在独立文字行，避免挤压或覆盖结果按钮。
+  float extra_footer = hotkey_warning ? (footer_actions ? 44.0f : 12.0f) : 0;
+  float footer_top = std::max(header_bottom + 16, viewport - 24 - footer_height - extra_footer);
+  float hint_top = footer_top + (hotkey_warning && footer_actions ? footer_height : 0);
+  result.footer =
+      D2D1::RectF(24, hint_top, width - 24, hint_top + (hotkey_warning ? 44 : footer_height));
   result.body_bottom = footer_top - 16;
   bool chinese = core::i18n::current(state) == core::i18n::Language::zh_cn;
   float settings_width = chinese ? 72.0f : 96.0f;
@@ -44,10 +52,14 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
   float card_bottom = std::max(328.0f, result.body_bottom);
   // 按页面类型流式排列卡片内部组件
   if (view.page == Page::settings) {
-    // 设置页只保留外观与语言两项，仓库入口改放底栏动作区
+    // 三项设置共用全宽按钮，快捷键状态说明放在按钮下方。
     cursor += 20;
     result.theme = row(44, 10);
-    result.language = row(44, 0);
+    result.language = row(44, 10);
+    result.stop_key = row(44, view.hotkey_available ? 0 : 4);
+    if (!view.hotkey_available) {
+      result.hotkey_status = row(44, 0);
+    }
     card_bottom = cursor + 24;
   } else if (view.page == Page::details) {
     // 明细页：分类扫描结果统计列表与告警说明
@@ -95,7 +107,7 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
   float notice_right = alternate ? width - 72 : result.primary.left - 16;
   result.notice = D2D1::RectF(left, notice_bottom - 48, notice_right, notice_bottom);
 
-  // 所有页面复用这一条 32 DIP 底栏，状态变化不影响其高度与位置。
+  // 底栏动作始终保留 32 DIP 高度；持续告警另占文字行。
   auto footer_button = [&](float x, float button_width) {
     return D2D1::RectF(x, footer_top, x + button_width, footer_top + footer_height);
   };

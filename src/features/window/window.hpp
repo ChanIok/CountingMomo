@@ -30,7 +30,7 @@ auto prepare(core::AppState& state, HWND hwnd, int width, int height, double tim
     -> std::expected<Target, core::Error>;
 auto activate(core::AppState& state, const Target& target) -> std::expected<void, core::Error>;
 
-// 校验停止请求、进程身份和客户区尺寸；foreground 为 true 时同时要求前台焦点。
+// 校验停止请求、进程身份和客户区尺寸；foreground 为 true 时失焦按正常停止处理。
 auto check(core::AppState& state, const Target& target, bool foreground = true)
     -> std::expected<void, core::Error>;
 auto scroll_point(const Target& target, const scan::Box& bounds)

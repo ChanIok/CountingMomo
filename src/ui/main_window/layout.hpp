@@ -37,6 +37,8 @@ struct Layout {
   D2D1_RECT_F theme{};
   D2D1_RECT_F repository{};
   D2D1_RECT_F language{};
+  D2D1_RECT_F stop_key{};
+  D2D1_RECT_F hotkey_status{};
   D2D1_RECT_F summary{};
   D2D1_RECT_F footer{};
   // 覆盖提示条，不参与排版：提示出现或消失不改变其它矩形与滚动范围。

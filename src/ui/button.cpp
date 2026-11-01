@@ -120,8 +120,12 @@ auto paint(core::AppState& app, Button& button, const theme::Palette& colors, UI
   // 绘制最顶层墨迹图层：包含次要按钮边框描边、图标与文本排版
   return composition::draw(
       app, button.ink, pixel_width, pixel_height, dpi, [&](auto* target, auto) {
+        if (spec.focused) {
+          drawing::outline(target, D2D1::RectF(2, 2, width - 2, height - 2), colors.text, radius,
+                           2);
+        }
         if (secondary) {
-          // 常驻轮廓与文字同层，悬停背景不能覆盖描边，也不叠加额外焦点外框。
+          // 常驻轮廓与文字同层，悬停背景不能覆盖描边；键盘焦点在内部单独标记。
           auto border =
               spec.enabled || colors.high_contrast ? colors.secondary_border : colors.line;
           drawing::outline(target, background_bounds, border, radius);
@@ -187,7 +191,7 @@ auto sync(core::AppState& app, State& state, HWND hwnd, IDCompositionVisual2* pa
     bool changed =
         repaint || button.dpi != dpi || button.spec.label != spec.label ||
         button.spec.style != spec.style || button.spec.enabled != spec.enabled ||
-        button.spec.icon != spec.icon ||
+        button.spec.icon != spec.icon || button.spec.focused != spec.focused ||
         button.spec.bounds.right - button.spec.bounds.left !=
             spec.bounds.right - spec.bounds.left ||
         button.spec.bounds.bottom - button.spec.bounds.top != spec.bounds.bottom - spec.bounds.top;

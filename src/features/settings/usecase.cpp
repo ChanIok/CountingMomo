@@ -9,6 +9,8 @@
 #include "core/i18n/i18n.hpp"
 #include "core/message/message.hpp"
 #include "core/state/app_state.hpp"
+#include "features/scan/control.hpp"
+#include "features/scan/usecase.hpp"
 #include "features/settings/state.hpp"
 #include "ui/main_window/state.hpp"
 #include "ui/main_window/window.hpp"
@@ -43,7 +45,8 @@ auto initialize(core::AppState& state) -> std::expected<void, core::Error> {
     // 校验主题与语言选项的合法枚举值
     if (settings &&
         (settings->theme == "system" || settings->theme == "light" || settings->theme == "dark") &&
-        (!settings->language || *settings->language == "zh-CN" || *settings->language == "en-US")) {
+        (!settings->language || *settings->language == "zh-CN" || *settings->language == "en-US") &&
+        settings->stop_key.get() >= 1 && settings->stop_key.get() <= 11) {
       state.settings->values = *settings;
     } else {
       // 配置损坏或字段非法时发出告警，保留 12 秒
@@ -105,6 +108,16 @@ auto toggle_language(core::AppState& state) -> void {
   state.settings->values.language = std::string(core::i18n::locale(language));
   save(state);
   ui::main_window::update_language(state);
+}
+
+auto set_stop_key(core::AppState& state, int key) -> void {
+  if (scan::running(state) || key < 1 || key > 11) {
+    return;
+  }
+  state.settings->values.stop_key = key;
+  save(state);
+  scan::check_hotkey(state);
+  ui::main_window::refresh(state);
 }
 
 auto open_repository(core::AppState& state) -> void {

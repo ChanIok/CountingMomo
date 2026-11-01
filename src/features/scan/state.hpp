@@ -43,6 +43,9 @@ struct State {
   std::chrono::steady_clock::time_point started{};
   std::thread worker;
   std::atomic_bool stop{};
+  // UI 线程维护可用性；工作线程只读取启动前固定的 request。
+  bool hotkey_available{true};
+  bool hotkey_registered{};
   // latest、pending 与 notification_pending 只在 mutex 下交接。
   std::mutex mutex;
   Progress latest;

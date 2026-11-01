@@ -19,6 +19,7 @@
 #include "features/scan/scan.hpp"
 #include "features/scan/state.hpp"
 #include "features/scan/vision.hpp"
+#include "features/settings/state.hpp"
 #include "features/window/state.hpp"
 #include "features/window/window.hpp"
 #include "ui/main_window/state.hpp"
@@ -170,15 +171,14 @@ auto start(core::AppState& state) -> void {
     return;
   }
   state.window->game = *game;
-  // 注册全局 F8 作为紧急中断热键
-  if (!RegisterHotKey(state.main_window->hwnd, 1, MOD_NOREPEAT, VK_F8)) {
-    ui::main_window::notify(state, core::error("error.app.register_hotkey"));
-    return;
-  }
+  // 快捷停止不可用不影响扫描，失焦始终可以终止任务。
+  register_hotkey(state);
   // 诊断根目录仅传入任务；异常收尾时才创建本次目录。
   features::scan::Request request;
   request.hwnd = state.window->game;
   request.diagnostic_root = *root / "data/diagnostics";
+  request.stop_key = state.settings->values.stop_key.get();
+  request.hotkey_enabled = state.scan->hotkey_registered;
   // 跨线程唤醒回调：向主窗口投递自定义扫描进度消息
   state.scan->wake = [hwnd = state.main_window->hwnd] {
     PostMessageW(hwnd, ui::main_window::scan_update, 0, 0);
@@ -205,7 +205,7 @@ auto start(core::AppState& state) -> void {
   state.status_window->graphics_failed = false;
   // 启动后台扫描工作线程
   if (auto started = job::start(state, std::move(request)); !started) {
-    UnregisterHotKey(state.main_window->hwnd, 1);
+    release_hotkey(state);
     state.scan->phase = Phase::failed;
     state.scan->message = started.error();
   } else {
@@ -230,8 +230,7 @@ auto consume_updates(core::AppState& state) -> void {
   // 检查后台线程是否已完成并交付结果
   auto result = job::consume(state);
   if (result) {
-    // 任务终结，注销 F8 热键
-    UnregisterHotKey(state.main_window->hwnd, 1);
+    release_hotkey(state);
     state.scan->diagnostic = result->diagnostic;
     state.scan->message = result->message;
     // 成功、失败或停止都可能需要用户处理窗口恢复等收尾事项。

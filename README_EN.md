@@ -15,7 +15,7 @@ Clothing collection data export tool for *Infinity Nikki*. Scan the in-game comp
 > **System Requirements**: Windows 10 (version 2004 or later).
 
 1. In the game, open **Pear-Pal → Compendium → Search**.
-2. Launch the application and click **Start scan** on the main window (press **F8** to stop at any time).
+2. Launch the application and click **Start scan** on the main window (default stop key: **F10**).
 3. Once scanning completes, click **Copy result** (can be pasted directly into [NUAN5.PRO](https://nuan5.pro/data)).
 
 ## Output Format

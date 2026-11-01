@@ -30,23 +30,23 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
   float indicator_top = (title.top + title.bottom - indicator_size) / 2 + 1;
   // 仅在明确标记 redraw 时执行卡片主体离屏重绘
   if (window.redraw) {
-    auto painted = composition::draw(
-        state, window.composition.content, static_cast<UINT>(client.right),
-        static_cast<UINT>(client.bottom), window.dpi, [&](auto* target, auto) {
-          target->Clear(window.material ? D2D1::ColorF(0, 0.0f) : colors.card);
-          auto background = colors.card;
-          background.a = window.material ? 0.72f : 1.0f;
-          // 填充半透明圆角卡片底色
-          drawing::fill(target, D2D1::RectF(0, 0, width, height), background, 8);
-          drawing::text(state, target, window.title, title, 15, colors.text);
-          drawing::text(state, target, window.detail, D2D1::RectF(20, 49, width - 20, 77), 13,
-                        colors.muted);
-          // 运行态显示前台保持提示
-          if (window.active) {
-            drawing::text(state, target, core::i18n::wide(state, "scan.foreground_hint"),
-                          D2D1::RectF(20, 87, width - 20, 118), 12, colors.muted);
-          }
-        });
+    auto painted =
+        composition::draw(state, window.composition.content, static_cast<UINT>(client.right),
+                          static_cast<UINT>(client.bottom), window.dpi, [&](auto* target, auto) {
+                            target->Clear(window.material ? D2D1::ColorF(0, 0.0f) : colors.card);
+                            auto background = colors.card;
+                            background.a = window.material ? 0.72f : 1.0f;
+                            // 填充半透明圆角卡片底色
+                            drawing::fill(target, D2D1::RectF(0, 0, width, height), background, 8);
+                            drawing::text(state, target, window.title, title, 15, colors.text);
+                            drawing::text(state, target, window.detail,
+                                          D2D1::RectF(20, 49, width - 20, 77), 13, colors.muted);
+                            // 运行态显示前台保持提示
+                            if (window.active) {
+                              drawing::text(state, target, window.hint,
+                                            D2D1::RectF(20, 87, width - 20, 118), 12, colors.muted);
+                            }
+                          });
     if (!painted) {
       return painted;
     }

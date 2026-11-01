@@ -215,7 +215,7 @@ auto locate(const cv::Mat& image, const Icon& icon, const scan::Box& bounds, boo
 // 在指定时间内暂停并持续检查窗口有效性与停止请求
 auto pause(core::AppState& state, double duration) -> std::expected<void, core::Error> {
   auto deadline = Clock::now() + std::chrono::duration<double>(duration);
-  // 细粒度轮询等待，确保能够敏捷响应外部 F8 中断
+  // 细粒度轮询等待，及时响应停止请求和游戏失焦。
   while (Clock::now() < deadline) {
     if (auto ok = window::check(state, state.scan->resources.target); !ok) {
       return ok;

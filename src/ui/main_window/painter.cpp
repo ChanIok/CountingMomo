@@ -72,7 +72,8 @@ auto buttons(core::AppState& state, const State& window) -> std::vector<button::
                       .clip = clip,
                       .style = style,
                       .enabled = enabled,
-                      .icon = std::move(icon)});
+                      .icon = std::move(icon),
+                      .focused = view.focused == action});
   };
   if (view.page == Page::main) {
     add(button::Action::settings, core::i18n::wide(state, "action.settings"), layout.settings,
@@ -107,6 +108,8 @@ auto buttons(core::AppState& state, const State& window) -> std::vector<button::
           true);
       add(button::Action::language, view.language_label, layout.language, button::Style::secondary,
           true, true);
+      add(button::Action::stop_key, view.stop_key_button_label, layout.stop_key,
+          button::Style::secondary, !active, true);
     } else {
       add(button::Action::save, core::i18n::wide(state, "action.save"), layout.save);
     }
@@ -168,6 +171,10 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
           if (view.page == Page::settings) {
             drawing::text(state, target, core::i18n::wide(state, "settings.heading"),
                           layout.heading, 16, colors.text);
+            if (!view.hotkey_available) {
+              drawing::text(state, target, core::i18n::wide(state, "settings.hotkey_unavailable"),
+                            layout.hotkey_status, 13, colors.danger);
+            }
           } else if (view.page == Page::details) {
             drawing::text(state, target, core::i18n::wide(state, "action.details"), layout.heading,
                           16, colors.text);
@@ -222,7 +229,11 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
                     core::i18n::wide(state, "scan.elapsed"),
                     std::format(L"{:02}:{:02}", elapsed / 60, elapsed % 60), colors, 22);
             if (view.phase == features::scan::Phase::running) {
-              drawing::text(state, target, core::i18n::wide(state, "scan.stop_hint"),
+              drawing::text(state, target,
+                            view.hotkey_available
+                                ? core::i18n::wide(state, "scan.stop_hint",
+                                                   utils::string::utf8(view.stop_key_label))
+                                : core::i18n::wide(state, "scan.switch_window_hint"),
                             layout.action_description, 13, colors.muted);
             }
           } else if (view.phase == features::scan::Phase::ready) {
@@ -255,10 +266,13 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
                           13, colors.text);
           }
           target->PopAxisAlignedClip();
-          // 就绪状态下展示页脚说明
-          if (view.page == Page::main && view.phase == features::scan::Phase::ready) {
-            drawing::text(state, target, core::i18n::wide(state, "scan.footer"), layout.footer, 13,
-                          colors.muted);
+          // 热键告警持续替换普通说明，不复用会自动过期的通知条。
+          if (view.page == Page::main &&
+              (!view.hotkey_available || view.phase == features::scan::Phase::ready)) {
+            drawing::text(state, target,
+                          view.hotkey_available ? core::i18n::wide(state, "scan.footer")
+                                                : view.hotkey_warning,
+                          layout.footer, 13, view.hotkey_available ? colors.muted : colors.danger);
           }
         });
     if (!painted) {

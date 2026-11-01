@@ -301,19 +301,26 @@ auto refresh(core::AppState& state, bool finished) -> void {
   } else if (success && state.result->last_success) {
     detail = core::i18n::wide(state, "scan.results_ready",
                               state.result->last_success->categories.size());
+  } else if (state.scan->phase == features::scan::Phase::stopped) {
+    detail = core::i18n::wide(state, "scan.stopped_detail");
   } else {
     detail = core::i18n::wide(state, "scan.open_for_details");
   }
   // 检查状态字段是否变动以标记重绘
+  auto hint = state.scan->hotkey_registered
+                  ? core::i18n::wide(state, "scan.foreground_hint",
+                                     std::format("F{}", state.scan->request.stop_key))
+                  : core::i18n::wide(state, "scan.keep_foreground");
   if (window.title != title || window.detail != detail || window.active != active ||
       window.success != success || window.copied != state.main_window->copied ||
-      window.failed != failed) {
+      window.failed != failed || window.hint != hint) {
     window.title = std::move(title);
     window.detail = std::move(detail);
     window.active = active;
     window.success = success;
     window.copied = state.main_window->copied;
     window.failed = failed;
+    window.hint = std::move(hint);
     window.redraw = true;
   }
   RECT current{};

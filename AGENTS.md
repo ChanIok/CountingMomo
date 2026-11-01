@@ -96,7 +96,7 @@ The codebase uses self-contained C++23 headers and implementation files (`.hpp +
 - **GPU Stability Verification**:
   Scanning automates the game at 1440x5760 borderless vertical. After input (category click or scroll), the scan thread waits on frame arrival, compares the WGC texture against a single GPU reference texture using a D3D11 compute shader over the fixed `stability_rect` (excluding game UI animations). A frame is declared stable after remaining unchanged for `stable_seconds` (0.25s) measured by QPC source time. Only the verified stable frame is staged and read back to CPU as a `cv::Mat`.
 - **Threading & Synchronization**:
-  The worker thread posts `latest` progress and `pending` final outcome under a mutex, notifying the UI thread via `PostMessageW`. The UI thread consumes snapshots without touching active scanning buffers. Cancellation (via F8 or UI stop button) wakes waiting frames immediately.
+  The worker thread posts `latest` progress and `pending` final outcome under a mutex, notifying the UI thread via `PostMessageW`. The UI thread consumes snapshots without touching active scanning buffers. Cancellation (via the configurable stop key, default F10, or UI stop button) wakes waiting frames immediately.
 - **Error Handling & Diagnostics**:
   Predictable failures use `std::expected<T, core::Error>`. User-facing errors show only high-level translatable messages via `core::i18n::wide(state, failure.message)`. Structured diagnostic details (`report.json` + `failure.png`) are written only when an actual failure or window-restore warning occurs.
 - **Single-Instance & Elevation**:

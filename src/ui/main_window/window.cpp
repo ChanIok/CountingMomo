@@ -27,6 +27,57 @@
 
 namespace ui::main_window {
 namespace {
+auto cancel_stop_key_recording(core::AppState& state) -> void {
+  auto& window = *state.main_window;
+  if (!window.recording_stop_key) {
+    return;
+  }
+  window.recording_stop_key = false;
+  window.stop_key_candidate = 0;
+  refresh(state);
+}
+
+// 同时接收系统按键消息，F10 才不会落入默认的菜单激活行为。
+auto record_stop_key(core::AppState& state, UINT message, WPARAM key, LPARAM flags) -> bool {
+  auto& window = *state.main_window;
+  if (!window.recording_stop_key || window.closing) {
+    return false;
+  }
+  bool down = message == WM_KEYDOWN || message == WM_SYSKEYDOWN;
+  bool up = message == WM_KEYUP || message == WM_SYSKEYUP;
+  if (!down && !up) {
+    return false;
+  }
+  bool system_shortcut = (message == WM_SYSKEYDOWN || message == WM_SYSKEYUP) &&
+                         (key != VK_F10 || (flags & (LPARAM{1} << 29)));
+  // 无效系统组合键不录入，但仍交给 Windows 处理 Alt+Tab、Alt+F4 等原有操作。
+  if (down) {
+    if (flags & (LPARAM{1} << 30)) {
+      return !system_shortcut;
+    }
+    if (key == VK_ESCAPE || key == VK_TAB) {
+      cancel_stop_key_recording(state);
+      return key == VK_ESCAPE;
+    }
+  }
+  auto modifiers = GetKeyState(VK_SHIFT) | GetKeyState(VK_CONTROL) | GetKeyState(VK_MENU) |
+                   GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN);
+  if (down) {
+    bool valid = key >= VK_F1 && key <= VK_F11 && !(modifiers & 0x8000) && !system_shortcut;
+    window.stop_key_candidate =
+        valid && !window.stop_key_candidate ? static_cast<int>(key - VK_F1 + 1) : 0;
+  } else if (window.stop_key_candidate && key == VK_F1 + window.stop_key_candidate - 1) {
+    int candidate = std::exchange(window.stop_key_candidate, 0);
+    if (!(modifiers & 0x8000) && !system_shortcut) {
+      window.recording_stop_key = false;
+      window.focused = button::Action::none;
+      features::settings::set_stop_key(state, candidate);
+    }
+  }
+  refresh(state);
+  return !system_shortcut;
+}
+
 auto expire_feedback(core::AppState& state) -> void {
   auto& window = *state.main_window;
   if ((!window.notice.message.key.empty() || window.copied) &&
@@ -57,6 +108,19 @@ auto view(core::AppState& state) -> View {
       .language_label = core::i18n::current(state) == core::i18n::Language::zh_cn
                             ? core::i18n::wide(state, "settings.language_chinese")
                             : core::i18n::wide(state, "settings.language_english"),
+      .stop_key_label = std::format(L"F{}", state.settings->values.stop_key.get()),
+      .stop_key_button_label =
+          state.main_window->recording_stop_key
+              ? (state.main_window->stop_key_candidate
+                     ? core::i18n::wide(state, "settings.stop_key_release",
+                                        std::format("F{}", state.main_window->stop_key_candidate))
+                     : core::i18n::wide(state, "settings.stop_key_press"))
+              : core::i18n::wide(state, "settings.stop_key",
+                                 std::format("F{}", state.settings->values.stop_key.get())),
+      .hotkey_warning = core::i18n::wide(state, "scan.hotkey_unavailable",
+                                         std::format("F{}", state.settings->values.stop_key.get())),
+      .hotkey_available = state.scan->hotkey_available,
+      .focused = state.main_window->focused,
       .category_count = state.scan->progress.category_count,
       .has_success = state.result->last_success.has_value(),
       .diagnostic = !state.scan->diagnostic.empty(),
@@ -98,6 +162,9 @@ auto command(core::AppState& state, button::Action id) -> void {
   auto& window = *state.main_window;
   if (window.closing) {
     return;
+  }
+  if (id != button::Action::stop_key) {
+    cancel_stop_key_recording(state);
   }
   switch (id) {
     case button::Action::primary:
@@ -157,12 +224,21 @@ auto command(core::AppState& state, button::Action id) -> void {
       // 用系统默认浏览器打开项目仓库
       features::settings::open_repository(state);
       break;
+    case button::Action::stop_key: {
+      if (features::scan::running(state)) {
+        break;
+      }
+      window.recording_stop_key = true;
+      window.stop_key_candidate = 0;
+      break;
+    }
     default:
       break;
   }
   // 切页时重置滚动位置
   if (id == button::Action::settings || id == button::Action::details ||
       id == button::Action::back) {
+    window.focused = button::Action::none;
     window.scroll_y = 0;
     window.wheel_delta = 0;
   }
@@ -199,6 +275,18 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
     return DefWindowProcW(hwnd, message, wparam, lparam);
   }
   auto& window = *state->main_window;
+  // 录入只属于当前设置页；鼠标操作、失焦和退出都不能提交尚未松开的候选键。
+  bool cancel_recording =
+      message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN || message == WM_MBUTTONDOWN ||
+      message == WM_NCLBUTTONDOWN || message == WM_NCRBUTTONDOWN || message == WM_KILLFOCUS ||
+      message == WM_CANCELMODE || message == WM_ENTERMENULOOP || message == WM_CLOSE ||
+      (message == WM_ACTIVATE && LOWORD(wparam) == WA_INACTIVE);
+  if (cancel_recording) {
+    cancel_stop_key_recording(*state);
+  }
+  if (record_stop_key(*state, message, wparam, lparam)) {
+    return 0;
+  }
   // 优先处理非客户区计算（无边框扩展、标题栏拖动及系统控制按钮命中）
   if (auto frame_result = frame::process(hwnd, message, wparam, lparam)) {
     return *frame_result;
@@ -235,6 +323,10 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
     case WM_LBUTTONUP: {
       if (window.closing) {
         return 0;
+      }
+      if (message == WM_LBUTTONDOWN && window.focused != button::Action::none) {
+        window.focused = button::Action::none;
+        refresh(*state);
       }
       // WM_PAINT 优先级低于输入；先应用待处理的内容/布局，避免点击旧页面的按钮。
       if (window.redraw || window.repaint_buttons) {
@@ -297,6 +389,64 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
       }
       break;
     case WM_KEYDOWN:
+      // 录入取消后，仍按住 Esc/激活键不能再触发返回或重新开始录入。
+      if ((wparam == VK_RETURN || wparam == VK_SPACE || wparam == VK_ESCAPE) &&
+          (lparam & (LPARAM{1} << 30))) {
+        return 0;
+      }
+      if (window.closing) {
+        return 0;
+      }
+      if (window.redraw || window.repaint_buttons) {
+        if (auto painted = paint(*state); !painted) {
+          failed(*state, painted.error());
+          return 0;
+        }
+      }
+      if (wparam == VK_TAB) {
+        std::vector<const button::Spec*> available;
+        for (const auto& item : window.buttons.buttons) {
+          if (item.spec.enabled) {
+            available.push_back(&item.spec);
+          }
+        }
+        if (!available.empty()) {
+          int index = -1;
+          for (int i = 0; i < static_cast<int>(available.size()); ++i) {
+            if (available[i]->action == window.focused) {
+              index = i;
+            }
+          }
+          bool backwards = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
+          int count = static_cast<int>(available.size());
+          index = index < 0 ? (backwards ? count - 1 : 0)
+                            : (index + (backwards ? count - 1 : 1)) % count;
+          const auto& target = *available[index];
+          window.focused = target.action;
+          if (target.action == button::Action::theme || target.action == button::Action::language ||
+              target.action == button::Action::stop_key ||
+              target.action == button::Action::primary) {
+            if (target.bounds.top < layout::header_bottom) {
+              window.scroll_y =
+                  std::max(0.0f, window.scroll_y + target.bounds.top - layout::header_bottom);
+            }
+            if (target.bounds.bottom > window.layout.body_bottom) {
+              window.scroll_y += target.bounds.bottom - window.layout.body_bottom;
+            }
+            window.redraw = true;
+          }
+          refresh(*state);
+        }
+        return 0;
+      }
+      if ((wparam == VK_RETURN || wparam == VK_SPACE) && window.focused != button::Action::none) {
+        if (std::ranges::any_of(window.buttons.buttons, [&](const button::Button& item) {
+              return item.spec.action == window.focused && item.spec.enabled;
+            })) {
+          command(*state, window.focused);
+        }
+        return 0;
+      }
       // ESC 键中断扫描或退回主页
       if (wparam == VK_ESCAPE) {
         if (features::scan::running(*state)) {
@@ -384,8 +534,8 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
       }
       return 0;
     case WM_HOTKEY:
-      // 全局 F8 热键：请求停止扫描
-      if (wparam == 1) {
+      if (wparam == features::scan::stop_hotkey_id && state->scan->hotkey_registered &&
+          HIWORD(lparam) == VK_F1 + state->scan->request.stop_key - 1) {
         features::scan::stop(*state);
       }
       return 0;
@@ -493,6 +643,9 @@ auto refresh(core::AppState& state) -> void {
   auto next = view(state);
   if (window.view != next) {
     bool relayout = window.view.page != next.page || window.view.phase != next.phase ||
+                    window.view.hotkey_available != next.hotkey_available ||
+                    window.view.has_success != next.has_success ||
+                    window.view.diagnostic != next.diagnostic ||
                     window.view.warning.empty() != next.warning.empty() ||
                     window.view.summary_count != next.summary_count ||
                     window.view.language_label != next.language_label;
@@ -601,6 +754,7 @@ auto notify(core::AppState& state, core::Error message) -> void {
 }
 
 auto close(core::AppState& state) -> void {
+  cancel_stop_key_recording(state);
   state.main_window->closing = true;
   // 保留消息循环消费终态；线程回收后再次调用 close 才请求退出。
   if (features::scan::running(state)) {
@@ -616,7 +770,7 @@ auto prepare_shutdown(core::AppState& state) -> void {
   window.closing = true;
   if (window.hwnd) {
     KillTimer(window.hwnd, 1);
-    UnregisterHotKey(window.hwnd, 1);
+    features::scan::release_hotkey(state);
   }
 }
 

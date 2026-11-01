@@ -299,7 +299,8 @@ auto check(core::AppState& state, const Target& target, bool foreground)
   }
   // 按需校验游戏窗口是否依然持有前台焦点
   if (foreground && GetForegroundWindow() != target.hwnd) {
-    return std::unexpected(core::error("error.window.focus_lost"));
+    scan::request_stop(state);
+    return std::unexpected(core::error("error.scan.cancelled"));
   }
   return {};
 }
