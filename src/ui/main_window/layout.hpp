@@ -11,10 +11,10 @@ struct AppState;
 
 namespace ui::main_window::layout {
 // 系统标题栏下方的内容页头保持固定，正文从此处裁剪，单位 DIP。
-inline constexpr float header_bottom = 96;
+inline constexpr float header_bottom = 64;
 inline constexpr float footer_height = 32;
 
-// 内容画布坐标，单位 DIP；标题栏和内容页头不随正文滚动。
+// 客户区画布坐标，单位 DIP；不包含原生标题栏，内容页头不随正文滚动。
 struct Layout {
   float content_height{};
   float body_bottom{};

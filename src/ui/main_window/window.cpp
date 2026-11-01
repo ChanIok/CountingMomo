@@ -16,7 +16,6 @@
 #include "ui/backdrop.hpp"
 #include "ui/button.hpp"
 #include "ui/composition.hpp"
-#include "ui/main_window/frame.hpp"
 #include "ui/main_window/layout.hpp"
 #include "ui/main_window/painter.hpp"
 #include "ui/main_window/state.hpp"
@@ -27,6 +26,13 @@
 
 namespace ui::main_window {
 namespace {
+// 客户区 DIP 转换为含系统标题栏与调整边框的物理外框，供创建和最小尺寸共用。
+auto outer_rect(int width, int height, UINT dpi) -> RECT {
+  RECT rect{0, 0, MulDiv(width, dpi, 96), MulDiv(height, dpi, 96)};
+  AdjustWindowRectExForDpi(&rect, WS_OVERLAPPEDWINDOW, FALSE, 0, dpi);
+  return rect;
+}
+
 auto cancel_stop_key_recording(core::AppState& state) -> void {
   auto& window = *state.main_window;
   if (!window.recording_stop_key) {
@@ -262,7 +268,7 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
   return painted;
 }
 
-// 主窗口 Win32 消息分发核心：处理非客户区、鼠标交互、滚轮滚动、DPI 与定时刷新
+// 主窗口处理客户区交互与生命周期；原生标题栏及系统按钮消息交由 DefWindowProcW。
 auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT {
   auto state = reinterpret_cast<core::AppState*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
   // 窗口初次创建时绑定 AppState 实例指针到 GWLP_USERDATA
@@ -286,10 +292,6 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
   }
   if (record_stop_key(*state, message, wparam, lparam)) {
     return 0;
-  }
-  // 优先处理非客户区计算（无边框扩展、标题栏拖动及系统控制按钮命中）
-  if (auto frame_result = frame::process(hwnd, message, wparam, lparam)) {
-    return *frame_result;
   }
   // Windows 任务栏按钮创建广播：初始化 ITaskbarList3 接口
   if (window.taskbar_message && message == window.taskbar_message) {
@@ -502,7 +504,7 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
     case WM_GETMINMAXINFO: {
       // 限制主窗口最小尺寸
       auto info = reinterpret_cast<MINMAXINFO*>(lparam);
-      RECT minimum = frame::outer_rect(520, 440, window.dpi);
+      RECT minimum = outer_rect(520, 408, window.dpi);
       info->ptMinTrackSize = {minimum.right - minimum.left, minimum.bottom - minimum.top};
       MONITORINFO monitor{sizeof(MONITORINFO)};
       if (GetMonitorInfoW(MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST), &monitor)) {
@@ -514,12 +516,12 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
       return 0;
     }
     case WM_DPICHANGED: {
-      // 显示器 DPI 变动：缩放窗口外框并刷新 DWM 扩展
+      // 系统建议的外框已包含原生标题栏；客户区布局按新 DPI 重新度量。
       window.dpi = HIWORD(wparam);
       auto rect = reinterpret_cast<RECT*>(lparam);
       SetWindowPos(hwnd, nullptr, rect->left, rect->top, rect->right - rect->left,
                    rect->bottom - rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
-      frame::extend(hwnd, window.material);
+      layout::update(*state);
       window.redraw = true;
       window.repaint_buttons = true;
       refresh(*state);
@@ -527,12 +529,13 @@ auto procedure(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) -> LRESULT
     }
     case WM_THEMECHANGED:
     case WM_SETTINGCHANGE:
+    case WM_DWMCOMPOSITIONCHANGED:
     case theme_update:
       // 系统主题色发生变动
       if (auto updated = update_theme(*state); !updated) {
         failed(*state, updated.error());
       }
-      return 0;
+      break;
     case WM_HOTKEY:
       if (wparam == features::scan::stop_hotkey_id && state->scan->hotkey_registered &&
           HIWORD(lparam) == VK_F1 + state->scan->request.stop_key - 1) {
@@ -608,7 +611,6 @@ auto update_theme(core::AppState& state) -> std::expected<void, core::Error> {
   auto& window = *state.main_window;
   // 应用主窗口 Mica 材质与 DWM 扩展
   window.material = backdrop::apply(window.hwnd, colors);
-  frame::extend(window.hwnd, window.material);
   // 应用状态浮窗 Acrylic 材质
   if (state.status_window->hwnd) {
     state.status_window->material = backdrop::apply(state.status_window->hwnd, colors, true);
@@ -674,7 +676,7 @@ auto create(core::AppState& state) -> std::expected<void, core::Error> {
   }
   // 根据显示器 DPI 计算适宜的初始外框矩形尺寸
   UINT dpi = GetDpiForSystem();
-  RECT rect = frame::outer_rect(560, 440, dpi);
+  RECT rect = outer_rect(560, 408, dpi);
   int width = rect.right - rect.left;
   int height = rect.bottom - rect.top;
   MONITORINFO monitor{sizeof(MONITORINFO)};
@@ -701,8 +703,6 @@ auto create(core::AppState& state) -> std::expected<void, core::Error> {
   if (auto updated = update_theme(state); !updated) {
     return updated;
   }
-  SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
-               SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
   refresh(state);
   return {};
 }

@@ -20,7 +20,7 @@ target("CountingMomo")
     add_packages("vcpkg::opencv4", "vcpkg::reflectcpp")
     add_links("user32", "ole32", "shell32", "d3d11", "d3dcompiler", "dxgi", "dwmapi", "windowsapp",
               "RuntimeObject", "windowscodecs", "d2d1", "dwrite", "dcomp", "gdi32",
-              "advapi32", "comdlg32", "uuid")
+              "advapi32", "comdlg32", "uuid", "uxtheme")
     if is_mode("release") then
         set_symbols("debug")
         add_ldflags("/DEBUG:FULL", {force = true})

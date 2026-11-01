@@ -27,20 +27,20 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
   result.body_bottom = footer_top - 16;
   bool chinese = core::i18n::current(state) == core::i18n::Language::zh_cn;
   float settings_width = chinese ? 72.0f : 96.0f;
-  result.settings = D2D1::RectF(width - 24 - settings_width, 48, width - 24, 80);
-  result.title = D2D1::RectF(24, 48, chinese ? 136 : result.settings.left - 16, 80);
+  result.settings = D2D1::RectF(width - 24 - settings_width, 16, width - 24, 48);
+  result.title = D2D1::RectF(24, 16, chinese ? 136 : result.settings.left - 16, 48);
   // 五个 20 DIP 全宽汉字占 100 DIP；标题区域保留余量，分隔点按文字末端定位。
   float title_text_right = result.title.left + 100;
   float separator_top = (result.title.top + result.title.bottom) / 2 - 1;
   result.title_separator =
       D2D1::RectF(title_text_right + 8, separator_top, title_text_right + 10, separator_top + 2);
   result.product_name =
-      D2D1::RectF(result.title_separator.right + 8, 50, result.settings.left - 16, 82);
+      D2D1::RectF(result.title_separator.right + 8, 18, result.settings.left - 16, 50);
 
   // 临时提示覆盖绘制，不参与排版：出现和消失都不移动卡片，也不扩大滚动范围。
   float left = 48;
   float right = width - 48;
-  float cursor = 128;
+  float cursor = 96;
   // 辅助行高累加器
   auto row = [&](float height, float gap) {
     auto rect = D2D1::RectF(left, cursor, right, cursor + height);
@@ -49,7 +49,7 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
   };
   result.heading = row(28, 0);
   bool alternate = view.page != Page::main;
-  float card_bottom = std::max(328.0f, result.body_bottom);
+  float card_bottom = std::max(296.0f, result.body_bottom);
   // 按页面类型流式排列卡片内部组件
   if (view.page == Page::settings) {
     // 三项设置共用全宽按钮，快捷键状态说明放在按钮下方。
@@ -93,7 +93,7 @@ auto measure(const core::AppState& state, float width, float viewport) -> Layout
     cursor += 16;
     result.description = row(56, 0);
   }
-  result.card = D2D1::RectF(24, 104, width - 24, card_bottom);
+  result.card = D2D1::RectF(24, 72, width - 24, card_bottom);
   // 主页显示主操作大按钮及动作描述
   if (!alternate) {
     result.primary = D2D1::RectF(right - 144, card_bottom - 68, right, card_bottom - 24);
