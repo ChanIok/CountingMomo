@@ -122,15 +122,12 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
   capture.awaiting_target_size = false;
   const auto& area = **box;
   RECT client{area.x, area.y, area.x + area.width, area.y + area.height};
-  // 先把客户区复制到自有纹理，再释放 WGC 帧；后续判稳和读回不再占用帧池中的源资源。
+  // 先把客户区复制到自有纹理；判稳和读回使用自有纹理，WGC 帧保持有效直到本次 GPU 工作收尾。
   auto& gpu = capture.comparison;
   D3D11_BOX source_box{static_cast<UINT>(client.left),  static_cast<UINT>(client.top),    0,
                        static_cast<UINT>(client.right), static_cast<UINT>(client.bottom), 1};
   capture.context->CopySubresourceRegion(gpu.processing.get(), 0, 0, 0, 0, texture.get(), 0,
                                          &source_box);
-  texture = nullptr;
-  frame.Close();
-  frame = nullptr;
 
   RECT local_client{0, 0, settings.width, settings.height};
   auto changed = comparison::update(state, gpu.processing.get(), local_client, deadline, check);
