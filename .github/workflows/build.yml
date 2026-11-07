@@ -28,13 +28,13 @@ jobs:
       XMAKE_GLOBALDIR: ${{ github.workspace }}/.xmake-global
 
     steps:
-      - name: Checkout
+      - name: Checkout default branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Resolve version and validate release tag
         id: version
-        env:
-          PUBLISH_RELEASE: ${{ inputs.publish_release }}
         run: |
           [xml]$manifest = Get-Content -LiteralPath "resources/app.manifest" -Raw
           $windowsVersion = [string]$manifest.assembly.assemblyIdentity.version
@@ -50,14 +50,23 @@ jobs:
           }
           $version = $parts[0..2] -join '.'
           $tag = "v$version"
-          if ($env:PUBLISH_RELEASE -eq 'true') {
-            if ($env:GITHUB_REF_TYPE -ne 'tag' -or $env:GITHUB_REF_NAME -cne $tag) {
-              throw "Publishing requires the existing $tag tag matching resources/app.manifest. Selected ref: $env:GITHUB_REF"
-            }
+          git rev-parse --verify --quiet "refs/tags/$tag" *> $null
+          if ($LASTEXITCODE -ne 0) {
+            throw "Release tag $tag is missing. Create and push it before running this workflow."
+          }
+          [xml]$tagged = git show "refs/tags/${tag}:resources/app.manifest" | Out-String
+          $taggedVersion = [string]$tagged.assembly.assemblyIdentity.version
+          if ($taggedVersion -ne $windowsVersion) {
+            throw "Tag $tag contains resources/app.manifest version $taggedVersion, expected $windowsVersion."
           }
           "version=$version" >> $env:GITHUB_OUTPUT
           "release_tag=$tag" >> $env:GITHUB_OUTPUT
           "package_name=CountingMomo-$version-x64.zip" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.version.outputs.release_tag }}
 
       - name: Setup Node.js and pnpm
         uses: pnpm/setup@v1
