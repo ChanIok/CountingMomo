@@ -100,6 +100,7 @@ auto initialize(core::AppState& state) -> std::expected<void, core::Error> {
     image.SampleDesc.Count = 1;
     image.Usage = D3D11_USAGE_DEFAULT;
     image.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+    winrt::check_hresult(capture.device->CreateTexture2D(&image, nullptr, gpu.processing.put()));
     winrt::check_hresult(capture.device->CreateTexture2D(&image, nullptr, gpu.reference.put()));
     winrt::check_hresult(capture.device->CreateShaderResourceView(gpu.reference.get(), nullptr,
                                                                   gpu.reference_view.put()));
@@ -239,8 +240,9 @@ auto update(core::AppState& state, ID3D11Texture2D* source, const RECT& client,
         return std::optional<bool>{};
       }
       D3D11_MAPPED_SUBRESOURCE mapped{};
-      winrt::check_hresult(capture.context->Map(gpu.changed_readback.get(), 0, D3D11_MAP_READ,
-                                                D3D11_MAP_FLAG_DO_NOT_WAIT, &mapped));
+      // finish() 已等待 GPU 查询完成；阻塞式读回避免把瞬时 GPU 拥堵误报为致命错误。
+      winrt::check_hresult(
+          capture.context->Map(gpu.changed_readback.get(), 0, D3D11_MAP_READ, 0, &mapped));
       different = *static_cast<const std::uint32_t*>(mapped.pData) != 0;
       capture.context->Unmap(gpu.changed_readback.get(), 0);
     }

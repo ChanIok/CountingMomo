@@ -76,7 +76,7 @@ auto client_box(HWND hwnd, int frame_width, int frame_height, int width, int hei
   return std::optional<cv::Rect>{};
 }
 
-// 原始帧只用于 GPU 判稳；只有稳定候选才读回完整客户区。
+// WGC 原始帧只复制到自有工作纹理；只有稳定候选才读回完整客户区。
 auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
                    Clock::time_point deadline,
                    const std::function<std::expected<void, core::Error>()>& check)
@@ -122,7 +122,18 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
   capture.awaiting_target_size = false;
   const auto& area = **box;
   RECT client{area.x, area.y, area.x + area.width, area.y + area.height};
-  auto changed = comparison::update(state, texture.get(), client, deadline, check);
+  // 先把客户区复制到自有纹理，再释放 WGC 帧；后续判稳和读回不再占用帧池中的源资源。
+  auto& gpu = capture.comparison;
+  D3D11_BOX source_box{static_cast<UINT>(client.left),  static_cast<UINT>(client.top),    0,
+                       static_cast<UINT>(client.right), static_cast<UINT>(client.bottom), 1};
+  capture.context->CopySubresourceRegion(gpu.processing.get(), 0, 0, 0, 0, texture.get(), 0,
+                                         &source_box);
+  texture = nullptr;
+  frame.Close();
+  frame = nullptr;
+
+  RECT local_client{0, 0, settings.width, settings.height};
+  auto changed = comparison::update(state, gpu.processing.get(), local_client, deadline, check);
   if (!changed) {
     return std::unexpected(changed.error());
   }
@@ -130,7 +141,6 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
   if (!*changed) {
     return std::optional<Frame>{};
   }
-  auto& gpu = capture.comparison;
   if (**changed) {
     gpu.awaiting_change = false;
     gpu.stable_since_source = source;
@@ -144,11 +154,11 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
     return {};
   }
 
-  // 读回当前 WGC 帧，而非参考纹理：比较域之外也应交付当前完整画面。
-  D3D11_BOX source_box{static_cast<UINT>(client.left),  static_cast<UINT>(client.top),    0,
-                       static_cast<UINT>(client.right), static_cast<UINT>(client.bottom), 1};
-  capture.context->CopySubresourceRegion(capture.staging.get(), 0, 0, 0, 0, texture.get(), 0,
-                                         &source_box);
+  // 读回当前工作纹理，而非参考纹理：比较域之外也应交付当前完整画面。
+  D3D11_BOX local_box{
+      0, 0, 0, static_cast<UINT>(settings.width), static_cast<UINT>(settings.height), 1};
+  capture.context->CopySubresourceRegion(capture.staging.get(), 0, 0, 0, 0, gpu.processing.get(), 0,
+                                         &local_box);
   auto completed = comparison::finish(state, deadline, check);
   if (!completed) {
     return std::unexpected(completed.error());
@@ -157,8 +167,8 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
     return std::optional<Frame>{};
   }
   D3D11_MAPPED_SUBRESOURCE mapped{};
-  winrt::check_hresult(capture.context->Map(capture.staging.get(), 0, D3D11_MAP_READ,
-                                            D3D11_MAP_FLAG_DO_NOT_WAIT, &mapped));
+  // finish() 已等待 GPU 查询完成；阻塞式读回避免把瞬时 GPU 拥堵误报为致命错误。
+  winrt::check_hresult(capture.context->Map(capture.staging.get(), 0, D3D11_MAP_READ, 0, &mapped));
   cv::Mat bgr;
   try {
     cv::Mat bgra(settings.height, settings.width, CV_8UC4, mapped.pData, mapped.RowPitch);

@@ -14,7 +14,7 @@ namespace features::capture::comparison {
 
 auto initialize(core::AppState& state) -> std::expected<void, core::Error>;
 
-// 借用当前 WGC 纹理，与唯一的自有参考纹理比较；首帧或不同时才更新参考。
+// 使用当前自有工作纹理，与唯一的自有参考纹理比较；首帧或不同时才更新参考。
 // 空值表示到 deadline 仍未得出比较结果，由调用方按超时处理。
 auto update(core::AppState& state, ID3D11Texture2D* source, const RECT& client,
             std::chrono::steady_clock::time_point deadline,
