@@ -10,42 +10,33 @@ namespace features::scan {
 
 namespace {
 
-constexpr Box card_bottom_rect{24, 90, 90, 105};
-constexpr Box card_right_rect{93, 30, 107, 90};
+constexpr Box card_bottom_rect{16, 60, 60, 70};
+constexpr Box card_right_rect{62, 20, 71, 60};
 constexpr double card_min_contrast = 20.0;
-constexpr Box hidden_search_rect{39, 32, 72, 83};
+constexpr Box hidden_search_rect{26, 21, 48, 55};
 constexpr double hidden_min_score = 0.9;
 constexpr double content_min_deviation = 3.0;
-constexpr Box star_rect{83, 11, 100, 31};
-// 最右侧星星在 y±1px 下共同保留的前景，排除左侧相邻星星；坐标相对 star_rect。
-constexpr std::array<std::array<int, 2>, 18> star_points{{
-    {10, 7},
-    {8, 8},
-    {9, 8},
-    {10, 8},
-    {11, 8},
-    {7, 9},
-    {8, 9},
-    {9, 9},
-    {10, 9},
-    {11, 9},
-    {7, 10},
-    {8, 10},
-    {9, 10},
-    {11, 10},
-    {12, 10},
-    {8, 11},
-    {8, 12},
-    {8, 13},
+constexpr Box star_rect{55, 7, 67, 21};
+// 最右侧星星的核心前景，按 y±1px 位移稳定性贪心选出，排除左侧相邻星星与右侧白色边框；
+// 坐标相对 star_rect。975 张 960 原生卡片 × 3 种位移全部正确分类。
+constexpr std::array<std::array<int, 2>, 8> star_points{{
+    {7, 5},
+    {5, 6},
+    {6, 6},
+    {7, 6},
+    {8, 6},
+    {6, 7},
+    {7, 7},
+    {5, 8},
 }};
-// 已拥有与未拥有亮度来自原生截图标定，容差区间之间保留空隙。
-constexpr double owned_luma = 224.42;
-constexpr double unowned_luma = 175.17;
-constexpr double max_luma_error = 10.0;
+// 已拥有与未拥有亮度来自 960 原生截图标定，容差区间之间保留空隙。
+constexpr double owned_luma = 211.0;
+constexpr double unowned_luma = 171.0;
+constexpr double max_luma_error = 16.0;
 constexpr std::array<Box, 3> scrollbar_bands{{
-    {1398, 5580, 1405, 5664},
-    {1386, 5580, 1393, 5664},
-    {1410, 5580, 1417, 5664},
+    {932, 3720, 937, 3776},
+    {924, 3720, 929, 3776},
+    {940, 3720, 945, 3776},
 }};
 constexpr double scrollbar_min_contrast = 25.0;
 constexpr double scrollbar_min_clear_fraction = 0.9;

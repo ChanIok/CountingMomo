@@ -76,7 +76,7 @@ The codebase uses self-contained C++23 headers and implementation files (`.hpp +
   - `features::scan`: worker job management (`job`), pagination loop (`scan`), vision/card detection (`vision`), layout geometry (`layout`), cancellation flags (`control`), diagnostics logging (`diagnostics`), and end-to-end orchestration (`usecase`)
   - `features::capture`: WGC capture session, D3D11 device/staging texture management, and GPU stability compute shader
   - `features::navigation`: compendium category directory, navigation state machine, and icon matching
-  - `features::window`: game window detection, temporary 1440x5760 borderless resize, and window restore
+  - `features::window`: game window detection, temporary 960x3840 borderless resize, and window restore
   - `features::result`: completed scan results storage, JSON serialization, and clipboard operations
   - `features::settings`: persistent user settings in `data/settings.json`
 - `ui::*` — native Win32 / Direct2D presentation:
@@ -94,7 +94,7 @@ The codebase uses self-contained C++23 headers and implementation files (`.hpp +
 
 ### Key Patterns & Invariants
 - **GPU Stability Verification**:
-  Scanning automates the game at 1440x5760 borderless vertical. After input (category click or scroll), the scan thread waits on frame arrival, compares the WGC texture against a single GPU reference texture using a D3D11 compute shader over the fixed `stability_rect` (excluding game UI animations). A frame is declared stable after remaining unchanged for `stable_seconds` (0.25s) measured by QPC source time. Only the verified stable frame is staged and read back to CPU as a `cv::Mat`.
+  Scanning automates the game at 960x3840 borderless vertical. After input (category click or scroll), the scan thread waits on frame arrival, compares the WGC texture against a single GPU reference texture using a D3D11 compute shader over the fixed `stability_rect` (excluding game UI animations). A frame is declared stable after remaining unchanged for `stable_seconds` (0.25s) measured by QPC source time. Only the verified stable frame is staged and read back to CPU as a `cv::Mat`.
 - **Threading & Synchronization**:
   The worker thread posts `latest` progress and `pending` final outcome under a mutex, notifying the UI thread via `PostMessageW`. The UI thread consumes snapshots without touching active scanning buffers. Cancellation (via the configurable stop key, default F10, or UI stop button) wakes waiting frames immediately.
 - **Error Handling & Diagnostics**:

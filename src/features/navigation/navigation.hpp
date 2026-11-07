@@ -16,8 +16,8 @@ namespace features::navigation {
 // 按模块内固定分类表加载图标，directory 为分类 PNG 素材目录。
 auto load(const std::filesystem::path& directory) -> std::expected<Catalog, core::Error>;
 
-// 在现有事务超时内取得 GPU 稳定画面并确认初始图标可定位。
-// 只确认侧栏已回顶、分组已收起，不代替用户重置导航初始状态。
+// 在现有事务超时内取得 GPU 稳定画面、确认初始图标可定位。
+// 只确认侧栏已回顶、分组已收起，不代替用户重置导航初始状态；此处不发滚轮输入。
 auto begin(core::AppState& state) -> std::expected<void, core::Error>;
 
 auto open_group(core::AppState& state, const Group& group) -> std::expected<void, core::Error>;

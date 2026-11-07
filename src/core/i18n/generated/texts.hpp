@@ -8,7 +8,7 @@ struct Text {
   std::string_view zh_cn;
   std::string_view en_us;
 };
-inline constexpr std::array<Text, 241> texts{{
+inline constexpr std::array<Text, 243> texts{{
     {"action.back", "返回", "Back"},
     {"action.copied", "已复制", "Copied"},
     {"action.copy", "复制结果", "Copy result"},
@@ -93,6 +93,7 @@ inline constexpr std::array<Text, 241> texts{{
     {"error.image.read_failed", "无法读取扫描所需的图片。", "Could not read an image required for scanning."},
     {"error.image.save_failed", "无法保存诊断图片。", "Could not save the diagnostic image."},
     {"error.navigation.bounds_unknown", "无法识别 {0} 分类菜单。", "Could not recognize the {0} category menu."},
+    {"error.navigation.calibration_failed", "无法确认分类菜单的滚动距离。", "Could not determine how far the category menu scrolled."},
     {"error.navigation.child_bounds_unknown", "无法识别展开后的分类菜单。", "Could not recognize the expanded category menu."},
     {"error.navigation.empty_icon", "扫描资源无效，请重新解压完整程序。", "The scan resources are invalid. Extract the complete application again."},
     {"error.navigation.invalid_icon_geometry", "扫描资源无效，请重新解压完整程序。", "The scan resources are invalid. Extract the complete application again."},
@@ -179,6 +180,7 @@ inline constexpr std::array<Text, 241> texts{{
     {"group.accessories", "饰品", "Accessories"},
     {"group.clothing", "服装", "Clothing"},
     {"group.makeup", "妆容", "Makeup"},
+    {"navigation.stage.calibrating", "标定分类菜单滚动距离", "Calibrating category menu scroll"},
     {"navigation.stage.initializing", "初始化导航", "Initializing navigation"},
     {"navigation.stage.opening", "展开 {0}", "Opening {0}"},
     {"navigation.stage.revealing", "露出 {0} 子列表（滚动外层菜单）", "Revealing the {0} list by scrolling the outer menu"},
