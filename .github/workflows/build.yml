@@ -57,7 +57,7 @@ jobs:
           }
           "version=$version" >> $env:GITHUB_OUTPUT
           "release_tag=$tag" >> $env:GITHUB_OUTPUT
-          "package_name=CountingMomo-$version-windows-x64.zip" >> $env:GITHUB_OUTPUT
+          "package_name=CountingMomo-$version-x64.zip" >> $env:GITHUB_OUTPUT
 
       - name: Setup Node.js and pnpm
         uses: pnpm/setup@v1

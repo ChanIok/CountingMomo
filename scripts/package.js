@@ -62,7 +62,7 @@ $info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($env:COUNTING_MOMO_
   }
 
   const dist = path.join(root, "dist");
-  const zipName = `CountingMomo-${version}-windows-x64.zip`;
+  const zipName = `CountingMomo-${version}-x64.zip`;
   fs.mkdirSync(dist, { recursive: true });
   // 暂存目录每次独立创建，只清理本次暂存内容，不触碰已有发行目录和用户数据。
   const staging = fs.mkdtempSync(path.join(dist, ".package-"));

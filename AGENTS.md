@@ -38,7 +38,7 @@ pnpm run build
 # Release build
 pnpm run build --release
 
-# Package release zip (dist/CountingMomo-<version>-windows-x64.zip)
+# Package release zip (dist/CountingMomo-<version>-x64.zip)
 pnpm run package
 
 # Generate embedded locales header
