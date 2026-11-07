@@ -100,7 +100,6 @@ auto initialize(core::AppState& state) -> std::expected<void, core::Error> {
     image.SampleDesc.Count = 1;
     image.Usage = D3D11_USAGE_DEFAULT;
     image.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    winrt::check_hresult(capture.device->CreateTexture2D(&image, nullptr, gpu.processing.put()));
     winrt::check_hresult(capture.device->CreateTexture2D(&image, nullptr, gpu.reference.put()));
     winrt::check_hresult(capture.device->CreateShaderResourceView(gpu.reference.get(), nullptr,
                                                                   gpu.reference_view.put()));

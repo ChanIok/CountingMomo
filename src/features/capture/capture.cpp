@@ -76,7 +76,7 @@ auto client_box(HWND hwnd, int frame_width, int frame_height, int width, int hei
   return std::optional<cv::Rect>{};
 }
 
-// WGC 原始帧只复制到自有工作纹理；只有稳定候选才读回完整客户区。
+// WGC 帧在 GPU 判稳和稳定读回完成前保持有效；只有稳定候选才读回完整客户区。
 auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
                    Clock::time_point deadline,
                    const std::function<std::expected<void, core::Error>()>& check)
@@ -122,15 +122,8 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
   capture.awaiting_target_size = false;
   const auto& area = **box;
   RECT client{area.x, area.y, area.x + area.width, area.y + area.height};
-  // 先把客户区复制到自有纹理；判稳和读回使用自有纹理，WGC 帧保持有效直到本次 GPU 工作收尾。
   auto& gpu = capture.comparison;
-  D3D11_BOX source_box{static_cast<UINT>(client.left),  static_cast<UINT>(client.top),    0,
-                       static_cast<UINT>(client.right), static_cast<UINT>(client.bottom), 1};
-  capture.context->CopySubresourceRegion(gpu.processing.get(), 0, 0, 0, 0, texture.get(), 0,
-                                         &source_box);
-
-  RECT local_client{0, 0, settings.width, settings.height};
-  auto changed = comparison::update(state, gpu.processing.get(), local_client, deadline, check);
+  auto changed = comparison::update(state, texture.get(), client, deadline, check);
   if (!changed) {
     return std::unexpected(changed.error());
   }
@@ -151,11 +144,11 @@ auto process_frame(core::AppState& state, wgc::Direct3D11CaptureFrame& frame,
     return {};
   }
 
-  // 读回当前工作纹理，而非参考纹理：比较域之外也应交付当前完整画面。
-  D3D11_BOX local_box{
-      0, 0, 0, static_cast<UINT>(settings.width), static_cast<UINT>(settings.height), 1};
-  capture.context->CopySubresourceRegion(capture.staging.get(), 0, 0, 0, 0, gpu.processing.get(), 0,
-                                         &local_box);
+  // 读回当前 WGC 帧，而非参考纹理：比较域之外也应交付当前完整画面。
+  D3D11_BOX source_box{static_cast<UINT>(client.left),  static_cast<UINT>(client.top),    0,
+                       static_cast<UINT>(client.right), static_cast<UINT>(client.bottom), 1};
+  capture.context->CopySubresourceRegion(capture.staging.get(), 0, 0, 0, 0, texture.get(), 0,
+                                         &source_box);
   auto completed = comparison::finish(state, deadline, check);
   if (!completed) {
     return std::unexpected(completed.error());

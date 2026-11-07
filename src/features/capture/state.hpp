@@ -13,8 +13,6 @@
 namespace features::capture {
 
 struct ComparisonState {
-  // WGC 帧只负责提供源纹理；后续处理使用自有工作纹理，帧保持到本轮 GPU 命令收尾。
-  winrt::com_ptr<ID3D11Texture2D> processing;
   winrt::com_ptr<ID3D11Texture2D> reference;
   winrt::com_ptr<ID3D11ShaderResourceView> reference_view;
   winrt::com_ptr<ID3D11ComputeShader> shader;
