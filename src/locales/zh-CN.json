@@ -173,6 +173,7 @@
   "navigation.stage.calibrating": "标定分类菜单滚动距离",
   "navigation.stage.initializing": "初始化导航",
   "navigation.stage.opening": "展开 {0}",
+  "navigation.stage.resetting": "复位分类菜单",
   "navigation.stage.revealing": "露出 {0} 子列表（滚动外层菜单）",
   "navigation.stage.seeking": "寻找 {0} / {1}",
   "navigation.stage.selecting": "选择 {0} / {1}",

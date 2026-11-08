@@ -8,7 +8,7 @@ struct Text {
   std::string_view zh_cn;
   std::string_view en_us;
 };
-inline constexpr std::array<Text, 243> texts{{
+inline constexpr std::array<Text, 244> texts{{
     {"action.back", "返回", "Back"},
     {"action.copied", "已复制", "Copied"},
     {"action.copy", "复制结果", "Copy result"},
@@ -183,6 +183,7 @@ inline constexpr std::array<Text, 243> texts{{
     {"navigation.stage.calibrating", "标定分类菜单滚动距离", "Calibrating category menu scroll"},
     {"navigation.stage.initializing", "初始化导航", "Initializing navigation"},
     {"navigation.stage.opening", "展开 {0}", "Opening {0}"},
+    {"navigation.stage.resetting", "复位分类菜单", "Resetting the category menu"},
     {"navigation.stage.revealing", "露出 {0} 子列表（滚动外层菜单）", "Revealing the {0} list by scrolling the outer menu"},
     {"navigation.stage.seeking", "寻找 {0} / {1}", "Finding {0} / {1}"},
     {"navigation.stage.selecting", "选择 {0} / {1}", "Selecting {0} / {1}"},

@@ -173,6 +173,7 @@
   "navigation.stage.calibrating": "Calibrating category menu scroll",
   "navigation.stage.initializing": "Initializing navigation",
   "navigation.stage.opening": "Opening {0}",
+  "navigation.stage.resetting": "Resetting the category menu",
   "navigation.stage.revealing": "Revealing the {0} list by scrolling the outer menu",
   "navigation.stage.seeking": "Finding {0} / {1}",
   "navigation.stage.selecting": "Selecting {0} / {1}",
