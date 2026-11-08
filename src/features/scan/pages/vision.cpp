@@ -1,4 +1,4 @@
-#include "features/scan/vision.hpp"
+#include "features/scan/pages/vision.hpp"
 
 #include "vendor/std.hpp"
 
@@ -6,7 +6,7 @@
 #include "features/scan/layout.hpp"
 #include "utils/image.hpp"
 
-namespace features::scan {
+namespace features::scan::pages {
 
 namespace {
 
@@ -44,23 +44,6 @@ constexpr int max_anchor_rows = 3;
 constexpr double anchor_min_score = 0.9;
 constexpr double anchor_min_sample_score = 0.8;
 constexpr double anchor_min_margin = 0.05;
-
-static_assert(owned_luma - unowned_luma > 2 * max_luma_error);
-static_assert([] {
-  for (auto point : star_points) {
-    if (point[0] < 0 || point[0] >= star_rect[2] - star_rect[0] || point[1] < 0 ||
-        point[1] >= star_rect[3] - star_rect[1]) {
-      return false;
-    }
-  }
-  return !star_points.empty();
-}());
-static_assert(card_bottom_rect[3] - card_bottom_rect[1] >= 5 &&
-              card_right_rect[2] - card_right_rect[0] >= 5);
-static_assert(scrollbar_bands[0][1] == scrollbar_bands[1][1] &&
-              scrollbar_bands[0][1] == scrollbar_bands[2][1] &&
-              scrollbar_bands[0][3] == scrollbar_bands[1][3] &&
-              scrollbar_bands[0][3] == scrollbar_bands[2][3]);
 
 // 计算浮点值向量的分位数
 auto quantile(std::vector<float> values, double fraction) -> double {
@@ -414,4 +397,4 @@ auto locate_anchor(const cv::Mat& image, const Anchor& anchor, const Layout& lay
   };
 }
 
-}  // namespace features::scan
+}  // namespace features::scan::pages

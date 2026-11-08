@@ -4,11 +4,21 @@
 
 #include "core/message/types.hpp"
 #include "features/result/types.hpp"
-#include "features/scan/stage.hpp"
 
 namespace features::scan {
 
 enum class Phase { ready, running, stopping, completed, stopped, failed };
+
+// 扫描线程当前所处步骤；只描述执行位置，展示措辞由 UI 决定。
+enum class Stage {
+  preparing,
+  adjusting_window,
+  waiting_foreground,
+  waiting_layout,
+  switching_category,
+  collecting,
+  completed
+};
 
 struct Progress {
   Stage stage{Stage::preparing};

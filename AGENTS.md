@@ -68,14 +68,15 @@ The application runs as a single native Win32 process with clear thread responsi
 The codebase uses self-contained C++23 headers and implementation files (`.hpp + .cpp`) without precompiled headers:
 
 - `core::*` — foundational application infrastructure:
-  - `core::state` (`app_state.hpp`): centralized root state holding subsystem states via `std::unique_ptr`
+  - `core::state` (`app_state.hpp`): centralized root state owning top-level subsystem states via `std::unique_ptr`
   - `core::initializer` & `core::shutdown`: explicit application-level lifecycle orchestration
   - `core::startup`: single-instance named mutex check and UAC administrator elevation handling
   - `core::message` & `core::i18n`: structured error model and compile-time checked dual-language localization
 - `features::*` — business logic and hardware integration:
-  - `features::scan`: worker job management (`job`), pagination loop (`scan`), vision/card detection (`vision`), layout geometry (`layout`), cancellation flags (`control`), diagnostics logging (`diagnostics`), and end-to-end orchestration (`usecase`)
-  - `features::capture`: WGC capture session, D3D11 device/staging texture management, and GPU stability compute shader
-  - `features::navigation`: compendium category directory, navigation state machine, and icon matching
+  - `features::scan`: a linear worker-thread script in `job`/`runtime`, with per-run session data as a POD in `state.hpp`; plus layout geometry (`layout`), cancellation/hotkey (`control`), diagnostics (`diagnostics`), progress (`progress`), and UI-side orchestration (`usecase`); the `menu`, `pages` and `capture` subdomains below own their own state
+    - `features::scan::menu` (`src/features/scan/menu/`): category menu domain — navigation entry points and main flow (`menu`), pure vision (`vision`), shared geometry constants (`constants`), PODs and menu session state (`types`); static icon catalogs are inlined in `menu.cpp` and loaded by `menu::prepare`; the menu session lives in `scan::Session::menu`
+    - `features::scan::pages` (`src/features/scan/pages/`): page scan domain — pagination entry points and main flow (`pages`), card vision for question marks and stars (`vision`), and session state (`types`); `pages::begin` loads the question-mark template; the page session lives in `scan::Session::pages`
+    - `features::scan::capture` (`src/features/scan/capture/`): WGC capture session, D3D11 device/staging texture management, and GPU stability compute shader (`capture`, `comparison`); its runtime state is a value member of `scan::State`, not a root `AppState` subsystem
   - `features::window`: game window detection, temporary 960x3840 borderless resize, and window restore
   - `features::result`: completed scan results storage, JSON serialization, and clipboard operations
   - `features::settings`: persistent user settings in `data/settings.json`
@@ -88,8 +89,9 @@ The codebase uses self-contained C++23 headers and implementation files (`.hpp +
 
 ### Design Philosophy
 - **POD Structs + Free Functions**: Plain data structs with behavior implemented as free functions. No OOP inheritance hierarchies.
-- **Centralized State**: `core::AppState` is the single root state. Subsystem states are owned via `std::unique_ptr` with forward declarations in headers. Functions take `AppState&` explicitly rather than threading ephemeral context objects through calls.
-- **Usecase Orchestration**: Cross-module workflow coordination belongs in `usecase.hpp/.cpp` (e.g. `features::scan::run_scan`).
+- **Centralized State**: `core::AppState` is the single root state. Top-level subsystem states are owned via `std::unique_ptr` with forward declarations in headers; nested domain state (menu, pages, capture) lives inside `scan::State` / `scan::Session`. Functions take `AppState&` explicitly rather than threading ephemeral context objects through calls.
+- **Self-Contained Subdomains**: `menu/` and `pages/` each expose a domain-named entry header (`menu.hpp`, `pages.hpp`) with its main flow in the matching `.cpp`; vision stays in `vision.cpp`, state in `types.hpp`, and static definitions are inlined where used.
+- **Usecase Orchestration**: UI-side workflow coordination belongs in `usecase.hpp/.cpp` (e.g. `features::scan::start` / `stop`); the worker-thread script itself lives in `job.cpp::execute()`.
 - **Explicit Lifecycle**: Application initialization and teardown are explicitly sequenced in `core::initializer` and `core::shutdown`, ensuring tasks stop, UI windows destroy, and COM revokes cleanly before state destruction.
 
 ### Key Patterns & Invariants
@@ -98,7 +100,7 @@ The codebase uses self-contained C++23 headers and implementation files (`.hpp +
 - **Threading & Synchronization**:
   The worker thread posts `latest` progress and `pending` final outcome under a mutex, notifying the UI thread via `PostMessageW`. The UI thread consumes snapshots without touching active scanning buffers. Cancellation (via the configurable stop key, default F10, or UI stop button) wakes waiting frames immediately.
 - **Error Handling & Diagnostics**:
-  Predictable failures use `std::expected<T, core::Error>`. User-facing errors show only high-level translatable messages via `core::i18n::wide(state, failure.message)`. Structured diagnostic details (`report.json` + `failure.png`) are written only when an actual failure or window-restore warning occurs.
+  Reusable platform layers use `std::expected<T, core::Error>`. Scan verbs convert failures into internal `Abort`/`Stop` interruptions via `runtime::must()`, caught once at the `job.cpp::execute()` boundary and turned into an `Outcome`. User-facing errors show only high-level translatable messages via `core::i18n::wide(state, failure.message)`. Structured diagnostic details (`report.json` + `failure.png`) are written only when an actual failure or window-restore warning occurs.
 - **Single-Instance & Elevation**:
   Manifest specifies `asInvoker`. The app first verifies the `Local\CountingMomo.SingleInstance` mutex; if an unprivileged instance is started without existing instances, it elevates via `runas`. Subsequent invocations activate the running instance's window without prompting for UAC.
 - **Portable Data Storage**:

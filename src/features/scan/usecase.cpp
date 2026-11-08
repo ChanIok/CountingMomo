@@ -4,21 +4,13 @@
 
 #include "vendor/windows.hpp"
 #include "vendor/windows/shellapi.hpp"
-#include "vendor/windows/winrt/windows_foundation.hpp"
 
 #include "core/message/message.hpp"
 #include "core/state/app_state.hpp"
-#include "features/capture/capture.hpp"
-#include "features/navigation/navigation.hpp"
-#include "features/navigation/state.hpp"
 #include "features/result/state.hpp"
 #include "features/scan/control.hpp"
 #include "features/scan/job.hpp"
-#include "features/scan/layout.hpp"
-#include "features/scan/progress.hpp"
-#include "features/scan/scan.hpp"
 #include "features/scan/state.hpp"
-#include "features/scan/vision.hpp"
 #include "features/settings/state.hpp"
 #include "features/window/state.hpp"
 #include "features/window/window.hpp"
@@ -29,121 +21,6 @@
 #include "utils/file.hpp"
 
 namespace features::scan {
-
-namespace {
-constexpr double frame_timeout = 8.0;
-constexpr double stable_seconds = 0.25;
-
-// 初始化捕获与导航；阶段仅用于流程进度，不触发诊断写入。
-auto prepare_batch_capture(core::AppState& state) -> std::expected<void, core::Error> {
-  const auto& options = state.scan->request;
-  const auto& layout = get_layout();
-  auto& shared = state.scan->resources;
-  auto& progress = state.scan->working_progress;
-  publish_progress(state);
-
-  auto root = utils::file::executable_directory();
-  if (!root) {
-    return std::unexpected(root.error());
-  }
-  auto question = load_hidden_question(*root / "resources/scan/hidden_question.png");
-  if (!question) {
-    return std::unexpected(question.error());
-  }
-  shared.hidden_question = std::move(*question);
-
-  auto found = window::find(options.hwnd, window::game_executable);
-  if (!found) {
-    return std::unexpected(found.error());
-  }
-  progress.stage = Stage::adjusting_window;
-  publish_progress(state);
-  auto target = window::prepare(state, *found, layout.reference_size[0], layout.reference_size[1],
-                                frame_timeout);
-  if (!target) {
-    return std::unexpected(target.error());
-  }
-  shared.target = *target;
-  progress.stage = Stage::waiting_foreground;
-  publish_progress(state);
-  if (auto activated = window::activate(state, *target); !activated) {
-    return activated;
-  }
-  if (auto started = capture::start(state, *found,
-                                    {.width = target->width,
-                                     .height = target->height,
-                                     .comparison_rect = layout.stability_rect,
-                                     .stable_seconds = stable_seconds});
-      !started) {
-    return started;
-  }
-  progress.stage = Stage::waiting_layout;
-  publish_progress(state);
-  return navigation::begin(state);
-}
-
-// 分类数组留在工作区，只有全部分类完成才交付完整结果。
-auto run_all(core::AppState& state) -> std::expected<void, core::Error> {
-  auto root = utils::file::executable_directory();
-  if (!root) {
-    return std::unexpected(root.error());
-  }
-  auto catalog = navigation::load(*root / "resources/categories");
-  if (!catalog) {
-    return std::unexpected(catalog.error());
-  }
-  auto& scan = *state.scan;
-  auto& progress = scan.working_progress;
-  for (const auto& group : catalog->groups) {
-    progress.planned_categories += static_cast<int>(group.categories.size());
-  }
-  scan.resources.frame_timeout = frame_timeout;
-  state.navigation->catalog = std::move(*catalog);
-  state.navigation->timeout = frame_timeout;
-  if (auto prepared = prepare_batch_capture(state); !prepared) {
-    return prepared;
-  }
-
-  for (const auto& group : state.navigation->catalog.groups) {
-    bool opened = false;
-    for (const auto& icon : group.categories) {
-      progress.category = icon.definition->id;
-      progress.category_count = 0;
-      progress.stage = Stage::switching_category;
-      publish_progress(state);
-      if (!opened) {
-        if (auto result = navigation::open_group(state, group); !result) {
-          return result;
-        }
-        opened = true;
-      }
-      if (auto result = navigation::visit(state, group, icon); !result) {
-        return result;
-      }
-      scan.resources.category_frame = state.navigation->last_frame;
-      progress.stage = Stage::collecting;
-      publish_progress(state);
-      if (auto result = collect_category(state); !result) {
-        return result;
-      }
-      const auto& values = scan.category.values;
-      scan.working_result.summaries.push_back({progress.category, static_cast<int>(values.size()),
-                                               static_cast<int>(std::ranges::count(values, 1))});
-      scan.completed.emplace(progress.category, std::move(scan.category.values));
-      ++progress.completed_categories;
-      progress.category_count = 0;
-      publish_progress(state);
-    }
-  }
-  progress.category.clear();
-  progress.stage = Stage::completed;
-  publish_progress(state);
-  scan.working_result.status = Phase::completed;
-  scan.working_result.categories = std::move(scan.completed);
-  return {};
-}
-
-}  // namespace
 
 auto running(const core::AppState& state) -> bool {
   return state.scan->phase == Phase::running || state.scan->phase == Phase::stopping;
@@ -275,64 +152,6 @@ auto open_diagnostic(core::AppState& state) -> void {
   if (reinterpret_cast<INT_PTR>(result) <= 32) {
     ui::main_window::notify(state, core::error("error.app.open_diagnostics"));
   }
-}
-
-auto run(core::AppState& state) -> std::expected<Outcome, core::Error> {
-  // 上次恢复失败时先处理原窗口，不覆盖恢复所需的信息。
-  if (state.window->original) {
-    if (auto restored = window::restore(state); !restored) {
-      auto error = core::error("error.window.restore_failed");
-      error.related.push_back(restored.error());
-      return std::unexpected(std::move(error));
-    }
-  }
-  std::expected<void, core::Error> result;
-  try {
-    result = run_all(state);
-  } catch (const winrt::hresult_error& error) {
-    result = std::unexpected(
-        core::with_detail(core::error("error.scan.exception"), winrt::to_string(error.message())));
-  } catch (const std::exception& error) {
-    result = std::unexpected(core::with_detail(core::error("error.scan.exception"), error.what()));
-  } catch (...) {
-    result = std::unexpected(core::error("error.scan.exception"));
-  }
-
-  // 收尾失败不覆盖采集错误；完整结果已取得时保留数据并作为警告交付。
-  auto add_cleanup_error = [&](core::Error error) {
-    auto& outcome = state.scan->working_result;
-    auto& target = outcome.warning;
-    if (target.message.key.empty()) {
-      target = std::move(error);
-    } else {
-      target.related.push_back(std::move(error));
-    }
-  };
-  if (auto stopped = capture::stop(state); !stopped) {
-    add_cleanup_error(stopped.error());
-  }
-  if (auto restored = window::restore(state); !restored) {
-    // 窗口恢复需要用户处理，独立于扫描是否成功；优先于其它收尾警告展示。
-    auto warning = core::error("error.window.restore_failed");
-    warning.related.push_back(restored.error());
-    auto& previous = state.scan->working_result.warning;
-    if (!previous.message.key.empty()) {
-      warning.related.push_back(std::move(previous));
-    }
-    previous = std::move(warning);
-  }
-  if (!result) {
-    return std::unexpected(result.error());
-  }
-  return std::move(state.scan->working_result);
-}
-
-// 调用方已关闭捕获并保存诊断，此时才释放最后的业务现场。
-auto release_run(core::AppState& state) -> void {
-  state.scan->category = {};
-  state.scan->resources = {};
-  state.scan->completed.clear();
-  *state.navigation = {};
 }
 
 }  // namespace features::scan

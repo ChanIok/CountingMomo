@@ -8,10 +8,11 @@
 #include "vendor/windows/winrt/windows_graphics_capture.hpp"
 #include "vendor/windows/winrt/windows_graphics_directx_direct3d11.hpp"
 
-#include "features/capture/types.hpp"
+#include "features/scan/capture/types.hpp"
 
-namespace features::capture {
+namespace features::scan::capture {
 
+// GPU 帧比对子系统的 D3D11 资源与运行状态
 struct ComparisonState {
   winrt::com_ptr<ID3D11Texture2D> reference;
   winrt::com_ptr<ID3D11ShaderResourceView> reference_view;
@@ -26,7 +27,7 @@ struct ComparisonState {
   std::int64_t stable_since_source{};
 };
 
-// 捕获资源仅由扫描线程操作；signal_mutex 只保护跨线程唤醒时的通知句柄寿命。
+// 画面捕获会话的整体运行状态与底层句柄
 struct State {
   HWND hwnd{};
   Settings settings;
@@ -46,4 +47,4 @@ struct State {
   winrt::Windows::Graphics::Capture::GraphicsCaptureSession session{nullptr};
 };
 
-}  // namespace features::capture
+}  // namespace features::scan::capture

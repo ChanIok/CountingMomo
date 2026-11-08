@@ -4,8 +4,6 @@
 
 #include "core/i18n/state.hpp"
 #include "core/startup/state.hpp"
-#include "features/capture/state.hpp"
-#include "features/navigation/state.hpp"
 #include "features/result/state.hpp"
 #include "features/scan/state.hpp"
 #include "features/settings/state.hpp"
@@ -21,8 +19,6 @@ AppState::AppState()
     : startup(std::make_unique<core::startup::State>()),
       settings(std::make_unique<features::settings::State>()),
       result(std::make_unique<features::result::State>()),
-      navigation(std::make_unique<features::navigation::State>()),
-      capture(std::make_unique<features::capture::State>()),
       i18n(std::make_unique<core::i18n::State>()),
       scan(std::make_unique<features::scan::State>()),
       window(std::make_unique<features::window::State>()),

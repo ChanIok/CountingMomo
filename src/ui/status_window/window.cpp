@@ -248,6 +248,27 @@ auto hide(core::AppState& state) -> void {
   window.visible = false;
 }
 
+// 扫描阶段映射到悬浮窗文案；阶段语义归 features::scan，措辞归此处。
+auto stage_text(const core::AppState& state, features::scan::Stage stage) -> std::wstring {
+  switch (stage) {
+    case features::scan::Stage::preparing:
+      return core::i18n::wide(state, "scan.stage.preparing");
+    case features::scan::Stage::adjusting_window:
+      return core::i18n::wide(state, "scan.stage.adjusting_window");
+    case features::scan::Stage::waiting_foreground:
+      return core::i18n::wide(state, "scan.stage.waiting_foreground");
+    case features::scan::Stage::waiting_layout:
+      return core::i18n::wide(state, "scan.stage.waiting_layout");
+    case features::scan::Stage::switching_category:
+      return core::i18n::wide(state, "scan.stage.switching_category");
+    case features::scan::Stage::collecting:
+      return core::i18n::wide(state, "scan.stage.collecting");
+    case features::scan::Stage::completed:
+      return core::i18n::wide(state, "scan.stage.completed");
+  }
+  std::unreachable();
+}
+
 // 刷新并对齐悬浮窗显示：检测有效生命周期 → 右下角定位 → 刷新文案与状态重绘
 auto refresh(core::AppState& state, bool finished) -> void {
   auto& window = *state.status_window;
@@ -293,7 +314,7 @@ auto refresh(core::AppState& state, bool finished) -> void {
   if (active) {
     const auto& progress = state.scan->progress;
     if (progress.category.empty()) {
-      detail = core::i18n::wide(state, features::scan::stage_message(progress.stage));
+      detail = stage_text(state, progress.stage);
     } else {
       detail = core::i18n::wide(state, "scan.progress", progress.completed_categories,
                                 progress.planned_categories, progress.category_count);

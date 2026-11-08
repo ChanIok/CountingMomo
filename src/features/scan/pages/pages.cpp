@@ -1,17 +1,19 @@
-#include "features/scan/scan.hpp"
+#include "features/scan/pages/pages.hpp"
 
 #include "vendor/std.hpp"
 
 #include "core/message/message.hpp"
 #include "core/state/app_state.hpp"
-#include "features/capture/capture.hpp"
+#include "features/scan/capture/capture.hpp"
 #include "features/scan/layout.hpp"
+#include "features/scan/pages/vision.hpp"
 #include "features/scan/progress.hpp"
+#include "features/scan/runtime.hpp"
 #include "features/scan/state.hpp"
-#include "features/scan/vision.hpp"
 #include "features/window/window.hpp"
+#include "utils/file.hpp"
 
-namespace features::scan {
+namespace features::scan::pages {
 
 namespace {
 
@@ -31,14 +33,15 @@ struct Observation {
 // 只解析 GPU 交付的稳定候选；未就绪则等画面变化后再判稳，不逐帧重复识别。
 auto wait_page(core::AppState& state, const Page* previous, const Anchor* anchor,
                std::int64_t after_source_time) -> std::expected<Observation, core::Error> {
-  auto& resources = state.scan->resources;
-  auto& scan = state.scan->category;
+  auto& resources = state.scan->session.resources;
+  auto& page_state = state.scan->session.pages;
+  auto& scan = page_state.category;
 
   const auto& layout = get_layout();
   const auto& target = resources.target;
   auto deadline = Clock::now() + std::chrono::duration_cast<Clock::duration>(
                                      std::chrono::duration<double>(resources.frame_timeout));
-  auto initial = previous ? std::optional<capture::Frame>{} : resources.category_frame;
+  auto initial = previous ? std::optional<capture::Frame>{} : page_state.category_frame;
   bool require_change = false;
   auto stage = core::message(previous ? "scan.wait.scroll_response" : "scan.wait.first_frame");
   std::optional<core::Error> last_error;
@@ -96,7 +99,7 @@ auto wait_page(core::AppState& state, const Page* previous, const Anchor* anchor
       }
     }
     // 按照滚动位移推算的相位，读取安全视野内的所有完整卡片状态
-    auto page = read_page((**frame).bgr, layout, resources.hidden_question,
+    auto page = read_page((**frame).bgr, layout, page_state.hidden_question,
                           previous ? previous->phase - displacement : layout.first_row_y, !previous,
                           bottom);
     if (!page) {
@@ -138,10 +141,10 @@ auto append_page(std::vector<int>& values, const Page& page, int first_new) -> v
 
 // 采纳并提交页面结果：追加结果集 → 统计当前分类累计数 → 发布进度通知
 auto accept_page(core::AppState& state, const Page& page, int first_new) -> void {
-  auto& scan = state.scan->category;
+  auto& scan = state.scan->session.pages.category;
 
   append_page(scan.values, page, first_new);
-  auto& progress = state.scan->working_progress;
+  auto& progress = state.scan->session.progress;
   int count = static_cast<int>(scan.values.size());
   progress.accepted_count += count - progress.category_count;
   progress.category_count = count;
@@ -152,15 +155,16 @@ auto accept_page(core::AppState& state, const Page& page, int first_new) -> void
 // 分页循环采集单个分类全部卡片：首屏读取 → 提取重叠锚点 → 注入滚轮滚动 → 动态标定格数 →
 // 拼接新行直到触底
 auto collect_pages(core::AppState& state) -> std::expected<void, core::Error> {
-  auto& resources = state.scan->resources;
-  auto& scan = state.scan->category;
+  auto& resources = state.scan->session.resources;
+  auto& page_state = state.scan->session.pages;
+  auto& scan = page_state.category;
 
   const auto& layout = get_layout();
   const auto& target = resources.target;
   // 采集分类首屏画面
   auto observation =
       wait_page(state, nullptr, nullptr,
-                resources.category_frame ? resources.category_frame->source_time : 0);
+                page_state.category_frame ? page_state.category_frame->source_time : 0);
   if (!observation) {
     return std::unexpected(observation.error());
   }
@@ -172,7 +176,7 @@ auto collect_pages(core::AppState& state) -> std::expected<void, core::Error> {
   auto& previous_start = scan.previous_start;
   accepted_rows = static_cast<int>(previous.rows.size());
   previous_start = 0;
-  auto& plan = resources.scroll;
+  auto& plan = page_state.scroll;
   // 从可读高度扣除完整卡片和指定重叠行，统一确定自动标定的目标位移。
   int target_pixels = layout.safe_y[1] - layout.scrolled_safe_top - layout.card_size[1] -
                       overlap_rows * layout.row_step;
@@ -249,12 +253,23 @@ auto collect_pages(core::AppState& state) -> std::expected<void, core::Error> {
 
 }  // namespace
 
-auto collect_category(core::AppState& state) -> std::expected<void, core::Error> {
-  state.scan->category = {};
-  if (auto checked = window::check(state, state.scan->resources.target); !checked) {
-    return checked;
-  }
-  return collect_pages(state);
+// 加载问号模板并初始化页面域资源；失败由动词边界转成扫描中断
+auto begin(core::AppState& state) -> void {
+  auto root = runtime::must(state, utils::file::executable_directory());
+  auto question =
+      runtime::must(state, load_hidden_question(root / "resources/scan/hidden_question.png"));
+  state.scan->session.pages.hidden_question = std::move(question);
 }
 
-}  // namespace features::scan
+auto read_all_pages(core::AppState& state) -> std::vector<int> {
+  auto& session = state.scan->session;
+  session.pages.category_frame = session.menu.last_frame;
+  session.progress.stage = Stage::collecting;
+  publish_progress(state);
+  session.pages.category = {};
+  runtime::must(state, window::check(state, session.resources.target));
+  runtime::must(state, collect_pages(state));
+  return std::move(session.pages.category.values);
+}
+
+}  // namespace features::scan::pages

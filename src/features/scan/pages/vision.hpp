@@ -7,7 +7,7 @@
 #include "core/message/message.hpp"
 #include "features/scan/types.hpp"
 
-namespace features::scan {
+namespace features::scan::pages {
 
 // 从指定素材路径加载原生尺寸的灰度问号模板。
 auto load_hidden_question(const std::filesystem::path& path) -> std::expected<cv::Mat, core::Error>;
@@ -29,4 +29,4 @@ auto make_anchor(const Page& page, const Layout& layout, int overlap_rows)
 auto locate_anchor(const cv::Mat& image, const Anchor& anchor, const Layout& layout, bool at_bottom)
     -> AnchorMatch;
 
-}  // namespace features::scan
+}  // namespace features::scan::pages

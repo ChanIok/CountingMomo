@@ -14,7 +14,7 @@ auto publish_progress(core::AppState& state) -> void {
     // 加锁保护跨线程共享的进度状态
     std::lock_guard lock(scan.mutex);
     // 同步工作线程内部进度到对外公布结构中
-    scan.latest = scan.working_progress;
+    scan.latest = scan.session.progress;
     // 如果存在唤醒回调且当前无在途通知，则标记待通知
     if (scan.wake && !scan.notification_pending) {
       scan.notification_pending = true;

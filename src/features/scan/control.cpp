@@ -5,7 +5,7 @@
 #include "vendor/windows.hpp"
 
 #include "core/state/app_state.hpp"
-#include "features/capture/capture.hpp"
+#include "features/scan/capture/capture.hpp"
 #include "features/scan/state.hpp"
 #include "features/settings/state.hpp"
 #include "ui/main_window/state.hpp"

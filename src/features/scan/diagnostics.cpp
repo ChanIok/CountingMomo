@@ -6,7 +6,6 @@
 
 #include "core/message/message.hpp"
 #include "core/state/app_state.hpp"
-#include "features/navigation/state.hpp"
 #include "features/scan/state.hpp"
 #include "utils/file.hpp"
 #include "utils/image.hpp"
@@ -44,11 +43,11 @@ auto save(core::AppState& state, Outcome& outcome) -> std::expected<void, core::
   outcome.diagnostic = directory;
 
   // 导航可能已切到下一分类；按源时间选择最近的已观察图片，不在收尾重新等帧。
-  const auto& category = state.scan->category;
-  const auto& nav = *state.navigation;
-  cv::Mat image = nav.last_frame ? nav.last_frame->bgr : cv::Mat{};
+  const auto& category = state.scan->session.pages.category;
+  const auto& menu = state.scan->session.menu;
+  cv::Mat image = menu.last_frame ? menu.last_frame->bgr : cv::Mat{};
   if (!category.last_image.empty() &&
-      (!nav.last_frame || category.last_frame_source_time >= nav.last_frame->source_time)) {
+      (!menu.last_frame || category.last_frame_source_time >= menu.last_frame->source_time)) {
     image = category.last_image;
   }
   std::optional<core::Error> image_error;
@@ -68,8 +67,8 @@ auto save(core::AppState& state, Outcome& outcome) -> std::expected<void, core::
     Report report{
         .created_at = created_at,
         .status = outcome.status,
-        .progress = state.scan->working_progress,
-        .navigation_stage = nav.stage,
+        .progress = state.scan->session.progress,
+        .navigation_stage = menu.stage,
         .message = outcome.message,
         .warning = outcome.warning,
         .elapsed_seconds = outcome.elapsed_seconds,
