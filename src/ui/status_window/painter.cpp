@@ -85,7 +85,7 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
       !ready) {
     return ready;
   }
-  // 非进行态装配复制与查看主窗口按钮
+  // 非进行态装配查看与复制按钮
   std::vector<button::Spec> buttons;
   auto clip = D2D1::RectF(0, 0, width, height);
   float action_right = width - 20;
@@ -93,19 +93,26 @@ auto paint(core::AppState& state) -> std::expected<void, core::Error> {
   float action_top = action_bottom - 32;
   if (!window.active) {
     if (window.success) {
-      buttons.push_back({.action = button::Action::copy,
-                         .label = window.copied ? core::i18n::wide(state, "action.copied")
-                                                : core::i18n::wide(state, "action.copy"),
+      buttons.push_back({.action = button::Action::view,
+                         .label = core::i18n::wide(state, "action.view"),
                          .bounds = D2D1::RectF(20, action_top, action_right - 112, action_bottom),
                          .clip = clip,
                          .style = button::Style::primary});
+      buttons.push_back(
+          {.action = button::Action::copy,
+           .label = window.copied ? core::i18n::wide(state, "action.copied")
+                                  : core::i18n::wide(state, "action.copy"),
+           .bounds = D2D1::RectF(action_right - 100, action_top, action_right, action_bottom),
+           .clip = clip,
+           .style = button::Style::secondary});
+    } else {
+      buttons.push_back(
+          {.action = button::Action::view,
+           .label = core::i18n::wide(state, "action.view"),
+           .bounds = D2D1::RectF(action_right - 120, action_top, action_right, action_bottom),
+           .clip = clip,
+           .style = button::Style::primary});
     }
-    buttons.push_back({.action = button::Action::view,
-                       .label = core::i18n::wide(state, "action.view"),
-                       .bounds = D2D1::RectF(action_right - (window.success ? 100 : 120),
-                                             action_top, action_right, action_bottom),
-                       .clip = clip,
-                       .style = button::Style::secondary});
   }
   // 同步按钮集合
   if (auto ready =
