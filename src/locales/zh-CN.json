@@ -127,6 +127,7 @@
   "error.theme.notify_failed": "无法刷新界面配色。",
   "error.theme.read_failed": "读取系统配色失败。",
   "error.theme.watch_failed": "监听系统配色失败。",
+  "error.timer.failed": "无法等待系统计时器。",
   "error.ui.allow_activation": "无法设置窗口唤起功能。",
   "error.ui.composition_failed": "无法绘制程序界面。",
   "error.ui.create_main": "无法创建主窗口。",

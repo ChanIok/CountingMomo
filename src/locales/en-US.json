@@ -127,6 +127,7 @@
   "error.theme.notify_failed": "Could not refresh the interface colors.",
   "error.theme.read_failed": "Could not read the system colors.",
   "error.theme.watch_failed": "Could not watch system color changes.",
+  "error.timer.failed": "Could not wait for the system timer.",
   "error.ui.allow_activation": "Could not enable window activation.",
   "error.ui.composition_failed": "Could not draw the application interface.",
   "error.ui.create_main": "Could not create the main window.",

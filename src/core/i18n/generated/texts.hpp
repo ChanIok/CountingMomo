@@ -8,7 +8,7 @@ struct Text {
   std::string_view zh_cn;
   std::string_view en_us;
 };
-inline constexpr std::array<Text, 244> texts{{
+inline constexpr std::array<Text, 245> texts{{
     {"action.back", "返回", "Back"},
     {"action.copied", "已复制", "Copied"},
     {"action.copy", "复制结果", "Copy result"},
@@ -137,6 +137,7 @@ inline constexpr std::array<Text, 244> texts{{
     {"error.theme.notify_failed", "无法刷新界面配色。", "Could not refresh the interface colors."},
     {"error.theme.read_failed", "读取系统配色失败。", "Could not read the system colors."},
     {"error.theme.watch_failed", "监听系统配色失败。", "Could not watch system color changes."},
+    {"error.timer.failed", "无法等待系统计时器。", "Could not wait for the system timer."},
     {"error.ui.allow_activation", "无法设置窗口唤起功能。", "Could not enable window activation."},
     {"error.ui.composition_failed", "无法绘制程序界面。", "Could not draw the application interface."},
     {"error.ui.create_main", "无法创建主窗口。", "Could not create the main window."},

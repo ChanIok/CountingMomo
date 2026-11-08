@@ -12,6 +12,7 @@
 #include "features/window/window.hpp"
 #include "utils/image.hpp"
 #include "utils/string.hpp"
+#include "utils/timer.hpp"
 
 namespace features::navigation {
 
@@ -58,9 +59,10 @@ constexpr int reset_max_attempts = 5;
 // 实际落点与实测值差 3~5px 就被判「没到顶」、白跑一整轮。
 constexpr int outer_top_origin = 144;
 constexpr int outer_top_tolerance = 8;
-// 逐格滚轮之间的间隔（秒）：实机 0.016（约一帧）可让游戏逐条同步点击命中表。
-// pause() 以 10ms 为轮询粒度，实际间隔取其整数倍。
-constexpr double wheel_step_interval = 0.016;
+// 逐格滚轮之间的间隔（秒）：必须大于 60fps 的一帧（16.67ms），才能保证两条
+// 滚轮消息不会落进同一帧、被游戏合并成一次命中表同步。间隔与帧相位无关，
+// 只要严格大于帧长就必然跨过至少一个帧边界。
+constexpr double wheel_step_interval = 0.017;
 constexpr double hover_seconds = 0.15;
 constexpr double click_seconds = 0.12;
 constexpr auto input_check_interval = std::chrono::milliseconds(10);
@@ -212,6 +214,7 @@ static_assert(static_cast<double>(reset_max_attempts * reset_notches) * min_whee
               outer_top_origin - (groups[2].expanded_parent_y - expanded_makeup_offset));
 static_assert(outer_top_origin > root_layout_min_y);
 static_assert(wheel_step_interval >= 0.0 && wheel_step_interval <= 0.1);
+static_assert(wheel_step_interval > 1.0 / 60.0, "逐格滚轮间隔必须大于一帧");
 static_assert([] {
   if (root_offsets.size() != root_ids.size() || root_offsets[1] != 0 ||
       expanded_makeup_offset <= root_offsets.back() || !root_ids.front().empty()) {
@@ -322,14 +325,20 @@ auto locate(const cv::Mat& image, const Icon& icon, const scan::Box& bounds, boo
 // 在指定时间内暂停并持续检查窗口有效性与停止请求
 auto pause(core::AppState& state, double duration) -> std::expected<void, core::Error> {
   auto deadline = Clock::now() + std::chrono::duration<double>(duration);
-  // 细粒度轮询等待，及时响应停止请求和游戏失焦。
-  while (Clock::now() < deadline) {
+  // 每 10ms 检查一次停止与失焦；每一片精确睡到片尾，不再被系统时钟量子放大。
+  while (true) {
+    auto now = Clock::now();
+    if (now >= deadline) {
+      return {};
+    }
     if (auto ok = window::check(state, state.scan->resources.target); !ok) {
       return ok;
     }
-    std::this_thread::sleep_for(input_check_interval);
+    auto slice = std::min(deadline, now + input_check_interval);
+    if (auto slept = utils::timer::sleep_until(slice); !slept) {
+      return std::unexpected(slept.error());
+    }
   }
-  return {};
 }
 
 // 将鼠标指针移动到停放泊位坐标，避免悬停触发高亮动效
