@@ -6,9 +6,11 @@ Clothing collection data export tool for *Infinity Nikki*. Scan the in-game comp
 
 ## About
 
-- **Fully Automated**: Automatically cycles through all 27 categories with seamless scrolling, strictly aligned with the in-game compendium.
+- **Fully Automated**: Automatically switches clothing categories and scrolls through pages to scan.
 
-- **Non-Invasive & Native**: Pure screen capture and visual detection with no reading or writing to game memory; zero external dependencies, portable and ready to run.
+- **Vision-Based**: Pure screen capture and visual detection — no reading to game memory.
+
+- **Lightweight & Native**: Built entirely in C++ with GPU-accelerated frame capture, packaged at roughly 1 MB.
 
 ## Getting Started
 
